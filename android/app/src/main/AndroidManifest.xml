@@ -1,0 +1,55 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="in.mahato.tambola">
+
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+
+
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+
+    <application
+        android:allowBackup="true"
+        android:banner="@drawable/banner"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Tambola Board"
+        android:logo="@drawable/banner"
+
+        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+
+
+        <activity
+            android:name="in.mahato.tambola.GameActivity"
+
+               android:exported="true"
+                android:theme="@style/AppTheme">
+
+        </activity>
+
+
+        <activity
+            android:name="in.mahato.tambola.MainActivity"
+            android:exported="true"
+            android:keepScreenOn="true"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+    </application>
+</manifest>

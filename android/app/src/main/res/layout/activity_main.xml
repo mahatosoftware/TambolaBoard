@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        style="@style/TambolaBoardHomeHeader"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/app_punch_line" />
+
+
+    <Button
+        android:id="@+id/btnNewGame"
+        android:text="@string/btn_start_new_game"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:focusable="true"
+        android:clickable="true"/>
+
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:text="@string/btn_continue_last_game"
+        android:layout_marginTop="12dp"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:focusable="true"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/textCopyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:text="@string/app_copyright" />
+</LinearLayout>
