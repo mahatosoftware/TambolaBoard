@@ -1,14 +1,18 @@
 package in.mahato.tambola;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +50,8 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     private boolean orientationChanged = false;
 
+    private Context ctx;
+
 
 
 
@@ -53,6 +59,8 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        ctx = this;
 
         dbh = new DBHelper(this);
         db = dbh.getWritableDatabase();
@@ -585,7 +593,20 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
 
         } else {
-            Toast.makeText(GameActivity.this, "Failed to load Text to Speech Engine.Game will continue without Voice", Toast.LENGTH_LONG).show();
+            if (GeneralUtil.isFireTv(ctx) && IsVoiceViewOnAmazonFireDevices()) {
+                new AlertDialog.Builder(ctx)
+                        .setTitle("Voice View Permission")
+                        .setMessage("The Game Requires VoiceView Permission to call out Tambola Numbers.Please Enable VoiceView Permission from Settings.")
+                        .setPositiveButton("Yes", (d, w) -> {
+                            Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                            startActivity(i);
+                            finish();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }else {
+                Toast.makeText(GameActivity.this, "Failed to load Text to Speech Engine.Game will continue without Voice", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -607,6 +628,14 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public boolean IsVoiceViewOnAmazonFireDevices() {
+
+        AccessibilityManager am = (AccessibilityManager) this.getSystemService(ACCESSIBILITY_SERVICE);
+        return am.isTouchExplorationEnabled();
+
+
     }
 
 }

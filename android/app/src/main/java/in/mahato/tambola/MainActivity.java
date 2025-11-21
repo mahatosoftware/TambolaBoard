@@ -20,13 +20,12 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
 
-
-   @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Context ctx = this;
+
         Button btnNew = findViewById(R.id.btnNewGame);
         Button btnContinue = findViewById(R.id.btnContinue);
 
@@ -36,38 +35,14 @@ public class MainActivity extends AppCompatActivity {
         textCopyright.setText(copyright);
 
 
-
         btnNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(GeneralUtil.isFireTv(ctx) && IsVoiceViewOnAmazonFireDevices()){
+                Intent i = new Intent(MainActivity.this, GameActivity.class);
+                i.putExtra("NEW_GAME", true);
+                startActivity(i);
+                finish();
 
-                    new AlertDialog.Builder(ctx)
-                            .setTitle("Voice View Permission")
-                            .setMessage("The Game Requires VoiceView Permission to call out Tambola Numbers.Please Enable VoiceView Permission from Settings.")
-                            .setPositiveButton("Yes", (d, w) -> {
-                                Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                                startActivity(i);
-                                finish();
-                            })
-                            .setNegativeButton("No", (d,w)->{
-
-                                Intent i = new Intent(MainActivity.this, GameActivity.class);
-                                i.putExtra("NEW_GAME", true);
-                                startActivity(i);
-                                finish();
-                            })
-                            .show();
-
-
-
-                }else {
-
-                    Intent i = new Intent(MainActivity.this, GameActivity.class);
-                    i.putExtra("NEW_GAME", true);
-                    startActivity(i);
-                    finish();
-                }
             }
         });
 
@@ -75,44 +50,13 @@ public class MainActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(GeneralUtil.isFireTv(ctx) && IsVoiceViewOnAmazonFireDevices()){
+                Intent i = new Intent(MainActivity.this, GameActivity.class);
+                i.putExtra("NEW_GAME", false);
+                startActivity(i);
+                finish();
 
-                    new AlertDialog.Builder(ctx)
-                            .setTitle("Voice View Permission")
-                            .setMessage("The Game Requires VoiceView Permission to call out Tambola Numbers.Please Enable VoiceView Permission from Settings.")
-                            .setPositiveButton("Yes", (d, w) -> {
-                                Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                                startActivity(i);
-                                finish();
-                            })
-                            .setNegativeButton("No", (d,w)->{
-
-                                Intent i = new Intent(MainActivity.this, GameActivity.class);
-                                i.putExtra("NEW_GAME", false);
-                                startActivity(i);
-                                finish();
-                            })
-                            .show();
-
-
-
-                }else {
-
-                    Intent i = new Intent(MainActivity.this, GameActivity.class);
-                    i.putExtra("NEW_GAME", false);
-                    startActivity(i);
-                    finish();
-                }
             }
         });
-    }
-
-    public   boolean IsVoiceViewOnAmazonFireDevices(){
-
-            AccessibilityManager am = (AccessibilityManager) this.getSystemService(ACCESSIBILITY_SERVICE);
-            return am.isTouchExplorationEnabled();
-
-
     }
 
 
