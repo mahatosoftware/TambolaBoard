@@ -382,7 +382,7 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 text = "Pain in the knee.";
                 break;
             case 44:
-                text = "All the 4's.";
+                text = "All the Fours.";
                 break;
             case 45:
                 text = "Halfway there.";

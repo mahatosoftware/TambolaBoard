@@ -23,6 +23,10 @@
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
+        android:nextFocusUp="@id/btnContinue"
+        android:nextFocusDown="@id/btnContinue"
+        android:nextFocusRight="@id/btnNewGame"
+        android:nextFocusLeft="@id/btnNewGame"
         android:focusable="true"
         android:clickable="true"/>
 
@@ -34,6 +38,10 @@
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
+        android:nextFocusUp="@id/btnNewGame"
+        android:nextFocusDown="@id/btnNewGame"
+        android:nextFocusRight="@id/btnContinue"
+        android:nextFocusLeft="@id/btnContinue"
         android:focusable="true"
         android:clickable="true"/>
 

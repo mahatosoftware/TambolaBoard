@@ -30,6 +30,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background"
+            android:nextFocusRight="@string/btn_reset"
+            android:nextFocusLeft="@id/btnExit"
+            android:nextFocusDown="@id/btnCallNext"
+            android:nextFocusUp="@id/btnCallNext"
             app:layout_constraintBottom_toBottomOf="@id/hgrid1"
             app:layout_constraintEnd_toEndOf="@id/vgrid1"/>
 
@@ -40,7 +44,11 @@
             android:layout_marginStart="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:nextFocusRight="@id/btnExit"
+            android:nextFocusLeft="@id/btnCallNext"
             android:background="@drawable/button_background"
+            android:nextFocusDown="@id/btnReset"
+            android:nextFocusUp="@id/btnReset"
             app:layout_constraintStart_toStartOf="@id/vgrid1"
             app:layout_constraintBottom_toBottomOf="@id/hgrid1"
             app:layout_constraintEnd_toEndOf="@id/vgrid2" />
@@ -51,6 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:background="@drawable/button_background"
+            android:nextFocusLeft="@id/btnReset"
+            android:nextFocusRight="@id/btnCallNext"
+            android:nextFocusDown="@id/btnExit"
+            android:nextFocusUp="@id/btnExit"
             android:text="@string/btn_exit"
             app:layout_constraintBottom_toBottomOf="@id/hgrid1"
             app:layout_constraintStart_toStartOf="@id/vgrid2" />
