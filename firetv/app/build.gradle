@@ -1,0 +1,52 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'in.mahato.tambola'
+   compileSdk 36
+
+    defaultConfig {
+        applicationId "in.mahato.tambola"
+        minSdk 21
+        targetSdk 34
+        versionCode 12
+        versionName "1.0.12"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+
+    }
+
+
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+
+
+    def leanback_version = "1.2.0"
+    implementation "androidx.leanback:leanback:$leanback_version"
+
+    def appcompat_version = "1.6.1" // Replace with the latest stable version
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    // If you also need resources for older platforms:
+    implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    implementation libs.androidx.constraintlayout
+
+}

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Tambola Board</string>
+    <string name="app_punch_line">Tambola time. The Party Starts here!!</string>
+    <string name="app_copyright">© 2025 Mahato Software Pvt. Ltd.</string>
+
+    <string name="btn_start_new_game">Start New Game</string>
+    <string name="btn_continue_last_game">Continue Last Game</string>
+
+    <string name="btn_exit">Exit</string>
+    <string name="btn_reset">Reset</string>
+    <string name="txt_last_number_called">Last Called Number: </string>
+    <string name="btn_call_next">Call Next</string>
+
+
+
+</resources>
