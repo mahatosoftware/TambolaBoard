@@ -122,7 +122,8 @@
         android:gravity="center"
         android:text="@string/app_copyright"
         app:layout_constraintBottom_toBottomOf="@id/hgrid4"
-        app:layout_constraintStart_toStartOf="@id/vgrid3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
      />
 
     <androidx.constraintlayout.widget.Guideline
@@ -140,15 +141,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.67"
         />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vgrid3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.40"
-        />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/hgrid0"
         android:layout_width="wrap_content"
