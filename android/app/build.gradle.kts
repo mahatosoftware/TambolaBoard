@@ -16,8 +16,8 @@ plugins {
             applicationId = "in.mahato.tambola"
             minSdk = 23
             targetSdk = 36
-            versionCode = 13
-            versionName = "1.0.13"
+            versionCode = 16
+            versionName = "1.0.16"
 
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }

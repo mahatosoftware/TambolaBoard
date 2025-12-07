@@ -1,0 +1,35 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pressed state -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#4A007E"/> <!-- Darker purple when pressed -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Focused (e.g., TV remote focus) -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#CF9FFF"/> <!-- Light purple when focused -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Hovered (for mouse or TV hover state) -->
+    <item android:state_hovered="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#CCCCFF"/> <!-- Slightly lighter on hover -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+    <!-- Default -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF"/> <!-- Default background -->
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+
+</selector>
