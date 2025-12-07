@@ -1,40 +1,70 @@
 package `in`.mahato.tambola.game
 
+
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.DirectionLeft
+import androidx.compose.ui.input.key.Key.Companion.DirectionRight
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.room.*
 import androidx.room.Room
-import `in`.mahato.tambola.MainScreenComposable
 import `in`.mahato.tambola.ui.theme.AppTheme
-import `in`.mahato.tambola.ui.theme.PurpleBg
 import `in`.mahato.tambola.util.GeneralUtil
 import `in`.mahato.tambola.util.ScreenSizeUtil
 import kotlinx.coroutines.launch
-import java.util.*
-
-
-
+import java.util.Locale
 
 
 /** --------------------- ACTIVITY --------------------- **/
@@ -174,28 +204,82 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
+
+
+                    // --- DPAD Focus Requesters ---
+                    val frCall = remember { FocusRequester() }
+                    val frReset = remember { FocusRequester() }
+                    val frExit = remember { FocusRequester() }
+                    val requesters = listOf(frCall, frReset, frExit)
+
+                    var focusedIndex by remember { mutableStateOf(0) }
+
+                    // Request initial focus
+                    LaunchedEffect(Unit) {
+                        frCall.requestFocus()
+                    }
+
                     var isCallNumberFocused by remember { mutableStateOf(false) }
                     var isResetFocused by remember { mutableStateOf(false) }
                     var isExitFocused by remember { mutableStateOf(false) }
+
+                    // Helper to handle DPAD navigation
+                    fun handleDpad(event: KeyEvent, current: Int): Boolean {
+                        if (event.type != KeyEventType.KeyDown) return false
+
+                        when (event.key) {
+                            DirectionRight -> {
+                                val next = (current + 1) % 3
+                                requesters[next].requestFocus()
+                                return true
+                            }
+                            DirectionLeft -> {
+                                val prev = (current - 1 + 3) % 3
+                                requesters[prev].requestFocus()
+                                return true
+                            }
+                        }
+                        return false
+                    }
+
+
+
                     Button(onClick = { callNumber() },
-                        modifier = Modifier.onFocusChanged { focusState ->
-                            isCallNumberFocused = focusState.isFocused
-                            },
+                        modifier = Modifier.focusRequester(frCall)
+                            .onFocusChanged { s ->
+                                if (s.isFocused) {
+                                    isCallNumberFocused = true
+                                    focusedIndex = 0
+                                } else isCallNumberFocused = false
+                            }
+                            .onKeyEvent { handleDpad(it, 0) },
                         colors = ButtonDefaults.buttonColors(
                         containerColor = if(isCallNumberFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,      // Background
                         contentColor = if(isCallNumberFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary     // Text color
                     )) { Text("Call Number") }
                     Button(onClick = { showResetDialog = true },
-                        modifier = Modifier.onFocusChanged { focusState ->
-                            isResetFocused = focusState.isFocused
-                        },colors = ButtonDefaults.buttonColors(
+                        modifier = Modifier.focusRequester(frReset)
+                            .onFocusChanged { s ->
+                                if (s.isFocused) {
+                                    isResetFocused = true
+                                    focusedIndex = 1
+                                } else isResetFocused = false
+                            }
+                            .onKeyEvent { handleDpad(it, 1) },
+                        colors = ButtonDefaults.buttonColors(
                             containerColor = if(isResetFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,      // Background
                             contentColor = if(isResetFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary     // Text color
                     )) { Text("Reset Board") }
                     Button(onClick = { showExitDialog = true },
-                        modifier = Modifier.onFocusChanged { focusState ->
-                            isExitFocused = focusState.isFocused
-                        },colors = ButtonDefaults.buttonColors(
+                        modifier = Modifier.focusRequester(frExit)
+                            .onFocusChanged { s ->
+                                if (s.isFocused) {
+                                    isExitFocused = true
+                                    focusedIndex = 2
+                                } else isExitFocused = false
+                            }
+                            .onKeyEvent { handleDpad(it, 2) },
+                        colors = ButtonDefaults.buttonColors(
                             containerColor = if(isExitFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,      // Background
                             contentColor = if(isExitFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary     // Text color
                     )) { Text("Exit") }

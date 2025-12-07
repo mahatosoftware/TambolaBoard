@@ -83,7 +83,7 @@ object FunnyPhraseUtil {
             77 -> "Two hockey sticks."
             78 -> "Heaven's gate."
             79 -> "One more time."
-            80 -> "Eight and Blank."
+            80 -> "Eight and Zero."
             81 -> "Corner shot."
             82 -> "Fat lady with a duck."
             83 -> "India wins Cricket World Cup at."
