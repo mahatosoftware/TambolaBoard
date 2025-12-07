@@ -18,7 +18,7 @@ val WhiteBg = Color(0xFFFFFFFF)
 //val GambogeBG = Color(0xFFE49B0F)
 
 
-val GambogeBG = Color(0xFF0097A7)
+val TealBG = Color(0xFF0097A7)
 
 val SunsPurpleBG = Color(0xFF1d1160)
 val MagentaBG = Color(0xFFD500F9)

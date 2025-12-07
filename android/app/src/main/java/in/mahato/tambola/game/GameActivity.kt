@@ -171,9 +171,9 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
             ) {
                 var showResetDialog by remember { mutableStateOf(false) }
                 var showExitDialog by remember { mutableStateOf(false) }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically) {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
                     var isCallNumberFocused by remember { mutableStateOf(false) }
                     var isResetFocused by remember { mutableStateOf(false) }
                     var isExitFocused by remember { mutableStateOf(false) }
