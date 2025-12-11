@@ -498,7 +498,7 @@ public class GameActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 text = "One more time.";
                 break;
             case 80:
-                text = "Eight and Blank.";
+                text = "Eight and Zero.";
                 break;
             case 81:
                 text = "Corner shot.";
