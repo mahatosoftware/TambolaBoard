@@ -35,6 +35,9 @@
 
         <activity android:name=".game.GameActivity" />
 
+        <activity android:name=".rule.RuleSelectionActivity" />
+        <activity android:name=".rule.PointsDistributionActivity" />
+
     </application>
 
 </manifest>

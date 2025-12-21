@@ -97,7 +97,7 @@ fun ThemedButton(
 
         contentAlignment = Alignment.Center,
 
-    ) {
+        ) {
         Text(
             text = text,
             color = MaterialTheme.colorScheme.onPrimary,        // ✔ dark text

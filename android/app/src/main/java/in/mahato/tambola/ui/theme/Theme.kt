@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 private val AppLightColors = lightColorScheme(
     primary = PurpleBg,
     onPrimary = WhiteText,
-    primaryContainer = TealBG,
+    primaryContainer = Black,
     onPrimaryContainer = WhiteText,
 
     background = WhiteBg,
@@ -24,7 +24,13 @@ private val AppLightColors = lightColorScheme(
     onSecondary = WhiteText,
 
     tertiary = WhiteBg,
-    onTertiary = BlackText
+    onTertiary = BlackText,
+
+    secondaryContainer = Byzantium,
+
+    tertiaryContainer = Bronze
+
+
 
 
 

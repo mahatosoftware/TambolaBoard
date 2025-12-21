@@ -10,13 +10,15 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import `in`.mahato.tambola.util.GeneralUtil
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    onSelectGameRule: () -> Unit,
     onNewGame: () -> Unit,
     onContinue: () -> Unit,
     onExit: () -> Unit
@@ -28,30 +30,29 @@ fun MainScreen(
     val buttonWidth = screenWidth * 0.3f
 
     // -----------------------------
-    // Focus Requesters for 3 buttons
+    // Focus Requesters for 4 buttons
     // -----------------------------
+    val focusSetRule = remember { FocusRequester() }
     val focusNew = remember { FocusRequester() }
     val focusContinue = remember { FocusRequester() }
     val focusExit = remember { FocusRequester() }
 
+    val focusRequesters = listOf(focusSetRule, focusNew, focusContinue, focusExit)
+    var focusedIndex by remember { mutableStateOf(0) }
+
+    // Request initial focus
     LaunchedEffect(Unit) {
-        focusNew.requestFocus()
+        focusRequesters[focusedIndex].requestFocus()
     }
 
-    fun moveFocusRight(current: Int) {
-        when (current) {
-            0 -> focusContinue.requestFocus()
-            1 -> focusExit.requestFocus()
-            2 -> focusNew.requestFocus()
+    // Move focus with looping
+    fun moveFocus(up: Boolean) {
+        focusedIndex = if (up) {
+            (focusedIndex - 1 + focusRequesters.size) % focusRequesters.size
+        } else {
+            (focusedIndex + 1) % focusRequesters.size
         }
-    }
-
-    fun moveFocusLeft(current: Int) {
-        when (current) {
-            0 -> focusExit.requestFocus()
-            1 -> focusNew.requestFocus()
-            2 -> focusContinue.requestFocus()
-        }
+        focusRequesters[focusedIndex].requestFocus()
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -63,14 +64,51 @@ fun MainScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Text(text = "Tambola time. The Party Starts here!!")
+            Text(
+                text = "Tambola time. The Party Starts here!!",
+                fontSize = 20.sp
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            //-------------------------------------------
+            // SELECT GAME RULES
+            //-------------------------------------------
+            var selectRulesFocused by remember { mutableStateOf(false) }
+            Button(
+                onClick = onSelectGameRule,
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                    .width(buttonWidth)
+                    .focusRequester(focusSetRule)
+                    .onFocusChanged { selectRulesFocused = it.isFocused }
+                    .onKeyEvent {
+                        if (it.type == KeyEventType.KeyDown) {
+                            when (it.key) {
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
+                                else -> false
+                            }
+                        } else false
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (selectRulesFocused)
+                        MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (selectRulesFocused)
+                        MaterialTheme.colorScheme.onSecondary
+                    else MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text(text = "Select Game Rules")
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             //-------------------------------------------
-            // NEW GAME BUTTON
+            // START NEW GAME
             //-------------------------------------------
             var newGameFocused by remember { mutableStateOf(false) }
-
             Button(
                 onClick = onNewGame,
                 modifier = Modifier
@@ -81,19 +119,19 @@ fun MainScreen(
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown) {
                             when (it.key) {
-                                Key.DirectionDown -> { moveFocusRight(0); true }
-                                Key.DirectionUp -> { moveFocusLeft(0); true }
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
                                 else -> false
                             }
                         } else false
                     },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =
-                        if (newGameFocused) MaterialTheme.colorScheme.background
-                        else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor =
-                        if (newGameFocused) MaterialTheme.colorScheme.onBackground
-                        else MaterialTheme.colorScheme.onPrimary
+                    containerColor = if (newGameFocused)
+                        MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (newGameFocused)
+                        MaterialTheme.colorScheme.onSecondary
+                    else MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(text = "Start New Game")
@@ -102,10 +140,9 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             //-------------------------------------------
-            // CONTINUE BUTTON
+            // CONTINUE LAST GAME
             //-------------------------------------------
             var continueFocused by remember { mutableStateOf(false) }
-
             Button(
                 onClick = onContinue,
                 modifier = Modifier
@@ -116,19 +153,19 @@ fun MainScreen(
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown) {
                             when (it.key) {
-                                Key.DirectionDown -> { moveFocusRight(1); true }
-                                Key.DirectionUp -> { moveFocusLeft(1); true }
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
                                 else -> false
                             }
                         } else false
                     },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =
-                        if (continueFocused) MaterialTheme.colorScheme.background
-                        else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor =
-                        if (continueFocused) MaterialTheme.colorScheme.onBackground
-                        else MaterialTheme.colorScheme.onPrimary
+                    containerColor = if (continueFocused)
+                        MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (continueFocused)
+                        MaterialTheme.colorScheme.onSecondary
+                    else MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(text = "Continue Last Game")
@@ -140,7 +177,6 @@ fun MainScreen(
             // EXIT BUTTON
             //-------------------------------------------
             var exitFocused by remember { mutableStateOf(false) }
-
             Button(
                 onClick = onExit,
                 modifier = Modifier
@@ -151,26 +187,29 @@ fun MainScreen(
                     .onKeyEvent {
                         if (it.type == KeyEventType.KeyDown) {
                             when (it.key) {
-                                Key.DirectionDown -> { moveFocusRight(2); true }
-                                Key.DirectionUp -> { moveFocusLeft(2); true }
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
                                 else -> false
                             }
                         } else false
                     },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =
-                        if (exitFocused) MaterialTheme.colorScheme.background
-                        else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor =
-                        if (exitFocused) MaterialTheme.colorScheme.onBackground
-                        else MaterialTheme.colorScheme.onPrimary
+                    containerColor = if (exitFocused)
+                        MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (exitFocused)
+                        MaterialTheme.colorScheme.onSecondary
+                    else MaterialTheme.colorScheme.onPrimary
                 )
             ) {
                 Text(text = "Exit")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
+            //-------------------------------------------
+            // COPYRIGHT
+            //-------------------------------------------
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
                 style = MaterialTheme.typography.bodyMedium

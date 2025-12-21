@@ -69,7 +69,7 @@ object FunnyPhraseUtil {
             63 -> "Tickle me."
             64 -> "Six and Four."
             65 -> "Old age pension."
-            66 -> "Chhakke pe chhakka."
+            66 -> "Six and Six."
             67 -> "Made in heaven."
             68 -> "Check your weight."
             69 -> "Favourite of mine."

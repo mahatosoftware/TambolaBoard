@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import `in`.mahato.tambola.game.GameActivity
+import `in`.mahato.tambola.rule.RuleSelectionActivity
 import `in`.mahato.tambola.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,6 +29,14 @@ fun MainScreenComposable() {
     val context = LocalContext.current
 
     MainScreen(
+
+        onSelectGameRule={
+            val intent = Intent(context, RuleSelectionActivity::class.java)
+
+            context.startActivity(intent)
+            if (context is MainActivity) context.finish()
+        },
+
         onNewGame = {
             val intent = Intent(context, GameActivity::class.java)
             intent.putExtra("NEW_GAME", true)
