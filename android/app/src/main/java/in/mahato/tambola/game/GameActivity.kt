@@ -29,13 +29,11 @@ import androidx.compose.ui.input.key.Key.Companion.DirectionRight
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.Room
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
-import `in`.mahato.tambola.util.ScreenSizeUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -92,14 +90,14 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "flash")
     val flashColor by infiniteTransition.animateColor(
         initialValue = Color.Gray,
         targetValue = Color.Cyan,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 500),
             repeatMode = RepeatMode.Reverse
-        )
+        ), label = "flash"
     )
 
     fun callNumber() {
@@ -214,18 +212,22 @@ fun GameControls(
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var showExitDialog by remember { mutableStateOf(false) }
+    var showWinnerBoard by remember { mutableStateOf(false) }
+
     val frCall = remember { FocusRequester() }
     val frAuto = remember { FocusRequester() }
+    val frWinner = remember { FocusRequester() }
     val frReset = remember { FocusRequester() }
     val frExit = remember { FocusRequester() }
-    val requesters = remember { listOf(frCall, frAuto, frReset, frExit) }
+
+    val requesters = remember { listOf(frCall, frAuto, frWinner, frReset, frExit) }
     var focusedIndex by remember { mutableIntStateOf(0) }
 
     fun handleDpad(event: KeyEvent, current: Int): Boolean {
         if (event.type != KeyEventType.KeyDown) return false
         when (event.key) {
-            DirectionRight -> { requesters[(current + 1) % 4].requestFocus(); return true }
-            DirectionLeft -> { requesters[(current - 1 + 4) % 4].requestFocus(); return true }
+            DirectionRight -> { requesters[(current + 1) % 5].requestFocus(); return true }
+            DirectionLeft -> { requesters[(current - 1 + 5) % 5].requestFocus(); return true }
         }
         return false
     }
@@ -246,14 +248,14 @@ fun GameControls(
             }
         }
 
-        Box(modifier = Modifier.height(120.dp), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.height(130.dp), contentAlignment = Alignment.Center) {
             AnimatedContent(
                 targetState = isTtsReady,
                 transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(500)) },
                 label = "TtsLoading"
             ) { ready ->
                 if (ready) {
-                    FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, maxItemsInEachRow = 2) {
+                    FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, maxItemsInEachRow = 3) {
                         val getBtnColors = @Composable { index: Int ->
                             ButtonDefaults.buttonColors(
                                 containerColor = if (focusedIndex == index) MaterialTheme.colorScheme.background
@@ -264,8 +266,9 @@ fun GameControls(
 
                         Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text("Call Next") }
                         Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) "Pause" else "Auto Call") }
-                        Button(onClick = { showResetDialog = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Reset") }
-                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Exit") }
+                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Winners") }
+                        Button(onClick = { showResetDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Reset") }
+                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Exit") }
                     }
                 } else {
                     val infiniteLoading = rememberInfiniteTransition(label = "loading")
@@ -287,6 +290,10 @@ fun GameControls(
         }
     }
 
+    if (showWinnerBoard) {
+        WinnerBoardDialog(onDismiss = { showWinnerBoard = false })
+    }
+
     if (showResetDialog) {
         AlertDialog(onDismissRequest = { showResetDialog = false },
             title = { Text("Reset Game?", color = Color.Red) },
@@ -304,6 +311,37 @@ fun GameControls(
             dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text("No") } }
         )
     }
+}
+
+@Composable
+fun WinnerBoardDialog(onDismiss: () -> Unit) {
+    val prizes = listOf("Early Five", "Top Line", "Middle Line", "Bottom Line", "Full House")
+    val checkedStates = remember { mutableStateMapOf<String, Boolean>() }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Winner Board", fontWeight = FontWeight.Bold) },
+        text = {
+            Column {
+                prizes.forEach { prize ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(prize)
+                        Checkbox(
+                            checked = checkedStates[prize] ?: false,
+                            onCheckedChange = { checkedStates[prize] = it }
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Close") }
+        }
+    )
 }
 
 @Composable
