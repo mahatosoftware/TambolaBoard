@@ -60,19 +60,11 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("com.google.zxing:core:3.5.3")
-
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0") 
-
     implementation("androidx.compose.material:material-icons-extended")
-
-
-
-
     implementation(platform("androidx.compose:compose-bom:2024.10.00"))
-
     implementation("androidx.compose.material3:material3")
-
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
