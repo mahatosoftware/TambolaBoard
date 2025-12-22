@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import `in`.ahato.tambola.rule.RuleViewModel
 
+
 /* ---------------- COLORS ---------------- */
 
 val PurpleBgStart = Color(0xFF4A148C)
@@ -203,10 +204,17 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             }
 
             Spacer(Modifier.height(12.dp))
-
+            val context = LocalContext.current
             Button(
                 enabled = allocatedPoints == totalPointsInt && totalPointsInt > 0,
-                onClick = {},
+                onClick = {
+                    val intent = Intent(context, SummaryActivity::class.java).apply {
+                        // Ensure TambolaRule implements Parcelable
+                        putParcelableArrayListExtra("rules", ArrayList(rules))
+                        putExtra("totalPoints", totalPointsInt)
+                    }
+                    context.startActivity(intent)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),

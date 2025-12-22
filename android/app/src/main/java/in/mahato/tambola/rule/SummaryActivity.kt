@@ -1,6 +1,8 @@
 package `in`.mahato.tambola.rule
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -9,26 +11,59 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import `in`.mahato.tambola.MainActivity
+import `in`.mahato.tambola.game.AppDatabase
+import `in`.mahato.tambola.rule.model.SavedRuleEntity
+import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Retrieve the rules and points passed via Intent
-        val rules = intent.getParcelableArrayListExtra<TambolaRule>("rules") ?: emptyList<TambolaRule>()
+        // Using proper type-safe intent retrieval for newer Android versions if needed,
+        // but keeping your standard implementation for compatibility.
+        val rules = intent.getParcelableArrayListExtra<TambolaRule>("rules") ?: emptyList()
         val totalPoints = intent.getIntExtra("totalPoints", 0)
-        val allocatedPoints = intent.getIntExtra("allocatedPoints", 0)
 
         setContent {
-            SummaryScreen(rules, allocatedPoints, totalPoints)
+            SummaryScreen(
+                rules = rules,
+                total = totalPoints,
+                onConfirmSave = { finalEntities ->
+                    saveToDatabase(finalEntities)
+                }
+            )
+        }
+    }
+
+    private fun saveToDatabase(entities: List<SavedRuleEntity>) {
+        lifecycleScope.launch {
+            try {
+                val db = AppDatabase.getDatabase(this@SummaryActivity)
+                // replaceRules handles the Delete + Insert transaction
+                db.ruleDao().replaceRules(entities)
+                Toast.makeText(this@SummaryActivity, "Distribution Saved Successfully", Toast.LENGTH_SHORT).show()
+                // Redirect to MainActivity
+                val intent = Intent(this@SummaryActivity, MainActivity::class.java).apply {
+                    // Clear the backstack so the user can't return to the Summary screen
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                startActivity(intent)
+                finish() // Close SummaryActivity
+
+            } catch (e: Exception) {
+                Toast.makeText(this@SummaryActivity, "Error saving: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
@@ -36,92 +71,124 @@ class SummaryActivity : ComponentActivity() {
 @Composable
 fun SummaryScreen(
     rules: List<TambolaRule>,
-    allocated: Int,
-    total: Int
+    total: Int,
+    onConfirmSave: (List<SavedRuleEntity>) -> Unit
 ) {
-    val remaining = total - allocated
-    val color = if (remaining == 0) MintButton else Color.Red
+    // track saving state to disable button and show progress if needed
+    var isSaving by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(listOf(PurpleBgStart, PurpleBgEnd))
-            )
+            .background(Brush.verticalGradient(listOf(PurpleBgStart, PurpleBgEnd)))
             .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
+        Column {
             Text(
-                "SUMMARY",
+                "FINAL DISTRIBUTION SUMMARY",
                 fontSize = 22.sp,
-                color = Color.White
+                fontWeight = FontWeight.Black,
+                color = Color.White,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Spacer(Modifier.height(16.dp))
-
-            /* -------- USED / REMAINING -------- */
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            // Grand Total Display
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MintButton),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Column {
-                    Text("Used", color = Color.LightGray, fontSize = 12.sp)
-                    Text("$allocated", color = Color.White, fontSize = 18.sp)
-                }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text("Remaining", color = Color.LightGray, fontSize = 12.sp)
-                    Text("$remaining", color = color, fontSize = 18.sp)
+                Row(
+                    Modifier.padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("GRAND TOTAL", fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text("$total PTS", fontSize = 26.sp, fontWeight = FontWeight.Black, color = Color.Black)
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
-
-            /* -------- LIST OF RULES -------- */
-            LazyColumn(
-                modifier = Modifier.weight(1f)
+            // Read-Only List
+            Card(
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.3f))
             ) {
-                items(rules) { rule ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Text(
-                            rule.name,
-                            modifier = Modifier.weight(2f),
-                            color = Color.White
-                        )
-                        Text(
-                            rule.quantity.toString(),
-                            modifier = Modifier.weight(1f),
-                            color = GoldButton
-                        )
-                        Text(
-                            "${rule.percentage}%",
-                            modifier = Modifier.weight(1f),
-                            color = Color.White
-                        )
+                Column(Modifier.padding(16.dp)) {
+                    SummaryHeaderRow()
+                    HorizontalDivider(
+                        color = Color.White.copy(alpha = 0.15f),
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+
+                    LazyColumn(Modifier.fillMaxSize()) {
+                        items(rules) { rule ->
+                            // Calculate total amount for this rule
+                            val amount = ((rule.percentage / 100.0) * total * rule.quantity).toInt()
+                            SummaryItemRow(rule, amount)
+                            HorizontalDivider(color = Color.White.copy(alpha = 0.05f))
+                        }
                     }
                 }
             }
 
-            /* -------- AD SPACE -------- */
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-                    .background(Color.DarkGray),
-                contentAlignment = Alignment.Center
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                enabled = !isSaving,
+                onClick = {
+                    isSaving = true
+                    val entities = rules.map { rule ->
+                        val amountPerItem = ((rule.percentage / 100.0) * total).toInt()
+                        SavedRuleEntity(
+                            ruleId = rule.id,
+                            ruleName = rule.name,
+                            percentage = rule.percentage,
+                            quantity = rule.quantity,
+                            amountPerItem = amountPerItem,
+                            totalRuleAmount = amountPerItem * rule.quantity
+                        )
+                    }
+                    onConfirmSave(entities)
+                },
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = GoldButton,
+                    disabledContainerColor = GoldButton.copy(alpha = 0.5f)
+                ),
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    "Advertisement",
-                    color = Color.White,
-                    fontSize = 14.sp
-                )
+                if (isSaving) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.Black)
+                } else {
+                    Text("SAVE & DONE", color = Color.Black, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                }
             }
         }
+    }
+}
+
+@Composable
+fun SummaryHeaderRow() {
+    Row(Modifier.fillMaxWidth()) {
+        Text("RULE", Modifier.weight(2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        Text("QTY", Modifier.weight(0.8f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+        Text("AMOUNT", Modifier.weight(1.2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End)
+    }
+}
+
+@Composable
+fun SummaryItemRow(rule: TambolaRule, amount: Int) {
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(Modifier.weight(2f)) {
+            Text(rule.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text("${rule.percentage}% of total", color = Color.White.copy(0.5f), fontSize = 11.sp)
+        }
+        Text("${rule.quantity}", Modifier.weight(0.8f), color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
+        Text("$amount", Modifier.weight(1.2f), color = GoldButton, fontWeight = FontWeight.Black, textAlign = TextAlign.End, fontSize = 18.sp)
     }
 }

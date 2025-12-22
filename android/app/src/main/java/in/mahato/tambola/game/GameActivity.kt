@@ -29,12 +29,15 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -45,6 +48,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -81,6 +85,7 @@ import androidx.compose.ui.unit.sp
 import androidx.room.Room
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+import `in`.mahato.tambola.rule.model.SavedRuleEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.coroutines.delay
@@ -211,53 +216,6 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
         }
     }
 
-  /*  Scaffold(
-        containerColor = MaterialTheme.colorScheme.primary,
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Tambola Board", color = MaterialTheme.colorScheme.onPrimary) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
-            )
-        }
-    ) { padding ->
-        val contentModifier = Modifier.fillMaxSize().padding(padding).padding(8.dp)
-
-        if (isLandscape) {
-            Row(modifier = contentModifier, verticalAlignment = Alignment.CenterVertically) {
-                Column(
-                    modifier = Modifier.weight(0.4f).fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    GameControls(isAutoCalling, { callNumber() }, { isAutoCalling = !isAutoCalling },
-                        { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, true, isTtsReady, gameId)
-                }
-                Column(modifier = Modifier.weight(0.6f)) {
-                    NumberGrid(calledNumbers, lastNumber, flashColor)
-                }
-            }
-        } else {
-            Column(
-                modifier = contentModifier,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                GameControls(isAutoCalling, { callNumber() }, { isAutoCalling = !isAutoCalling },
-                    { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, false, isTtsReady, gameId)
-
-                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    NumberGrid(calledNumbers, lastNumber, flashColor)
-                }
-
-                Text(
-                    text = GeneralUtil.getCopyrightMessage(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-        }
-    }*/
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
@@ -288,6 +246,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                         verticalArrangement = Arrangement.Center
                     ) {
                         GameControls(
+                            db = db,
                             isAutoCalling,
                             { callNumber() },
                             { isAutoCalling = !isAutoCalling },
@@ -311,6 +270,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     GameControls(
+                        db = db,
                         isAutoCalling,
                         { callNumber() },
                         { isAutoCalling = !isAutoCalling },
@@ -347,6 +307,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun GameControls(
+    db: AppDatabase,
     isAutoCalling: Boolean,
     onCall: () -> Unit,
     onAutoToggle: () -> Unit,
@@ -452,7 +413,7 @@ fun GameControls(
     }
 
     if (showWinnerBoard) {
-        WinnerBoardDialog(onDismiss = { showWinnerBoard = false })
+        WinnerBoardDialog(db = db, onDismiss = { showWinnerBoard = false })
     }
 
     if (showResetDialog) {
@@ -494,34 +455,83 @@ fun generateQRCode(text: String): Bitmap? {
 }
 
 @Composable
-fun WinnerBoardDialog(onDismiss: () -> Unit) {
-    val prizes = listOf("Early Five", "Top Line", "Middle Line", "Bottom Line", "Full House")
-    val checkedStates = remember { mutableStateMapOf<String, Boolean>() }
+fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
+    var savedRules by remember { mutableStateOf<List<SavedRuleEntity>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    // Fetch rules from DB when dialog opens
+    LaunchedEffect(Unit) {
+        savedRules = db.ruleDao().getAllSavedRules()
+        isLoading = false
+    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Winner Board", fontWeight = FontWeight.Bold) },
-        text = {
+        title = {
             Column {
-                prizes.forEach { prize ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(prize)
-                        Checkbox(
-                            checked = checkedStates[prize] ?: false,
-                            onCheckedChange = { checkedStates[prize] = it }
-                        )
+                Text("Winner Board", fontWeight = FontWeight.Black, fontSize = 24.sp)
+                Text("Claim prizes as they are won", fontSize = 12.sp, color = Color.Gray)
+            }
+        },
+        text = {
+            Box(modifier = Modifier.heightIn(max = 400.dp)) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                } else if (savedRules.isEmpty()) {
+                    Text("No point distribution found. Please set rules in settings.")
+                } else {
+                    LazyColumn {
+                        items(savedRules) { rule ->
+                            WinnerItemRow(rule)
+                            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
+                        }
                     }
                 }
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1DE9B6))
+            ) {
+                Text("Close Board", color = Color.Black, fontWeight = FontWeight.Bold)
+            }
         }
     )
+}
+
+@Composable
+fun WinnerItemRow(rule: SavedRuleEntity) {
+    // State to track if this specific prize is claimed
+    var isClaimed by remember { mutableStateOf(false) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = rule.ruleName.uppercase(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = if (isClaimed) Color.Gray else Color.Unspecified
+            )
+            Text(
+                text = "Prize: ${rule.amountPerItem} pts",
+                fontSize = 12.sp,
+                color = if (isClaimed) Color.Gray else Color(0xFF7B1FA2)
+            )
+        }
+
+        // Action button to claim
+        Checkbox(
+            checked = isClaimed,
+            onCheckedChange = { isClaimed = it }
+        )
+    }
 }
 @Composable
 fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
