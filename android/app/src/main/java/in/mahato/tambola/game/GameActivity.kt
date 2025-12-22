@@ -1,5 +1,6 @@
 package `in`.mahato.tambola.game
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
@@ -24,7 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.input.key.Key.Companion.DirectionLeft
 import androidx.compose.ui.input.key.Key.Companion.DirectionRight
+import androidx.compose.ui.layout.LayoutIdParentData
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,6 +60,8 @@ class GameActivity : ComponentActivity() {
                 ) {
                     tts.setLanguage(Locale.ENGLISH)
                 }
+
+                tts.speak("Welcome to Tambola Board", TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
 
@@ -79,9 +85,11 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
     val dao = db.calledNumberDao()
     var calledNumbers by remember { mutableStateOf(listOf<Int>()) }
     var lastNumber by remember { mutableStateOf<Int?>(null) }
-    var isAutoCalling by remember { mutableStateOf(false) } // State for Auto Call
+    var isAutoCalling by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val infiniteTransition = rememberInfiniteTransition()
     val flashColor by infiniteTransition.animateColor(
@@ -93,7 +101,6 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
         )
     )
 
-    // Function to call number
     fun callNumber() {
         val remainingNumbers = (1..90).toSet() - calledNumbers.toSet()
         if (remainingNumbers.isNotEmpty()) {
@@ -113,18 +120,16 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
         }
     }
 
-    // ⭐ Auto Call Logic
     LaunchedEffect(isAutoCalling) {
         if (isAutoCalling) {
             while (isAutoCalling && calledNumbers.size < 90) {
                 callNumber()
-                delay(4000) // 4 seconds interval
+                delay(6000)
             }
             isAutoCalling = false
         }
     }
 
-    // Load from database on start
     LaunchedEffect(Unit) {
         if (isNewGame) {
             dao.resetBoard()
@@ -149,196 +154,215 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Tambola Board",
-                        maxLines = 1,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Text("Tambola Board", color = MaterialTheme.colorScheme.onPrimary)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             )
-        },
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                var showResetDialog by remember { mutableStateOf(false) }
-                var showExitDialog by remember { mutableStateOf(false) }
+        }
+    ) { padding ->
+        val contentModifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .padding(8.dp)
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+        if (isLandscape) {
+            Row(modifier = contentModifier, verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier.weight(0.4f).fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    // --- DPAD Focus Requesters ---
-                    val frCall = remember { FocusRequester() }
-                    val frAuto = remember { FocusRequester() }
-                    val frReset = remember { FocusRequester() }
-                    val frExit = remember { FocusRequester() }
-                    val requesters = remember { listOf(frCall, frAuto, frReset, frExit) }
-
-                    var isCallFocused by remember { mutableStateOf(false) }
-                    var isAutoFocused by remember { mutableStateOf(false) }
-                    var isResetFocused by remember { mutableStateOf(false) }
-                    var isExitFocused by remember { mutableStateOf(false) }
-
-                    LaunchedEffect(Unit) {
-                        delay(100)
-                        frCall.requestFocus()
-                    }
-
-                    fun handleDpad(event: KeyEvent, current: Int): Boolean {
-                        if (event.type != KeyEventType.KeyDown) return false
-                        when (event.key) {
-                            DirectionRight -> {
-                                requesters[(current + 1) % 4].requestFocus()
-                                return true
-                            }
-                            DirectionLeft -> {
-                                requesters[(current - 1 + 4) % 4].requestFocus()
-                                return true
-                            }
-                        }
-                        return false
-                    }
-
-                    Button(
-                        onClick = { callNumber() },
-                        modifier = Modifier
-                            .focusRequester(frCall)
-                            .onFocusChanged { isCallFocused = it.isFocused }
-                            .onKeyEvent { handleDpad(it, 0) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isCallFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = if (isCallFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) { Text("Call Number") }
-
-                    // ⭐ Added Auto Call / Pause Button
-                    Button(
-                        onClick = { isAutoCalling = !isAutoCalling },
-                        modifier = Modifier
-                            .focusRequester(frAuto)
-                            .onFocusChanged { isAutoFocused = it.isFocused }
-                            .onKeyEvent { handleDpad(it, 1) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isAutoFocused) MaterialTheme.colorScheme.background
-                            else if (isAutoCalling) Color(0xFFFFB300) // Amber when active
-                            else MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = if (isAutoFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) { Text(if (isAutoCalling) "Pause" else "Auto Call") }
-
-                    Button(
-                        onClick = { showResetDialog = true },
-                        modifier = Modifier
-                            .focusRequester(frReset)
-                            .onFocusChanged { isResetFocused = it.isFocused }
-                            .onKeyEvent { handleDpad(it, 2) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isResetFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = if (isResetFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) { Text("Reset Board") }
-
-                    Button(
-                        onClick = { showExitDialog = true },
-                        modifier = Modifier
-                            .focusRequester(frExit)
-                            .onFocusChanged { isExitFocused = it.isFocused }
-                            .onKeyEvent { handleDpad(it, 3) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isExitFocused) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = if (isExitFocused) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) { Text("Exit") }
-                }
-
-                // RESET DIALOG
-                if (showResetDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showResetDialog = false },
-                        title = { Text("Reset Game?", color = Color.Red) },
-                        text = { Text("Are you sure you want to reset? This clears called numbers.") },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                resetBoard()
-                                showResetDialog = false
-                            }) { Text("Yes") }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { showResetDialog = false }) { Text("No") }
-                        }
+                    GameControls(
+                        isAutoCalling = isAutoCalling,
+                        onCall = { callNumber() },
+                        onAutoToggle = { isAutoCalling = !isAutoCalling },
+                        onResetClick = { resetBoard() },
+                        onExitClick = { (context as GameActivity).finish() },
+                        lastNumber = lastNumber,
+                        isLandscape = true
                     )
                 }
+                Column(modifier = Modifier.weight(0.6f)) {
+                    NumberGrid(calledNumbers, lastNumber, flashColor)
+                }
+            }
+        } else {
+            Column(
+                modifier = contentModifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Takes up top space
+                GameControls(
+                    isAutoCalling = isAutoCalling,
+                    onCall = { callNumber() },
+                    onAutoToggle = { isAutoCalling = !isAutoCalling },
+                    onResetClick = { resetBoard() },
+                    onExitClick = { (context as GameActivity).finish() },
+                    lastNumber = lastNumber,
+                    isLandscape = false
+                )
 
-                // EXIT DIALOG
-                if (showExitDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showExitDialog = false },
-                        title = { Text("Exit Game?", color = Color.Red) },
-                        text = { Text("Are you sure you want to exit?") },
-                        confirmButton = {
-                            TextButton(onClick = {
-                                (context as GameActivity).finish()
-                                showExitDialog = false
-                            }) { Text("Yes") }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { showExitDialog = false }) { Text("No") }
-                        }
-                    )
+                // Grid takes up all middle space
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    NumberGrid(calledNumbers, lastNumber, flashColor)
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = "Last Called Number: ${lastNumber ?: "-"}",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(10),
-                    modifier = Modifier.fillMaxWidth(),
-                    content = {
-                        items((1..90).toList()) { number ->
-                            val isCalled = calledNumbers.contains(number)
-                            val isLast = lastNumber == number
-                            val bgColor = when {
-                                isLast -> flashColor
-                                isCalled -> Color.Magenta
-                                else -> MaterialTheme.colorScheme.secondary
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .padding(2.dp)
-                                    .size((ScreenSizeUtil.getScreenHeightDp(context) * 0.55 * 0.1).dp)
-                                    .background(
-                                        color = bgColor,
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .border(1.dp, Color.Black, RoundedCornerShape(4.dp)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = "$number")
-                            }
-                        }
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
+                // Footer
                 Text(
                     text = GeneralUtil.getCopyrightMessage(),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
-    )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun GameControls(
+    isAutoCalling: Boolean,
+    onCall: () -> Unit,
+    onAutoToggle: () -> Unit,
+    onResetClick: () -> Unit,
+    onExitClick: () -> Unit,
+    lastNumber: Int?,
+    isLandscape: Boolean
+) {
+    var showResetDialog by remember { mutableStateOf(false) }
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    val frCall = remember { FocusRequester() }
+    val frAuto = remember { FocusRequester() }
+    val frReset = remember { FocusRequester() }
+    val frExit = remember { FocusRequester() }
+    val requesters = remember { listOf(frCall, frAuto, frReset, frExit) }
+
+    var focusedIndex by remember { mutableIntStateOf(0) }
+
+    fun handleDpad(event: KeyEvent, current: Int): Boolean {
+        if (event.type != KeyEventType.KeyDown) return false
+        when (event.key) {
+            DirectionRight -> { requesters[(current + 1) % 4].requestFocus(); return true }
+            DirectionLeft -> { requesters[(current - 1 + 4) % 4].requestFocus(); return true }
+        }
+        return false
+    }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        // Last Number Display (Hero Element to fill vertical space)
+        Card(
+            modifier = Modifier
+                .padding(vertical = if (isLandscape) 8.dp else 16.dp)
+                .fillMaxWidth(if (isLandscape) 0.8f else 0.7f),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(if (isLandscape) 8.dp else 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("LAST NUMBER", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "${lastNumber ?: "--"}",
+                    style = if (isLandscape) MaterialTheme.typography.displayMedium else MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.onSecondary
+                )
+            }
+        }
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            maxItemsInEachRow = 2
+        ) {
+            val getBtnColors = @Composable { index: Int ->
+                ButtonDefaults.buttonColors(
+                    containerColor = if (focusedIndex == index) MaterialTheme.colorScheme.background
+                    else if (index == 1 && isAutoCalling) Color(0xFFFFB300)
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (focusedIndex == index) MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
+                )
+            }
+
+            Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) })
+            { Text("Call Next") }
+
+            Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) })
+            { Text(if (isAutoCalling) "Pause" else "Auto Call") }
+
+            Button(onClick = { showResetDialog = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) })
+            { Text("Reset") }
+
+            Button(onClick = { showExitDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) })
+            { Text("Exit") }
+        }
+    }
+
+    if (showResetDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetDialog = false },
+            title = { Text("Reset Game?", color = Color.Red) },
+            text = { Text("Are you sure you want to reset the board?") },
+            confirmButton = { TextButton(onClick = { onResetClick(); showResetDialog = false }) { Text("Yes") } },
+            dismissButton = { TextButton(onClick = { showResetDialog = false }) { Text("No") } }
+        )
+    }
+
+    if (showExitDialog) {
+        AlertDialog(
+            onDismissRequest = { showExitDialog = false },
+            title = { Text("Exit Game?", color = Color.Red) },
+            text = { Text("Quit to main menu?") },
+            confirmButton = { TextButton(onClick = { onExitClick(); showExitDialog = false }) { Text("Yes") } },
+            dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text("No") } }
+        )
+    }
+}
+
+@Composable
+fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
+    val configuration = LocalConfiguration.current
+    val cellSize = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        (configuration.screenHeightDp * 0.08).dp
+    } else {
+        (configuration.screenWidthDp * 0.085).dp
+    }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(10),
+        modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+        contentPadding = PaddingValues(4.dp),
+        userScrollEnabled = false
+    ) {
+        items((1..90).toList()) { number ->
+            val isCalled = calledNumbers.contains(number)
+            val isLast = lastNumber == number
+            val bgColor = when {
+                isLast -> flashColor
+                isCalled -> Color.Magenta
+                else -> MaterialTheme.colorScheme.secondary
+            }
+            Box(
+                modifier = Modifier
+                    .padding(2.dp)
+                    .size(cellSize)
+                    .background(color = bgColor, shape = RoundedCornerShape(4.dp))
+                    .border(1.dp, Color.Black.copy(alpha = 0.5f), RoundedCornerShape(4.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "$number",
+                    fontSize = (cellSize.value * 0.4).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isCalled || isLast) Color.White else MaterialTheme.colorScheme.onSecondary
+                )
+            }
+        }
+    }
 }

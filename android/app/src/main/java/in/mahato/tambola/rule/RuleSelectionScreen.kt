@@ -2,9 +2,7 @@ package `in`.mahato.tambola.rule
 
 import android.content.Intent
 import android.content.res.Configuration
-
-import kotlinx.coroutines.launch
-import androidx.compose.animation.animateColorAsState
+import android.os.Parcelable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -14,11 +12,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,7 +29,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -60,7 +53,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -71,7 +63,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -82,8 +73,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import `in`.ahato.tambola.rule.RuleViewModel
 import `in`.mahato.tambola.R
 import `in`.mahato.tambola.ui.theme.AppTheme
+import kotlinx.parcelize.Parcelize
 
 
 // -------------------- MODEL --------------------
@@ -95,7 +88,7 @@ data class TambolaRule(
     val icon: ImageVector,
     val winningPattern: List<Int>
 )*/
-
+@Parcelize
 data class TambolaRule(
     val id: Int,
     val name: String,
@@ -103,9 +96,11 @@ data class TambolaRule(
     val type: TambolaRuleType,
     val winningPattern: List<Int>,
     val quantity: Int = 1,
-    val percentage: Int = 0
+    val percentage: Int = 0,
+    val weight: Int = 1,
+    val isFullHouse: Boolean =false
 
-)
+) : Parcelable
 
 
 // -------------------- SAMPLE DATA --------------------
@@ -137,28 +132,29 @@ enum class TambolaRuleType(val iconRes: Int) {
 
 
 val tambolaRules = listOf(
-    TambolaRule(1, "Early Five", "First player to mark any five numbers.", TambolaRuleType.EARLY_FIVE, listOf(0, 4, 12, 18, 26)),
-    TambolaRule(2, "Top Line", "Complete all numbers in the top row.", TambolaRuleType.TOP_LINE, (0..8).toList()),
-    TambolaRule(3, "Middle Line", "Complete all numbers in the middle row.", TambolaRuleType.MIDDLE_LINE, (9..17).toList()),
-    TambolaRule(4, "Bottom Line", "Complete all numbers in the bottom row.", TambolaRuleType.BOTTOM_LINE, (18..26).toList()),
-    TambolaRule(5, "Full House", "Complete all numbers on the ticket.", TambolaRuleType.FULL_HOUSE, (0..26).toList()),
-    TambolaRule(6, "Second House", "Second player to complete the ticket.", TambolaRuleType.SECOND_HOUSE, (0..26).toList()),
-    TambolaRule(7, "Third House", "Third player to complete the ticket.", TambolaRuleType.THIRD_HOUSE, (0..26).toList()),
-    TambolaRule(8, "Corner", "Top Row:1st ,5th Number\n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7, 18, 26)),
-    TambolaRule(9, "Diamond", "Top Row:1st ,5th Number\n Middle Row: 3rd Number \n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7,14, 18, 26)),
-    TambolaRule(10, "Pyramid", "Top Row: 3rd Number \n Middle Row: 2nd, 4th Number\n Bottom Row: 1st, 3rd, 5th Number", TambolaRuleType.PYRAMID, listOf(4,  12, 15, 18,21, 26)),
-    TambolaRule(11, "Inverted Pyramid", "Top Row: 1st, 3rd and 5th number \n Middle Row: 2nd and 4th number\n Bottom Row 3rd number.", TambolaRuleType.INVERTED_PYRAMID, listOf(0, 4, 7, 12, 15, 21)),
-    TambolaRule(12, "Star", "Top Row: 1st, 3rd, 5th Number\n Middle Row: All Numbers \n Bottom Row: 1st, 3rd, 5th Number.", TambolaRuleType.STAR, listOf(0,4,7,10,12, 14,15, 17, 18,21,26)),
-    TambolaRule(13, "Odds", "Top Row: 1st, 3rd, 5th Number \n Middle Row: 1st, 3rd, 5th Number \n Bottom Row: 1st, 3rd, 5th Number.", TambolaRuleType.ODDS, listOf(0, 4, 7,10,14,17,18,21, 26)),
-    TambolaRule(14, "Even", "Top Row: 2nd, 4th Number \n Middle Row: 2nd, 4th Number \n Bottom Row: 2nd, 4th Number.", TambolaRuleType.EVEN, listOf(2,5,12,15,20,25)),
-    TambolaRule(15, "First Half", "First three numbers from every row.", TambolaRuleType.FIRST_HALF, listOf(0,2,4,10,12,14,18,20,21)),
-    TambolaRule(16, "Second Half", "Last three numbers from every row.", TambolaRuleType.SECOND_HALF, listOf(4,5,7,14,15,17,21,25,26)),
-    TambolaRule(17, "Breakfast", "Column 1,2,3. Mark numbers from 1 to 29.", TambolaRuleType.BREAKFAST, listOf(0,2,10,18,20)),
-    TambolaRule(18, "Lunch", "Column 4,5,6. Mark numbers from 30 to 59.", TambolaRuleType.LUNCH, listOf(4,5,12,14,21)),
-    TambolaRule(19, "Dinner", "Column 7,8,9. Mark numbers from 60 to 90.", TambolaRuleType.DINNER, listOf(7,15,17,25,26)),
-    TambolaRule(20, "Temperature", "Mark 1st and Last numbers of a ticket.", TambolaRuleType.TEMPERATURE, listOf(0,26)),
-    TambolaRule(21, "Below Fifty", "All numbers present on a ticket which are less than 50. Numbers from 1 to 49", TambolaRuleType.BELOW_FIFTY, listOf(0,2,4,10,12,18,20,21)),
-    TambolaRule(22, "Above Fifty", "All numbers present on a card which are greater than equal to 50. Numbers from 50 to 90", TambolaRuleType.ABOVE_FIFTY, listOf(5,7,14,15,17,25,26))
+    TambolaRule(1, "Full House", "Complete all numbers on the ticket.", TambolaRuleType.FULL_HOUSE, (0..26).toList(),weight = 50,isFullHouse=true),
+    TambolaRule(2, "Second House", "Second player to complete the ticket.", TambolaRuleType.SECOND_HOUSE, (0..26).toList(),weight = 30, isFullHouse = true),
+    TambolaRule(3, "Third House", "Third player to complete the ticket.", TambolaRuleType.THIRD_HOUSE, (0..26).toList(),weight = 20, isFullHouse = true),
+
+    TambolaRule(4, "Early Five", "First player to mark any five numbers.", TambolaRuleType.EARLY_FIVE, listOf(0, 4, 12, 18, 26) ,weight = 10),
+    TambolaRule(5, "Top Line", "Complete all numbers in the top row.", TambolaRuleType.TOP_LINE, (0..8).toList(),weight = 10),
+    TambolaRule(6, "Middle Line", "Complete all numbers in the middle row.", TambolaRuleType.MIDDLE_LINE, (9..17).toList(),weight =10 ),
+    TambolaRule(7, "Bottom Line", "Complete all numbers in the bottom row.", TambolaRuleType.BOTTOM_LINE, (18..26).toList(),weight = 10),
+    TambolaRule(8, "Corner", "Top Row:1st ,5th Number\n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7, 18, 26),weight = 10),
+    TambolaRule(9, "Diamond", "Top Row:1st ,5th Number\n Middle Row: 3rd Number \n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7,14, 18, 26),weight = 10),
+    TambolaRule(10, "Pyramid", "Top Row: 3rd Number \n Middle Row: 2nd, 4th Number\n Bottom Row: 1st, 3rd, 5th Number", TambolaRuleType.PYRAMID, listOf(4,  12, 15, 18,21, 26),weight = 10),
+    TambolaRule(11, "Inverted Pyramid", "Top Row: 1st, 3rd and 5th number \n Middle Row: 2nd and 4th number\n Bottom Row 3rd number.", TambolaRuleType.INVERTED_PYRAMID, listOf(0, 4, 7, 12, 15, 21),weight = 10),
+    TambolaRule(12, "Star", "Top Row: 1st, 3rd, 5th Number\n Middle Row: All Numbers \n Bottom Row: 1st, 3rd, 5th Number.", TambolaRuleType.STAR, listOf(0,4,7,10,12, 14,15, 17, 18,21,26),weight = 10),
+    TambolaRule(13, "Odds", "Top Row: 1st, 3rd, 5th Number \n Middle Row: 1st, 3rd, 5th Number \n Bottom Row: 1st, 3rd, 5th Number.", TambolaRuleType.ODDS, listOf(0, 4, 7,10,14,17,18,21, 26),weight = 10),
+    TambolaRule(14, "Even", "Top Row: 2nd, 4th Number \n Middle Row: 2nd, 4th Number \n Bottom Row: 2nd, 4th Number.", TambolaRuleType.EVEN, listOf(2,5,12,15,20,25),weight = 10),
+    TambolaRule(15, "First Half", "First three numbers from every row.", TambolaRuleType.FIRST_HALF, listOf(0,2,4,10,12,14,18,20,21),weight = 10),
+    TambolaRule(16, "Second Half", "Last three numbers from every row.", TambolaRuleType.SECOND_HALF, listOf(4,5,7,14,15,17,21,25,26),weight = 10),
+    TambolaRule(17, "Breakfast", "Column 1,2,3. Mark numbers from 1 to 29.", TambolaRuleType.BREAKFAST, listOf(0,2,10,18,20),weight = 10),
+    TambolaRule(18, "Lunch", "Column 4,5,6. Mark numbers from 30 to 59.", TambolaRuleType.LUNCH, listOf(4,5,12,14,21),weight = 10),
+    TambolaRule(19, "Dinner", "Column 7,8,9. Mark numbers from 60 to 90.", TambolaRuleType.DINNER, listOf(7,15,17,25,26),weight = 10),
+    TambolaRule(20, "Temperature", "Mark 1st and Last numbers of a ticket.", TambolaRuleType.TEMPERATURE, listOf(0,26),weight = 10),
+    TambolaRule(21, "Below Fifty", "All numbers present on a ticket which are less than 50. Numbers from 1 to 49", TambolaRuleType.BELOW_FIFTY, listOf(0,2,4,10,12,18,20,21),weight = 10),
+    TambolaRule(22, "Above Fifty", "All numbers present on a card which are greater than equal to 50. Numbers from 50 to 90", TambolaRuleType.ABOVE_FIFTY, listOf(5,7,14,15,17,25,26),weight = 10)
 )
 
 

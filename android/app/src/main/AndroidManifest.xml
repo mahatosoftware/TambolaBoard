@@ -38,6 +38,8 @@
         <activity android:name=".rule.RuleSelectionActivity" />
         <activity android:name=".rule.PointsDistributionActivity" />
 
+        <activity android:name=".rule.SummaryActivity" />
+
     </application>
 
 </manifest>

@@ -93,11 +93,11 @@ fun MainScreen(
                     },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectRulesFocused)
-                        MaterialTheme.colorScheme.secondary
+                        MaterialTheme.colorScheme.background
                     else MaterialTheme.colorScheme.primaryContainer,
                     contentColor = if (selectRulesFocused)
-                        MaterialTheme.colorScheme.onSecondary
-                    else MaterialTheme.colorScheme.onPrimary
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
             ) {
                 Text(text = "Select Game Rules")
@@ -127,11 +127,11 @@ fun MainScreen(
                     },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (newGameFocused)
-                        MaterialTheme.colorScheme.secondary
+                        MaterialTheme.colorScheme.background
                     else MaterialTheme.colorScheme.primaryContainer,
                     contentColor = if (newGameFocused)
-                        MaterialTheme.colorScheme.onSecondary
-                    else MaterialTheme.colorScheme.onPrimary
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
             ) {
                 Text(text = "Start New Game")
@@ -161,11 +161,11 @@ fun MainScreen(
                     },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (continueFocused)
-                        MaterialTheme.colorScheme.secondary
+                        MaterialTheme.colorScheme.background
                     else MaterialTheme.colorScheme.primaryContainer,
                     contentColor = if (continueFocused)
-                        MaterialTheme.colorScheme.onSecondary
-                    else MaterialTheme.colorScheme.onPrimary
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
             ) {
                 Text(text = "Continue Last Game")
@@ -195,11 +195,11 @@ fun MainScreen(
                     },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (exitFocused)
-                        MaterialTheme.colorScheme.secondary
+                        MaterialTheme.colorScheme.background
                     else MaterialTheme.colorScheme.primaryContainer,
                     contentColor = if (exitFocused)
-                        MaterialTheme.colorScheme.onSecondary
-                    else MaterialTheme.colorScheme.onPrimary
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
             ) {
                 Text(text = "Exit")

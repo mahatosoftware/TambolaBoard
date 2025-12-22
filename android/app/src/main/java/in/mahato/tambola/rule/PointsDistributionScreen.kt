@@ -1,5 +1,6 @@
 package `in`.mahato.tambola.rule
 
+import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,38 +15,45 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import `in`.ahato.tambola.rule.RuleViewModel
 
-// THEME COLORS
+/* ---------------- COLORS ---------------- */
+
 val PurpleBgStart = Color(0xFF4A148C)
 val PurpleBgEnd = Color(0xFF7B1FA2)
 val GoldButton = Color(0xFFFFC107)
 val MintButton = Color(0xFF1DE9B6)
 val DPadFocusColor = Color.White
 
+
+/* ---------------- MAIN SCREEN ---------------- */
+
 @Composable
 fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
-    var isManualMode by remember { mutableStateOf(true) }
+
+    var isManualMode by remember { mutableStateOf(false) }
     var totalPoints by remember { mutableStateOf("1000") }
 
     val rules = ruleViewModel.selectedRules
     val totalPointsInt = totalPoints.toIntOrNull() ?: 0
-    val scrollState = rememberScrollState()
-
-    // Focus Requesters for D-Pad navigation
-    val textFieldFocusRequester = remember { FocusRequester() }
-
     val allocatedPoints = rules.sumOf {
         ((it.percentage / 100.0) * totalPointsInt * it.quantity).toInt()
     }
+
+    val scrollState = rememberScrollState()
+    val isTv = isTvDevice()
+    val focusRequester = remember { FocusRequester() }
 
     Box(
         Modifier
@@ -54,48 +62,46 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             .padding(16.dp)
     ) {
         Column {
+
             Text(
                 "DISTRIBUTE POINTS",
-                color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Black,
+                color = Color.White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
             Spacer(Modifier.height(16.dp))
 
-            // 1. TOTAL POINTS INPUT
-            var isFieldFocused by remember { mutableStateOf(false) }
             OutlinedTextField(
                 value = totalPoints,
                 onValueChange = { totalPoints = it },
-                label = { Text("TOTAL POINTS", color = if(isFieldFocused) Color.White else Color.LightGray) },
-                textStyle = LocalTextStyle.current.copy(color = Color.White, fontWeight = FontWeight.Bold),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                label = { Text("TOTAL POINTS") },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .focusRequester(textFieldFocusRequester)
-                    .onFocusChanged { isFieldFocused = it.isFocused }
-                    .border(
-                        width = if (isFieldFocused) 2.dp else 1.dp,
-                        color = if (isFieldFocused) DPadFocusColor else Color.White.copy(alpha = 0.2f),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
+                    .focusRequester(focusRequester),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White.copy(alpha = 0.1f),
                     unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
                     cursorColor = GoldButton,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
+                ),
+                textStyle = LocalTextStyle.current.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 )
             )
 
             Spacer(Modifier.height(12.dp))
 
-            // 2. MODE TOGGLE
-            ModeToggleButton(
+            OverlappingModeSelector(
                 isManual = isManualMode,
-                onToggle = {
+                onModeChange = {
                     isManualMode = it
                     if (!it) ruleViewModel.autoDistribute()
                 }
@@ -103,109 +109,248 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
 
             Spacer(Modifier.height(12.dp))
 
-            // 3. MAIN CONTENT CARD (Rules + Summary)
             Card(
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.25f))
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Black.copy(alpha = 0.25f)
+                )
             ) {
-                Column(Modifier.padding(16.dp)) {
-                    // Header
-                    RulesHeader()
-                    HorizontalDivider(color = Color.White.copy(alpha = 0.2f), thickness = 1.dp)
 
-                    // Rules List (Scrollable)
-                    Column(
+                if (isTv) {
+                    Row(
                         Modifier
-                            .weight(1f)
-                            .verticalScroll(scrollState)
+                            .fillMaxSize()
+                            .padding(16.dp)
                     ) {
-                        rules.forEachIndexed { index, rule ->
-                            RuleRow(
-                                rule = rule,
-                                totalPoints = totalPointsInt,
-                                isManualMode = isManualMode,
-                                onPercentChange = { ruleViewModel.updatePercentage(index, it) },
-                                onQuantityChange = { ruleViewModel.updateQuantity(index, it, !isManualMode) }
+
+                        Column(
+                            Modifier
+                                .weight(3f)
+                                .fillMaxHeight()
+                        ) {
+                            RulesHeader()
+                            HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+
+                            Column(
+                                Modifier
+                                    .weight(1f)
+                                    .verticalScroll(scrollState)
+                            ) {
+                                rules.forEachIndexed { index, rule ->
+                                    RuleRow(
+                                        rule,
+                                        totalPointsInt,
+                                        isManualMode,
+                                        { ruleViewModel.updatePercentage(index, it) },
+                                        { ruleViewModel.updateQuantity(index, it, !isManualMode) }
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(Modifier.width(16.dp))
+
+                        Column(
+                            Modifier
+                                .weight(1.2f)
+                                .fillMaxHeight()
+                        ) {
+                            SummaryCard(
+                                allocated = allocatedPoints,
+                                total = totalPointsInt,
+                                rules
+
                             )
                         }
                     }
+                } else {
 
-                    Spacer(Modifier.height(12.dp))
+                    Column(Modifier.padding(16.dp)) {
 
-                    // 4. SUMMARY (Now below the table)
-                    SummaryCard(allocated = allocatedPoints, total = totalPointsInt)
+                        RulesHeader()
+                        HorizontalDivider(color = Color.White.copy(alpha = 0.2f))
+
+                        Column(
+                            Modifier
+                                .weight(1f)
+                                .verticalScroll(scrollState)
+                        ) {
+                            rules.forEachIndexed { index, rule ->
+                                RuleRow(
+                                    rule,
+                                    totalPointsInt,
+                                    isManualMode,
+                                    { ruleViewModel.updatePercentage(index, it) },
+                                    { ruleViewModel.updateQuantity(index, it, !isManualMode) }
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(12.dp))
+
+                        SummaryCard(
+                            allocated = allocatedPoints,
+                            total = totalPointsInt,rules
+
+                        )
+                    }
                 }
             }
 
             Spacer(Modifier.height(12.dp))
 
-            // 5. CONFIRM BUTTON
-            val canConfirm = allocatedPoints == totalPointsInt && totalPointsInt > 0
-            var isConfirmFocused by remember { mutableStateOf(false) }
-
             Button(
-                enabled = canConfirm,
-                onClick = { /* Proceed Logic */ },
+                enabled = allocatedPoints == totalPointsInt && totalPointsInt > 0,
+                onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
-                    .onFocusChanged { isConfirmFocused = it.isFocused }
-                    .border(
-                        width = if (isConfirmFocused) 4.dp else 0.dp,
-                        color = DPadFocusColor,
-                        shape = RoundedCornerShape(100.dp)
-                    ),
+                    .height(60.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MintButton,
-                    contentColor = Color.Black,
-                    disabledContainerColor = Color.Gray.copy(alpha = 0.5f)
+                    contentColor = Color.Black
                 )
             ) {
-                Text("CONFIRM DISTRIBUTION", fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                Text("CONFIRM DISTRIBUTION", fontWeight = FontWeight.ExtraBold)
             }
         }
     }
 
-    // Auto-focus TextField on screen entry
-    LaunchedEffect(Unit) {
-        textFieldFocusRequester.requestFocus()
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+}
+
+/* ---------------- MODE SELECTOR ---------------- */
+
+@Composable
+fun OverlappingModeSelector(
+    isManual: Boolean,
+    onModeChange: (Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    ) {
+
+        ModeButton(
+            text = "AUTOMATIC",
+            selected = !isManual,
+            backgroundColor = MintButton,
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .align(Alignment.CenterStart)
+                .zIndex(if (!isManual) 2f else 1f),
+            onClick = { onModeChange(false) }
+        )
+
+        ModeButton(
+            text = "MANUAL",
+            selected = isManual,
+            backgroundColor = GoldButton,
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .align(Alignment.CenterEnd)
+                .zIndex(if (isManual) 2f else 1f),
+            onClick = { onModeChange(true) }
+        )
     }
 }
 
 @Composable
-fun SummaryCard(allocated: Int, total: Int) {
+fun ModeButton(
+    text: String,
+    selected: Boolean,
+    backgroundColor: Color,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    val containerColor by animateColorAsState(
+        if (selected) backgroundColor else Color.Black.copy(alpha = 0.35f),
+        label = "modeColor"
+    )
+
+    Button(
+        onClick = onClick,
+        modifier = modifier.height(52.dp),
+        shape = RoundedCornerShape(100.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = if (selected) Color.Black else Color.White
+        )
+    ) {
+        Text(text, fontWeight = FontWeight.ExtraBold)
+    }
+}
+
+/* ---------------- SUMMARY CARD ---------------- */
+
+
+@Composable
+fun SummaryCard(
+    allocated: Int,
+    total: Int,
+    rules: List<TambolaRule>
+) {
     val remaining = total - allocated
-    val statusColor = if (remaining == 0) MintButton else Color(0xFFFF5252)
+    val color = if (remaining == 0) MintButton else Color.Red
+    val context = LocalContext.current
 
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                // Launch SummaryActivity
+                val intent = Intent(context, SummaryActivity::class.java).apply {
+                    putParcelableArrayListExtra("rules", ArrayList(rules))
+                    putExtra("totalPoints", total)
+                    putExtra("allocatedPoints", allocated)
+                }
+                context.startActivity(intent)
+            },
         shape = RoundedCornerShape(12.dp),
         color = Color.White.copy(alpha = 0.08f),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.15f))
     ) {
         Row(
-            Modifier.padding(16.dp),
+            modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Column {
-                Text("SUMMARY", fontWeight = FontWeight.Bold, fontSize = 10.sp, color = Color.LightGray)
-                Text("Total Used: $allocated", fontSize = 15.sp, color = Color.White, fontWeight = FontWeight.Medium)
+                Text(
+                    text = "SUMMARY",
+                    fontSize = 10.sp,
+                    color = Color.LightGray,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Used: $allocated",
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium
+                )
             }
 
             Column(horizontalAlignment = Alignment.End) {
-                Text("REMAINING", fontWeight = FontWeight.Bold, fontSize = 10.sp, color = Color.LightGray)
+                Text(
+                    text = "REMAINING",
+                    fontSize = 10.sp,
+                    color = Color.LightGray,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(
                     text = remaining.toString(),
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Black,
-                    fontSize = 20.sp,
-                    color = statusColor
+                    color = color
                 )
             }
         }
     }
 }
+
+
+/* ---------------- RULE ROW ---------------- */
 
 @Composable
 fun RuleRow(
@@ -218,129 +363,77 @@ fun RuleRow(
     val amount = ((rule.percentage / 100.0) * totalPoints * rule.quantity).toInt()
 
     Row(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = rule.name,
-            modifier = Modifier.weight(1.5f),
-            color = Color.White,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
+
+        Text(rule.name, Modifier.weight(1.5f), color = Color.White)
+
+        ValueStepper(
+            "${rule.percentage}%",
+            isManualMode,
+            { onPercentChange(-1) },
+            { onPercentChange(1) },
+            Modifier.weight(1.5f)
         )
 
         ValueStepper(
-            valueText = "${rule.percentage}%",
-            enabled = isManualMode,
-            onMinus = { onPercentChange(-5) },
-            onPlus = { onPercentChange(5) },
-            modifier = Modifier.weight(1.8f)
-        )
-
-        ValueStepper(
-            valueText = rule.quantity.toString(),
-            enabled = true,
-            onMinus = { onQuantityChange(-1) },
-            onPlus = { onQuantityChange(1) },
-            modifier = Modifier.weight(1.5f)
+            rule.quantity.toString(),
+            true,
+            { onQuantityChange(-1) },
+            { onQuantityChange(1) },
+            Modifier.weight(1.2f)
         )
 
         Text(
-            text = amount.toString(),
-            modifier = Modifier.weight(1f),
-            fontWeight = FontWeight.Bold,
-            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            amount.toString(),
+            Modifier.weight(1f),
+            textAlign = TextAlign.End,
             color = GoldButton,
-            fontSize = 14.sp
+            fontWeight = FontWeight.Bold
         )
     }
 }
 
+/* ---------------- STEPPER ---------------- */
+
 @Composable
 fun ValueStepper(
-    valueText: String,
+    value: String,
     enabled: Boolean,
     onMinus: () -> Unit,
     onPlus: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         StepperIconButton(Icons.Default.Remove, enabled, onMinus)
-        Text(
-            valueText,
-            modifier = Modifier.width(44.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            fontSize = 13.sp,
-            color = if (enabled) Color.White else Color.Gray
-        )
+        Text(value, Modifier.width(40.dp), textAlign = TextAlign.Center)
         StepperIconButton(Icons.Default.Add, enabled, onPlus)
     }
 }
 
 @Composable
 fun StepperIconButton(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-    var isFocused by remember { mutableStateOf(false) }
-
-    IconButton(
-        enabled = enabled,
-        onClick = onClick,
-        modifier = Modifier
-            .size(32.dp)
-            .onFocusChanged { isFocused = it.isFocused }
-            .background(
-                color = if (isFocused) Color.White.copy(alpha = 0.2f) else Color.Transparent,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .border(
-                width = if (isFocused) 2.dp else 0.dp,
-                color = DPadFocusColor,
-                shape = RoundedCornerShape(4.dp)
-            )
-    ) {
-        Icon(icon, null, tint = if (enabled) Color.White else Color.Gray, modifier = Modifier.size(18.dp))
+    IconButton(enabled = enabled, onClick = onClick) {
+        Icon(icon, null, tint = if (enabled) Color.White else Color.Gray)
     }
 }
 
-@Composable
-fun ModeToggleButton(isManual: Boolean, onToggle: (Boolean) -> Unit) {
-    var isFocused by remember { mutableStateOf(false) }
-    val color by animateColorAsState(if (isManual) GoldButton else MintButton, label = "color")
-
-    Button(
-        onClick = { onToggle(!isManual) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp)
-            .onFocusChanged { isFocused = it.isFocused }
-            .border(
-                width = if (isFocused) 4.dp else 0.dp,
-                color = DPadFocusColor,
-                shape = RoundedCornerShape(100.dp)
-            ),
-        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = Color.Black)
-    ) {
-        Text(
-            if (isManual) "MODE: MANUAL" else "MODE: AUTOMATIC",
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 1.sp
-        )
-    }
-}
+/* ---------------- HEADER ---------------- */
 
 @Composable
 fun RulesHeader() {
     Row(Modifier.padding(bottom = 8.dp)) {
-        val style = androidx.compose.ui.text.TextStyle(fontWeight = FontWeight.Bold, fontSize = 11.sp, color = Color.LightGray)
+        val style = LocalTextStyle.current.copy(
+            fontWeight = FontWeight.Bold,
+            fontSize = 11.sp,
+            color = Color.LightGray
+        )
         Text("RULE", Modifier.weight(1.5f), style = style)
-        Text("%", Modifier.weight(1.8f), style = style, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-        Text("QTY", Modifier.weight(1.5f), style = style, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-        Text("AMT", Modifier.weight(1f), style = style, textAlign = androidx.compose.ui.text.style.TextAlign.End)
+        Text("PERCENT(%)", Modifier.weight(1.5f), style = style, textAlign = TextAlign.Center)
+        Text("QUANTITY", Modifier.weight(1.2f), style = style, textAlign = TextAlign.Center)
+        Text("AMOUNT", Modifier.weight(1f), style = style, textAlign = TextAlign.End)
     }
 }
