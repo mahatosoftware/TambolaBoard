@@ -1,12 +1,14 @@
 package `in`.mahato.tambola.game
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -23,6 +25,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.input.key.Key.Companion.DirectionLeft
 import androidx.compose.ui.input.key.Key.Companion.DirectionRight
@@ -34,6 +37,8 @@ import androidx.compose.ui.unit.sp
 import androidx.room.Room
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -49,16 +54,11 @@ class GameActivity : ComponentActivity() {
             applicationContext,
             AppDatabase::class.java,
             "tambola_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
 
         tts = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val hindiResult = tts.setLanguage(Locale("hi", "IN"))
-                if (hindiResult == TextToSpeech.LANG_MISSING_DATA ||
-                    hindiResult == TextToSpeech.LANG_NOT_SUPPORTED
-                ) {
-                    tts.setLanguage(Locale.ENGLISH)
-                }
+                tts.setLanguage(Locale("hi", "IN"))
                 _isTtsReady.value = true
                 tts.speak("Welcome to Tambola Board", TextToSpeech.QUEUE_FLUSH, null, null)
             }
@@ -85,6 +85,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
     var calledNumbers by remember { mutableStateOf(listOf<Int>()) }
     var lastNumber by remember { mutableStateOf<Int?>(null) }
     var isAutoCalling by remember { mutableStateOf(false) }
+    var gameId by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -100,6 +101,8 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
         ), label = "flash"
     )
 
+    fun generateId() = (1..5).map { "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".random() }.joinToString("")
+
     fun callNumber() {
         if (!isTtsReady) return
         val remainingNumbers = (1..90).toSet() - calledNumbers.toSet()
@@ -113,8 +116,9 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                 dao.insert(CalledNumber(newNumber, isLast = true))
             }
 
+            // Fallback if FunnyPhraseUtil is not available in snippet
             val funnyPhrase = FunnyPhraseUtil.getFunnyPhrase(newNumber)
-            tts.speak(funnyPhrase, TextToSpeech.QUEUE_FLUSH, null, null)
+            tts.speak("$funnyPhrase", TextToSpeech.QUEUE_FLUSH, null, null)
         } else {
             isAutoCalling = false
         }
@@ -131,11 +135,16 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
     }
 
     LaunchedEffect(Unit) {
-        if (isNewGame) {
+        val savedId = dao.getSavedGameId()
+        if (isNewGame || savedId == null) {
             dao.resetBoard()
+            val newId = generateId()
+            dao.saveGameMetadata(GameMetadata(gameId = newId))
+            gameId = newId
             calledNumbers = listOf()
             lastNumber = null
         } else {
+            gameId = savedId
             val numbers = dao.getAll()
             calledNumbers = numbers.map { it.number }
             lastNumber = numbers.find { it.isLast }?.number
@@ -144,12 +153,17 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
 
     fun resetBoard() {
         isAutoCalling = false
+        val newId = generateId()
         calledNumbers = listOf()
         lastNumber = null
-        scope.launch { dao.resetBoard() }
+        gameId = newId
+        scope.launch {
+            dao.resetBoard()
+            dao.saveGameMetadata(GameMetadata(gameId = newId))
+        }
     }
 
-    Scaffold(
+  /*  Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
             CenterAlignedTopAppBar(
@@ -168,7 +182,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                     verticalArrangement = Arrangement.Center
                 ) {
                     GameControls(isAutoCalling, { callNumber() }, { isAutoCalling = !isAutoCalling },
-                        { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, true, isTtsReady)
+                        { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, true, isTtsReady, gameId)
                 }
                 Column(modifier = Modifier.weight(0.6f)) {
                     NumberGrid(calledNumbers, lastNumber, flashColor)
@@ -181,7 +195,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 GameControls(isAutoCalling, { callNumber() }, { isAutoCalling = !isAutoCalling },
-                    { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, false, isTtsReady)
+                    { resetBoard() }, { (context as GameActivity).finish() }, lastNumber, false, isTtsReady, gameId)
 
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     NumberGrid(calledNumbers, lastNumber, flashColor)
@@ -195,8 +209,92 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                 )
             }
         }
+    }*/
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.primary,
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("Tambola Board", color = MaterialTheme.colorScheme.onPrimary) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+            )
+        }
+    ) { padding ->
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+
+            /** MAIN CONTENT **/
+            if (isLandscape) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier.weight(0.4f).fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        GameControls(
+                            isAutoCalling,
+                            { callNumber() },
+                            { isAutoCalling = !isAutoCalling },
+                            { resetBoard() },
+                            { (context as GameActivity).finish() },
+                            lastNumber,
+                            true,
+                            isTtsReady,
+                            gameId
+                        )
+                    }
+                    Column(modifier = Modifier.weight(0.6f)) {
+                        NumberGrid(calledNumbers, lastNumber, flashColor)
+                    }
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    GameControls(
+                        isAutoCalling,
+                        { callNumber() },
+                        { isAutoCalling = !isAutoCalling },
+                        { resetBoard() },
+                        { (context as GameActivity).finish() },
+                        lastNumber,
+                        false,
+                        isTtsReady,
+                        gameId
+                    )
+
+                 //   Spacer(Modifier.weight(1f))
+
+                    NumberGrid(calledNumbers, lastNumber, flashColor)
+                }
+            }
+
+            /** ✅ FOOTER – WORKS ON TV **/
+
+            Text(
+                text = GeneralUtil.getCopyrightMessage(),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 8.dp)
+            )
+        }
     }
-}
+
+
+}// end of TambolaScreen
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -208,7 +306,8 @@ fun GameControls(
     onExitClick: () -> Unit,
     lastNumber: Int?,
     isLandscape: Boolean,
-    isTtsReady: Boolean
+    isTtsReady: Boolean,
+    gameId: String
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var showExitDialog by remember { mutableStateOf(false) }
@@ -233,12 +332,39 @@ fun GameControls(
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+        if (gameId.isNotEmpty()) {
+            val qrBitmap = remember(gameId) { generateQRCode(gameId) }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                qrBitmap?.let {
+                    Image(
+                        bitmap = it.asImageBitmap(),
+                        contentDescription = "Game QR",
+                        modifier = Modifier
+                            .size(if (isLandscape) 60.dp else 90.dp)
+                            .background(Color.White)
+                            .padding(4.dp)
+                            .border(1.dp, Color.Black)
+                    )
+                }
+                Text(
+                    "GAME ID: $gameId",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
+            }
+        }
+
         Card(
-            modifier = Modifier.padding(vertical = if (isLandscape) 8.dp else 16.dp).fillMaxWidth(if (isLandscape) 0.8f else 0.7f),
+            modifier = Modifier.padding(vertical = if (isLandscape) 4.dp else 8.dp).fillMaxWidth(if (isLandscape) 0.8f else 0.7f),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
-            Column(modifier = Modifier.padding(if (isLandscape) 8.dp else 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("LAST NUMBER", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 Text(
                     text = "${lastNumber ?: "--"}",
@@ -271,20 +397,7 @@ fun GameControls(
                         Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Exit") }
                     }
                 } else {
-                    val infiniteLoading = rememberInfiniteTransition(label = "loading")
-                    val scale by infiniteLoading.animateFloat(
-                        initialValue = 0.8f, targetValue = 1.2f,
-                        animationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse), label = "scale"
-                    )
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(48.dp).scale(scale),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 4.dp
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text("Board is getting Ready for use ...", color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelSmall)
-                    }
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }
@@ -310,6 +423,25 @@ fun GameControls(
             confirmButton = { TextButton(onClick = { onExitClick(); showExitDialog = false }) { Text("Yes") } },
             dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text("No") } }
         )
+    }
+}
+
+// Utility to generate a scannable QR Code bitmap
+fun generateQRCode(text: String): Bitmap? {
+    return try {
+        val writer = QRCodeWriter()
+        val bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, 512, 512)
+        val width = bitMatrix.width
+        val height = bitMatrix.height
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                bitmap.setPixel(x, y, if (bitMatrix.get(x, y)) android.graphics.Color.BLACK else android.graphics.Color.WHITE)
+            }
+        }
+        bitmap
+    } catch (e: Exception) {
+        null
     }
 }
 
@@ -343,17 +475,26 @@ fun WinnerBoardDialog(onDismiss: () -> Unit) {
         }
     )
 }
-
 @Composable
 fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
     val configuration = LocalConfiguration.current
+
+    // Dynamically adjust cell size based on screen width/height to fit better
     val cellSize = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        (configuration.screenHeightDp * 0.08).dp
+        (configuration.screenHeightDp * 0.075).dp // Slightly smaller for landscape
     } else {
-        (configuration.screenWidthDp * 0.085).dp
+        (configuration.screenWidthDp * 0.082).dp // Slightly smaller for portrait
     }
 
-    LazyVerticalGrid(columns = GridCells.Fixed(10), modifier = Modifier.fillMaxWidth().wrapContentHeight(), contentPadding = PaddingValues(4.dp), userScrollEnabled = false) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(10),
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        contentPadding = PaddingValues(4.dp),
+        // CHANGE: Set to true to ensure all rows are reachable if they don't fit
+        userScrollEnabled = true
+    ) {
         items((1..90).toList()) { number ->
             val isCalled = calledNumbers.contains(number)
             val isLast = lastNumber == number
@@ -363,12 +504,19 @@ fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
                 else -> MaterialTheme.colorScheme.secondary
             }
             Box(
-                modifier = Modifier.padding(2.dp).size(cellSize).background(color = bgColor, shape = RoundedCornerShape(4.dp))
+                modifier = Modifier
+                    .padding(2.dp)
+                    .size(cellSize)
+                    .background(color = bgColor, shape = RoundedCornerShape(4.dp))
                     .border(1.dp, Color.Black.copy(alpha = 0.5f), RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "$number", fontSize = (cellSize.value * 0.4).sp, fontWeight = FontWeight.Bold,
-                    color = if (isCalled || isLast) Color.White else MaterialTheme.colorScheme.onSecondary)
+                Text(
+                    text = "$number",
+                    fontSize = (cellSize.value * 0.4).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (isCalled || isLast) Color.White else MaterialTheme.colorScheme.onSecondary
+                )
             }
         }
     }
