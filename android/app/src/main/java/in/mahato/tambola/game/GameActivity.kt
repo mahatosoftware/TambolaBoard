@@ -165,8 +165,8 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                 dao.insert(CalledNumber(newNumber, isLast = true))
             }
 
-
-            tts.speak("$FunnyPhraseUtil.getFunnyPhrase(newNumber)", TextToSpeech.QUEUE_FLUSH, null, null)
+            val funnyphrase = FunnyPhraseUtil.getFunnyPhrase(newNumber)
+            tts.speak("$funnyphrase", TextToSpeech.QUEUE_FLUSH, null, null)
         } else {
             isAutoCalling = false
         }

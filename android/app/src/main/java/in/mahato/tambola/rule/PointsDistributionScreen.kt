@@ -76,7 +76,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             OutlinedTextField(
                 value = totalPoints,
                 onValueChange = { totalPoints = it },
-                label = { Text("TOTAL POINTS") },
+                label = { Text("TOTAL POINTS", ) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -85,6 +85,10 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
                 colors = TextFieldDefaults.colors(
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.White,
+                    disabledLabelColor = Color.LightGray,
+                    errorLabelColor = Color.Red,
                     focusedContainerColor = Color.White.copy(alpha = 0.1f),
                     unfocusedContainerColor = Color.White.copy(alpha = 0.05f),
                     cursorColor = GoldButton,
