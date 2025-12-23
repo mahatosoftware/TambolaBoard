@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- CENTER DIAMOND -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="
+            M60,40
+            L80,60
+            L60,80
+            L40,60
+            Z" />
+
+    <!-- TOP DIAMOND -->
+    <path
+        android:fillColor="#03A9F4"
+        android:pathData="
+            M60,10
+            L75,25
+            L60,40
+            L45,25
+            Z" />
+
+    <!-- BOTTOM DIAMOND -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="
+            M60,80
+            L75,95
+            L60,110
+            L45,95
+            Z" />
+
+    <!-- LEFT DIAMOND -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="
+            M10,60
+            L25,45
+            L40,60
+            L25,75
+            Z" />
+
+    <!-- RIGHT DIAMOND -->
+    <path
+        android:fillColor="#9C27B0"
+        android:pathData="
+            M80,60
+            L95,45
+            L110,60
+            L95,75
+            Z" />
+
+</vector>

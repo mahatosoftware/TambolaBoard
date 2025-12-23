@@ -90,19 +90,21 @@ import kotlinx.parcelize.Parcelize
 enum class TambolaRuleType(val iconRes: Int) {
     EARLY_FIVE(R.drawable.ic_early_five),
     TOP_LINE(R.drawable.ic_line),
-    MIDDLE_LINE(R.drawable.ic_line),
-    BOTTOM_LINE(R.drawable.ic_line),
+    MIDDLE_LINE(R.drawable.ic_middle_line),
+    BOTTOM_LINE(R.drawable.ic_bottom_line),
     FULL_HOUSE(R.drawable.ic_full_house),
     SECOND_HOUSE(R.drawable.ic_full_house),
     THIRD_HOUSE(R.drawable.ic_full_house),
     CORNER(R.drawable.ic_corner),
+
+    DIAMOND(R.drawable.ic_diamond),
     PYRAMID(R.drawable.ic_pyramid),
     INVERTED_PYRAMID(R.drawable.ic_inverted_pyramid),
     STAR(R.drawable.ic_early_five),
     ODDS(R.drawable.ic_numbers),
     EVEN(R.drawable.ic_numbers),
-    FIRST_HALF(R.drawable.ic_split),
-    SECOND_HALF(R.drawable.ic_split),
+    FIRST_HALF(R.drawable.ic_split_first),
+    SECOND_HALF(R.drawable.ic_split_second),
     BREAKFAST(R.drawable.ic_meal),
     LUNCH(R.drawable.ic_meal),
     DINNER(R.drawable.ic_meal),
@@ -130,7 +132,7 @@ val tambolaRules = listOf(
     TambolaRule(6, "Middle Line", "Complete all numbers in the middle row.", TambolaRuleType.MIDDLE_LINE, (9..17).toList(),weight =10 ),
     TambolaRule(7, "Bottom Line", "Complete all numbers in the bottom row.", TambolaRuleType.BOTTOM_LINE, (18..26).toList(),weight = 10),
     TambolaRule(8, "Corner", "Top Row:1st ,5th Number\n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7, 18, 26),weight = 10),
-    TambolaRule(9, "Diamond", "Top Row:1st ,5th Number\n Middle Row: 3rd Number \n Bottom Row: 1st ,5th Number.", TambolaRuleType.CORNER, listOf(0, 7,14, 18, 26),weight = 10),
+    TambolaRule(9, "Diamond", "Top Row:1st ,5th Number\n Middle Row: 3rd Number \n Bottom Row: 1st ,5th Number.", TambolaRuleType.DIAMOND, listOf(0, 7,14, 18, 26),weight = 10),
     TambolaRule(10, "Pyramid", "Top Row: 3rd Number \n Middle Row: 2nd, 4th Number\n Bottom Row: 1st, 3rd, 5th Number", TambolaRuleType.PYRAMID, listOf(4,  12, 15, 18,21, 26),weight = 10),
     TambolaRule(11, "Inverted Pyramid", "Top Row: 1st, 3rd and 5th number \n Middle Row: 2nd and 4th number\n Bottom Row 3rd number.", TambolaRuleType.INVERTED_PYRAMID, listOf(0, 4, 7, 12, 15, 21),weight = 10),
     TambolaRule(12, "Star", "Top Row: 1st, 3rd, 5th Number\n Middle Row: All Numbers \n Bottom Row: 1st, 3rd, 5th Number.", TambolaRuleType.STAR, listOf(0,4,7,10,12, 14,15, 17, 18,21,26),weight = 10),
@@ -367,7 +369,7 @@ fun RuleCard(
                         "OK: Select | Hold: Info",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         textAlign = TextAlign.Center
                     )
                 }
