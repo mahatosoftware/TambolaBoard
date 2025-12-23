@@ -41,6 +41,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -614,6 +615,8 @@ fun WinnerBoardDialog(
         .getAllPrizes()
         .collectAsState(initial = emptyList())
 
+    val firstItemFocusRequester = remember { FocusRequester() }
+
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
@@ -624,10 +627,10 @@ fun WinnerBoardDialog(
                 modifier = Modifier
                     .widthIn(max = 500.dp)
                     .heightIn(max = 500.dp)
-                    .padding(16.dp)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // Title
                 Text(
                     "Winner Board",
                     fontWeight = FontWeight.Black,
@@ -642,53 +645,48 @@ fun WinnerBoardDialog(
 
                 Spacer(Modifier.height(12.dp))
 
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusable()
-                ) {
-                    when {
-                        prizes.isEmpty() -> {
-                            Text(
-                                "No prizes generated yet.",
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                        else -> {
-                            LazyColumn(Modifier.fillMaxSize()) {
-                                items(prizes, key = { it.prizeId }) { prize ->
-                                    WinnerItemRow(
-                                        prize = prize,
-                                        onClaimToggle = { claimed ->
-                                            if (claimed)
-                                                db.winningPrizeDao().claimPrize(prize.prizeId)
-                                            else
-                                                db.winningPrizeDao().unclaimPrize(prize.prizeId)
-                                        }
-                                    )
+                Box(modifier = Modifier.weight(1f)) {
+                    LazyColumn {
+                        itemsIndexed(prizes, key = { _, it -> it.prizeId }) { index, prize ->
+                            WinnerItemRow(
+                                prize = prize,
+                                focusRequester =
+                                    if (index == 0) firstItemFocusRequester else null,
+                                onClaimToggle = { claimed ->
+                                    if (claimed)
+                                        db.winningPrizeDao().claimPrize(prize.prizeId)
+                                    else
+                                        db.winningPrizeDao().unclaimPrize(prize.prizeId)
                                 }
-
-                            }
+                            )
                         }
                     }
                 }
 
                 Spacer(Modifier.height(12.dp))
-
+                var closeDialogFocused by remember { mutableStateOf(false) }
                 Button(
                     onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth() .onFocusChanged { closeDialogFocused = it.isFocused },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1DE9B6)
+                        containerColor = if (closeDialogFocused)
+                            MaterialTheme.colorScheme.background
+                        else MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = if (closeDialogFocused)
+                            MaterialTheme.colorScheme.onTertiary
+                        else MaterialTheme.colorScheme.tertiary
                     )
                 ) {
-                    Text(
-                        "Close Board",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Close Board", fontWeight = FontWeight.Bold)
                 }
             }
+        }
+    }
+
+    // ⭐ Auto-focus first item when dialog opens
+    LaunchedEffect(prizes) {
+        if (prizes.isNotEmpty()) {
+            firstItemFocusRequester.requestFocus()
         }
     }
 }
@@ -696,54 +694,34 @@ fun WinnerBoardDialog(
 @Composable
 fun WinnerItemRow(
     prize: WinningPrizeEntity,
+    focusRequester: FocusRequester? = null,
     onClaimToggle: suspend (Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val isClaimed = prize.isClaimed
-
+    var isFocused by remember { mutableStateOf(false) }
     var showUnclaimDialog by remember { mutableStateOf(false) }
 
-    // ---- Confirmation Dialog ----
-    if (showUnclaimDialog) {
-        AlertDialog(
-            onDismissRequest = { showUnclaimDialog = false },
-            title = {
-                Text(
-                    text = "Confirm",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Red
-                )
-            },
-            text = {
-                Text("Are you sure you want to unclaim the Prize?")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showUnclaimDialog = false
-                        scope.launch {
-                            onClaimToggle(false) // unclaim
-                        }
-                    }
-                ) {
-                    Text("Yes")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { showUnclaimDialog = false }
-                ) {
-                    Text("No")
-                }
-            }
-        )
-    }
-
-    // ---- Row UI ----
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp),
+            .padding(vertical = 6.dp)
+            .then(
+                if (focusRequester != null)
+                    Modifier.focusRequester(focusRequester)
+                else Modifier
+            )
+            .onFocusChanged { isFocused = it.isFocused }
+            .focusable()
+            .background(
+                color =
+                    if (isFocused)
+                        MaterialTheme.colorScheme.secondaryContainer
+                    else
+                        Color.Transparent,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -753,7 +731,12 @@ fun WinnerItemRow(
                 text = prize.savedRule.ruleName.uppercase(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = if (isClaimed) Color.Red else MaterialTheme.colorScheme.onPrimary
+                color =
+                    when {
+                        isClaimed -> Color.Red
+                        isFocused -> MaterialTheme.colorScheme.onSecondaryContainer
+                        else -> MaterialTheme.colorScheme.onPrimary
+                    }
             )
             Text(
                 text = "Prize: ${prize.savedRule.amountPerItem} pts",
@@ -766,23 +749,37 @@ fun WinnerItemRow(
             checked = isClaimed,
             onCheckedChange = { checked ->
                 if (!checked && isClaimed) {
-                    // Trying to uncheck → ask confirmation
                     showUnclaimDialog = true
                 } else {
-                    // Normal claim
-                    scope.launch {
-                        onClaimToggle(true)
-                    }
+                    scope.launch { onClaimToggle(true) }
                 }
+            }
+        )
+    }
+
+    // ---- Unclaim confirmation dialog (unchanged) ----
+    if (showUnclaimDialog) {
+        AlertDialog(
+            onDismissRequest = { showUnclaimDialog = false },
+            title = { Text("Confirm", color = Color.Red) },
+            text = { Text("Are you sure you want to unclaim the Prize?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showUnclaimDialog = false
+                        scope.launch { onClaimToggle(false) }
+                    }
+                ) { Text("Yes") }
             },
-            colors = CheckboxDefaults.colors(
-                uncheckedColor = MaterialTheme.colorScheme.onPrimary,
-                checkedColor = Color.Green,
-                checkmarkColor = Color.White
-            )
+            dismissButton = {
+                TextButton(onClick = { showUnclaimDialog = false }) {
+                    Text("No")
+                }
+            }
         )
     }
 }
+
 
 @Composable
 fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
