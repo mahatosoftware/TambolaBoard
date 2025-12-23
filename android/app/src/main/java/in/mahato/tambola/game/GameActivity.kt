@@ -46,6 +46,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -401,7 +402,7 @@ fun GameControls(
 
                         Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text("Call Next") }
                         Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) "Pause" else "Auto Call") }
-                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Winners") }
+                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Winner Board") }
                         Button(onClick = { showResetDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Reset") }
                         Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Exit") }
                     }
@@ -467,10 +468,11 @@ fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
+        containerColor = MaterialTheme.colorScheme.primary,
+                title = {
             Column {
-                Text("Winner Board", fontWeight = FontWeight.Black, fontSize = 24.sp)
-                Text("Claim prizes as they are won", fontSize = 12.sp, color = Color.Gray)
+                Text("Winner Board", fontWeight = FontWeight.Black, fontSize = 24.sp,color = MaterialTheme.colorScheme.onPrimary)
+                Text("Claim prizes as they are won", fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary)
             }
         },
         text = {
@@ -517,19 +519,25 @@ fun WinnerItemRow(rule: SavedRuleEntity) {
                 text = rule.ruleName.uppercase(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = if (isClaimed) Color.Gray else Color.Unspecified
+                color = if (isClaimed) Color.Red else  MaterialTheme.colorScheme.onPrimary
             )
             Text(
                 text = "Prize: ${rule.amountPerItem} pts",
                 fontSize = 12.sp,
-                color = if (isClaimed) Color.Gray else Color(0xFF7B1FA2)
+                color = if (isClaimed) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary
             )
         }
 
         // Action button to claim
         Checkbox(
             checked = isClaimed,
-            onCheckedChange = { isClaimed = it }
+            onCheckedChange = { isClaimed = it },
+            colors = CheckboxDefaults.colors(
+                uncheckedColor = MaterialTheme.colorScheme.onPrimary,   // 👈 outline color
+                checkedColor = Color.Green,   // 👈 fill + check
+                checkmarkColor = Color.White,
+                disabledUncheckedColor = Color.Gray
+            )
         )
     }
 }

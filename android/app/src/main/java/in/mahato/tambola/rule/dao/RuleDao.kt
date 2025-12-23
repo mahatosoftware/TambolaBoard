@@ -1,4 +1,4 @@
-package `in`.mahato.tambola.rule
+package `in`.mahato.tambola.rule.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -16,7 +16,7 @@ interface RuleDao {
     @Query("DELETE FROM saved_rules")
     suspend fun deleteAllRules()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertRules(rules: List<SavedRuleEntity>)
 
     @Transaction
@@ -25,4 +25,3 @@ interface RuleDao {
         insertRules(rules)
     }
 }
-

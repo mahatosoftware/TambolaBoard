@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import `in`.mahato.tambola.rule.RuleDao
+import `in`.mahato.tambola.rule.dao.RuleDao
 import `in`.mahato.tambola.rule.model.SavedRuleEntity
 
 @Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class], version = 5, exportSchema = false)
