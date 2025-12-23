@@ -1,0 +1,86 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Clock outer circle -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="
+            M12,2
+            A10,10 0 1,1 12,22
+            A10,10 0 1,1 12,2
+            Z" />
+
+    <!-- Clock inner -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M12,4
+            A8,8 0 1,1 12,20
+            A8,8 0 1,1 12,4
+            Z" />
+
+    <!-- Hour hand (pointing to 2) -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="
+            M12,12
+            L17,8
+            L16,7
+            L12,11
+            Z" />
+
+    <!-- Minute hand (12) -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="
+            M12,6
+            V12
+            H13
+            V6
+            Z" />
+
+    <!-- Center dot -->
+    <path
+        android:fillColor="#424242"
+        android:pathData="
+            M11,11
+            H13
+            V13
+            H11
+            Z" />
+
+    <!-- PM badge -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="
+            M14,14
+            H22
+            V20
+            H14
+            Z" />
+
+    <!-- P -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M15,15
+            V19
+            H16.5
+            A1.5,1.5 0 0,0 16.5,15
+            Z" />
+
+    <!-- M -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M18,19
+            V15
+            L19,17
+            L20,15
+            V19
+            Z" />
+
+</vector>

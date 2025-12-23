@@ -105,12 +105,12 @@ enum class TambolaRuleType(val iconRes: Int) {
     EVEN(R.drawable.ic_numbers),
     FIRST_HALF(R.drawable.ic_split_first),
     SECOND_HALF(R.drawable.ic_split_second),
-    BREAKFAST(R.drawable.ic_meal),
-    LUNCH(R.drawable.ic_meal),
-    DINNER(R.drawable.ic_meal),
+    BREAKFAST(R.drawable.ic_meal_breakfast),
+    LUNCH(R.drawable.ic_meal_lunch),
+    DINNER(R.drawable.ic_meal_dinner),
     TEMPERATURE(R.drawable.ic_temperature),
-    BELOW_FIFTY(R.drawable.ic_above_below),
-    ABOVE_FIFTY(R.drawable.ic_above_below)
+    BELOW_FIFTY(R.drawable.ic_above50),
+    ABOVE_FIFTY(R.drawable.ic_below50)
 }
 
 
