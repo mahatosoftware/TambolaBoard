@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -67,7 +68,6 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             Text(
                 "DISTRIBUTE POINTS",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Black,
                 color = Color.White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -205,6 +205,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
 
             Spacer(Modifier.height(12.dp))
             val context = LocalContext.current
+            var confirmDistributionFocused by remember { mutableStateOf(false) }
             Button(
                 enabled = allocatedPoints == totalPointsInt && totalPointsInt > 0,
                 onClick = {
@@ -217,10 +218,16 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .onFocusChanged { confirmDistributionFocused = it.isFocused }
                     .height(60.dp),
+
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MintButton,
-                    contentColor = Color.Black
+                    containerColor = if (confirmDistributionFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (confirmDistributionFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
             ) {
                 Text("CONFIRM DISTRIBUTION", fontWeight = FontWeight.ExtraBold)

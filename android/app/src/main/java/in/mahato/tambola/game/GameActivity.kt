@@ -18,6 +18,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +34,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -52,6 +55,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -83,6 +87,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.room.Room
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
@@ -466,7 +471,7 @@ fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
         isLoading = false
     }
 
-    AlertDialog(
+   /* AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = MaterialTheme.colorScheme.primary,
                 title = {
@@ -499,7 +504,85 @@ fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
                 Text("Close Board", color = Color.Black, fontWeight = FontWeight.Bold)
             }
         }
-    )
+    )*/
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = MaterialTheme.colorScheme.primary,
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 500.dp)
+                    .heightIn(max = 500.dp)
+                    .padding(16.dp)
+            ) {
+
+                // Title
+                Text(
+                    "Winner Board",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    "Claim prizes as they are won",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                // Scrollable content
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusable() // 🔑 allows DPAD to enter
+                ) {
+                    when {
+                        isLoading -> {
+                            CircularProgressIndicator(Modifier.align(Alignment.Center))
+                        }
+                        savedRules.isEmpty() -> {
+                            Text(
+                                "No point distribution found. Please set rules in settings.",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                        else -> {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                items(savedRules) { rule ->
+                                    WinnerItemRow(rule)
+                                    HorizontalDivider(
+                                        color = Color.LightGray.copy(alpha = 0.5f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF1DE9B6)
+                    )
+                ) {
+                    Text(
+                        "Close Board",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+
 }
 
 @Composable

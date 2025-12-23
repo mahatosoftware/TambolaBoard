@@ -191,16 +191,18 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+                    .onFocusChanged { submitFocused = it.isFocused }
                     .height(56.dp)
                     .focusable(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor =
-                        if (submitFocused) MaterialTheme.colorScheme.background
-                        else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor =
-                        if (submitFocused) MaterialTheme.colorScheme.onBackground
-                        else MaterialTheme.colorScheme.onPrimary
+                    containerColor = if (submitFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (submitFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 )
+
             ) {
                 Text(" Selected (${selected.size}) Rules Distribute Points", fontSize = 18.sp)
             }

@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -87,9 +89,8 @@ fun SummaryScreen(
             Text(
                 "FINAL DISTRIBUTION SUMMARY",
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Black,
                 color = Color.White,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 16.dp).align(Alignment.CenterHorizontally)
             )
 
             // Grand Total Display
@@ -134,7 +135,7 @@ fun SummaryScreen(
             }
 
             Spacer(Modifier.height(16.dp))
-
+            var saveDistributionFocused by remember { mutableStateOf(false) }
             Button(
                 enabled = !isSaving,
                 onClick = {
@@ -152,10 +153,14 @@ fun SummaryScreen(
                     }
                     onConfirmSave(entities)
                 },
-                modifier = Modifier.fillMaxWidth().height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp) .onFocusChanged { saveDistributionFocused = it.isFocused },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = GoldButton,
-                    disabledContainerColor = GoldButton.copy(alpha = 0.5f)
+                    containerColor = if (saveDistributionFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (saveDistributionFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -180,15 +185,38 @@ fun SummaryHeaderRow() {
 
 @Composable
 fun SummaryItemRow(rule: TambolaRule, amount: Int) {
+    var focused by remember { mutableStateOf(false) }
+
     Row(
-        Modifier.fillMaxWidth().padding(vertical = 14.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 14.dp)
+            .background(
+                if (focused) Color.White.copy(alpha = 0.15f) else Color.Transparent,
+                RoundedCornerShape(8.dp)
+            )
+            .onFocusChanged { focused = it.isFocused }
+            .focusable(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(Modifier.weight(2f)) {
             Text(rule.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
             Text("${rule.percentage}% of total", color = Color.White.copy(0.5f), fontSize = 11.sp)
         }
-        Text("${rule.quantity}", Modifier.weight(0.8f), color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Medium)
-        Text("$amount", Modifier.weight(1.2f), color = GoldButton, fontWeight = FontWeight.Black, textAlign = TextAlign.End, fontSize = 18.sp)
+        Text(
+            "${rule.quantity}",
+            Modifier.weight(0.8f),
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            "$amount",
+            Modifier.weight(1.2f),
+            color = GoldButton,
+            fontWeight = FontWeight.Black,
+            textAlign = TextAlign.End,
+            fontSize = 18.sp
+        )
     }
 }
