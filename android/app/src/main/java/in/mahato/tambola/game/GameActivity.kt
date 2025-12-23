@@ -701,6 +701,45 @@ fun WinnerItemRow(
     val scope = rememberCoroutineScope()
     val isClaimed = prize.isClaimed
 
+    var showUnclaimDialog by remember { mutableStateOf(false) }
+
+    // ---- Confirmation Dialog ----
+    if (showUnclaimDialog) {
+        AlertDialog(
+            onDismissRequest = { showUnclaimDialog = false },
+            title = {
+                Text(
+                    text = "Confirm",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Red
+                )
+            },
+            text = {
+                Text("Are you sure you want to unclaim the Prize?")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showUnclaimDialog = false
+                        scope.launch {
+                            onClaimToggle(false) // unclaim
+                        }
+                    }
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showUnclaimDialog = false }
+                ) {
+                    Text("No")
+                }
+            }
+        )
+    }
+
+    // ---- Row UI ----
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -726,8 +765,14 @@ fun WinnerItemRow(
         Checkbox(
             checked = isClaimed,
             onCheckedChange = { checked ->
-                scope.launch {
-                    onClaimToggle(checked)
+                if (!checked && isClaimed) {
+                    // Trying to uncheck → ask confirmation
+                    showUnclaimDialog = true
+                } else {
+                    // Normal claim
+                    scope.launch {
+                        onClaimToggle(true)
+                    }
                 }
             },
             colors = CheckboxDefaults.colors(
@@ -738,7 +783,6 @@ fun WinnerItemRow(
         )
     }
 }
-
 
 @Composable
 fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {

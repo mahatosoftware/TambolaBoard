@@ -15,7 +15,7 @@ interface WinningPrizeDao {
     // LOAD FOR SCREEN (AUTO-OBSERVE)
     // --------------------------------------------------
 
-    @Query("SELECT * FROM winning_prizes ORDER BY prizeId ASC")
+    @Query("SELECT * FROM winning_prizes ORDER BY isClaimed ASC")
     fun getAllPrizes(): Flow<List<WinningPrizeEntity>>
 
     @Query("""

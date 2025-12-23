@@ -22,13 +22,14 @@ class RuleViewModel : ViewModel() {
 
     fun toggleRule(rule: TambolaRule) {
         selectedRules =
-            if (rule in selectedRules)
-                selectedRules - rule
+            if (selectedRules.any { it.id == rule.id })
+                selectedRules.filterNot { it.id == rule.id }
             else
                 selectedRules + rule
 
         autoDistribute()
     }
+
 
     // -----------------------------
     // MANUAL UPDATES
