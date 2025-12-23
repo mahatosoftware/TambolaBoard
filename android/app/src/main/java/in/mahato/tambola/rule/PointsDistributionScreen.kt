@@ -219,6 +219,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .navigationBarsPadding()
                     .onFocusChanged { confirmDistributionFocused = it.isFocused }
                     .height(60.dp),
 

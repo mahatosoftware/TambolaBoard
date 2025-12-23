@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -189,6 +190,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+                    .navigationBarsPadding()
                     .onFocusChanged { submitFocused = it.isFocused }
                     .height(56.dp)
                     .focusable(),
@@ -215,9 +217,9 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 .focusProperties {
                     canFocus = false   // ⭐ prevents grid stealing focus
                 },
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(8.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tambolaRules) { rule ->
                 RuleCard(
