@@ -27,6 +27,7 @@ import `in`.mahato.tambola.MainActivity
 import `in`.mahato.tambola.db.AppDatabase
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
+import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {
@@ -52,9 +53,29 @@ class SummaryActivity : ComponentActivity() {
     private fun saveToDatabase(entities: List<SavedRuleEntity>) {
         lifecycleScope.launch {
             try {
+
                 val db = AppDatabase.getDatabase(this@SummaryActivity)
+
+                val ruleDao = db.ruleDao()
+                val prizeDao = db.winningPrizeDao()
+
+
+                prizeDao.clearAll()
+
+                val prizeEntities = entities.flatMap { savedRule ->
+                    List(savedRule.quantity) {
+                        WinningPrizeEntity(
+                            savedRule = savedRule,
+                            isClaimed = false
+                        )
+                    }
+                }
+
+                // 4️⃣ Save prizes
+                prizeDao.insertPrizes(prizeEntities)
                 // replaceRules handles the Delete + Insert transaction
-                db.ruleDao().replaceRules(entities)
+                ruleDao.replaceRules(entities)
+
                 Toast.makeText(this@SummaryActivity, "Distribution Saved Successfully", Toast.LENGTH_SHORT).show()
                 // Redirect to MainActivity
                 val intent = Intent(this@SummaryActivity, MainActivity::class.java).apply {

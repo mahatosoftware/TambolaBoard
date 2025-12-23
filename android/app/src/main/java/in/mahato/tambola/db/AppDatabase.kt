@@ -8,13 +8,17 @@ import `in`.mahato.tambola.game.dao.CalledNumberDao
 import `in`.mahato.tambola.game.entity.CalledNumber
 import `in`.mahato.tambola.game.entity.GameMetadata
 import `in`.mahato.tambola.rule.dao.RuleDao
+import `in`.mahato.tambola.rule.dao.WinningPrizeDao
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
+import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 
-@Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class], version = 5, exportSchema = false)
+@Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class, WinningPrizeEntity::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun calledNumberDao(): CalledNumberDao
 
     abstract fun ruleDao(): RuleDao
+    abstract fun winningPrizeDao(): WinningPrizeDao
+
 
     companion object {
         @Volatile

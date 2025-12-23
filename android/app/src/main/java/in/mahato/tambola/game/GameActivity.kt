@@ -61,6 +61,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -95,6 +96,7 @@ import `in`.mahato.tambola.game.entity.CalledNumber
 import `in`.mahato.tambola.game.entity.GameMetadata
 import `in`.mahato.tambola.game.util.FunnyPhraseUtil
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
+import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.coroutines.delay
@@ -128,8 +130,16 @@ class GameActivity : ComponentActivity() {
         }
 
         setContent {
+            var showWinnerBoard by remember { mutableStateOf(false) }
             AppTheme {
                 TambolaScreen(db, tts, isNewGame, _isTtsReady.value)
+            }
+
+            if (showWinnerBoard) {
+                WinnerBoardDialog(
+                    db = AppDatabase.getDatabase(this),
+                    onDismiss = { showWinnerBoard = false }
+                )
             }
         }
     }
@@ -462,7 +472,7 @@ fun generateQRCode(text: String): Bitmap? {
         null
     }
 }
-
+/*
 @Composable
 fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
     var savedRules by remember { mutableStateOf<List<SavedRuleEntity>>(emptyList()) }
@@ -474,40 +484,6 @@ fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
         isLoading = false
     }
 
-   /* AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.primary,
-                title = {
-            Column {
-                Text("Winner Board", fontWeight = FontWeight.Black, fontSize = 24.sp,color = MaterialTheme.colorScheme.onPrimary)
-                Text("Claim prizes as they are won", fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary)
-            }
-        },
-        text = {
-            Box(modifier = Modifier.heightIn(max = 400.dp)) {
-                if (isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                } else if (savedRules.isEmpty()) {
-                    Text("No point distribution found. Please set rules in settings.")
-                } else {
-                    LazyColumn {
-                        items(savedRules) { rule ->
-                            WinnerItemRow(rule)
-                            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1DE9B6))
-            ) {
-                Text("Close Board", color = Color.Black, fontWeight = FontWeight.Bold)
-            }
-        }
-    )*/
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
@@ -627,6 +603,143 @@ fun WinnerItemRow(rule: SavedRuleEntity) {
         )
     }
 }
+*/
+
+@Composable
+fun WinnerBoardDialog(
+    db: AppDatabase,
+    onDismiss: () -> Unit
+) {
+    val prizes by db.winningPrizeDao()
+        .getAllPrizes()
+        .collectAsState(initial = emptyList())
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(20.dp),
+            color = MaterialTheme.colorScheme.primary,
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 500.dp)
+                    .heightIn(max = 500.dp)
+                    .padding(16.dp)
+            ) {
+
+                // Title
+                Text(
+                    "Winner Board",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    "Claim prizes as they are won",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusable()
+                ) {
+                    when {
+                        prizes.isEmpty() -> {
+                            Text(
+                                "No prizes generated yet.",
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                        else -> {
+                            LazyColumn(Modifier.fillMaxSize()) {
+                                items(prizes, key = { it.prizeId }) { prize ->
+                                    WinnerItemRow(
+                                        prize = prize,
+                                        onClaimToggle = { claimed ->
+                                            if (claimed)
+                                                db.winningPrizeDao().claimPrize(prize.prizeId)
+                                            else
+                                                db.winningPrizeDao().unclaimPrize(prize.prizeId)
+                                        }
+                                    )
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(12.dp))
+
+                Button(
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF1DE9B6)
+                    )
+                ) {
+                    Text(
+                        "Close Board",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun WinnerItemRow(
+    prize: WinningPrizeEntity,
+    onClaimToggle: suspend (Boolean) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val isClaimed = prize.isClaimed
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = prize.savedRule.ruleName.uppercase(),
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = if (isClaimed) Color.Red else MaterialTheme.colorScheme.onPrimary
+            )
+            Text(
+                text = "Prize: ${prize.savedRule.amountPerItem} pts",
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+
+        Checkbox(
+            checked = isClaimed,
+            onCheckedChange = { checked ->
+                scope.launch {
+                    onClaimToggle(checked)
+                }
+            },
+            colors = CheckboxDefaults.colors(
+                uncheckedColor = MaterialTheme.colorScheme.onPrimary,
+                checkedColor = Color.Green,
+                checkmarkColor = Color.White
+            )
+        )
+    }
+}
+
+
 @Composable
 fun NumberGrid(calledNumbers: List<Int>, lastNumber: Int?, flashColor: Color) {
     val configuration = LocalConfiguration.current
