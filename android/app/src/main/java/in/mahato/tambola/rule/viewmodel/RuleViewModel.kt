@@ -1,10 +1,10 @@
-package `in`.ahato.tambola.rule
+package `in`.mahato.tambola.rule.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import `in`.mahato.tambola.rule.TambolaRule
+import androidx.compose.runtime.setValue
+import `in`.mahato.tambola.game.model.TambolaRule
 
 class RuleViewModel : ViewModel() {
 

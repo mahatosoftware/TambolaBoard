@@ -1,4 +1,4 @@
-package `in`.mahato.tambola.rule.model
+package `in`.mahato.tambola.rule.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

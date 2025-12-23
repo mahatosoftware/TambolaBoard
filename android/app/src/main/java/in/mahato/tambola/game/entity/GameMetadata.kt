@@ -1,4 +1,4 @@
-package `in`.mahato.tambola.game
+package `in`.mahato.tambola.game.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -8,4 +8,3 @@ data class GameMetadata(
     @PrimaryKey val id: Int = 1,
     val gameId: String
 )
-

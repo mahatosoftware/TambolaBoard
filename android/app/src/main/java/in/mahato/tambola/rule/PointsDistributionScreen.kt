@@ -27,7 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import `in`.ahato.tambola.rule.RuleViewModel
+import `in`.mahato.tambola.game.model.TambolaRule
+import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 
 
 /* ---------------- COLORS ---------------- */

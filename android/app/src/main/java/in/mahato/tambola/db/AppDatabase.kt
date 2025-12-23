@@ -1,11 +1,14 @@
-package `in`.mahato.tambola.game
+package `in`.mahato.tambola.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import `in`.mahato.tambola.game.dao.CalledNumberDao
+import `in`.mahato.tambola.game.entity.CalledNumber
+import `in`.mahato.tambola.game.entity.GameMetadata
 import `in`.mahato.tambola.rule.dao.RuleDao
-import `in`.mahato.tambola.rule.model.SavedRuleEntity
+import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 
 @Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {

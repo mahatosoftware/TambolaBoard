@@ -73,27 +73,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import `in`.ahato.tambola.rule.RuleViewModel
+import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.R
+import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 
 
 // -------------------- MODEL --------------------
 
-@Parcelize
-data class TambolaRule(
-    val id: Int,
-    val name: String,
-    val description: String,
-    val type: TambolaRuleType,
-    val winningPattern: List<Int>,
-    val quantity: Int = 1,
-    val percentage: Int = 0,
-    val weight: Int = 1,
-    val isFullHouse: Boolean =false
-
-) : Parcelable
 
 
 // -------------------- SAMPLE DATA --------------------
@@ -125,7 +113,15 @@ enum class TambolaRuleType(val iconRes: Int) {
 
 
 val tambolaRules = listOf(
-    TambolaRule(1, "Full House", "Complete all numbers on the ticket.", TambolaRuleType.FULL_HOUSE, (0..26).toList(),weight = 50,isFullHouse=true),
+    TambolaRule(
+        1,
+        "Full House",
+        "Complete all numbers on the ticket.",
+        TambolaRuleType.FULL_HOUSE,
+        (0..26).toList(),
+        weight = 50,
+        isFullHouse = true
+    ),
     TambolaRule(2, "Second House", "Second player to complete the ticket.", TambolaRuleType.SECOND_HOUSE, (0..26).toList(),weight = 30, isFullHouse = true),
     TambolaRule(3, "Third House", "Third player to complete the ticket.", TambolaRuleType.THIRD_HOUSE, (0..26).toList(),weight = 20, isFullHouse = true),
 

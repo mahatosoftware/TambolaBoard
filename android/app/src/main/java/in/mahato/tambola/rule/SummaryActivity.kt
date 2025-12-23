@@ -24,8 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import `in`.mahato.tambola.MainActivity
-import `in`.mahato.tambola.game.AppDatabase
-import `in`.mahato.tambola.rule.model.SavedRuleEntity
+import `in`.mahato.tambola.db.AppDatabase
+import `in`.mahato.tambola.game.model.TambolaRule
+import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {

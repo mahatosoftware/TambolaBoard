@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import `in`.ahato.tambola.rule.RuleViewModel
+import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.ui.theme.AppTheme
 
 class PointsDistributionActivity : ComponentActivity() {

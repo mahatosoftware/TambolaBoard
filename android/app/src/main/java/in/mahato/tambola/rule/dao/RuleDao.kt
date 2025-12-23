@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import `in`.mahato.tambola.rule.model.SavedRuleEntity
+import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 
 @Dao
 interface RuleDao {

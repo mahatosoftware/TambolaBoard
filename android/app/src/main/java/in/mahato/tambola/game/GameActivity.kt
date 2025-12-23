@@ -63,7 +63,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -91,7 +90,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.room.Room
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import `in`.mahato.tambola.rule.model.SavedRuleEntity
+import `in`.mahato.tambola.db.AppDatabase
+import `in`.mahato.tambola.game.entity.CalledNumber
+import `in`.mahato.tambola.game.entity.GameMetadata
+import `in`.mahato.tambola.game.util.FunnyPhraseUtil
+import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.coroutines.delay

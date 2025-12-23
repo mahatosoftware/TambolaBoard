@@ -1,4 +1,4 @@
-package `in`.mahato.tambola.game
+package `in`.mahato.tambola.game.util
 
 object FunnyPhraseUtil {
 
