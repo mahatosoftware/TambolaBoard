@@ -428,16 +428,16 @@ fun ValueStepper(
     onPlus: () -> Unit,
     modifier: Modifier
 ) {
-    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = modifier.widthIn(min = 120.dp), verticalAlignment = Alignment.CenterVertically) {
         StepperIconButton(Icons.Default.Remove, enabled, onMinus)
-        Text(value, Modifier.width(40.dp), textAlign = TextAlign.Center)
+        Text(value, Modifier.width(32.dp), textAlign = TextAlign.Center)
         StepperIconButton(Icons.Default.Add, enabled, onPlus)
     }
 }
 
 @Composable
 fun StepperIconButton(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-    IconButton(enabled = enabled, onClick = onClick) {
+    IconButton(enabled = enabled, onClick = onClick,modifier = Modifier.size(32.dp)) {
         Icon(icon, null, tint = if (enabled) Color.White else Color.Gray)
     }
 }
