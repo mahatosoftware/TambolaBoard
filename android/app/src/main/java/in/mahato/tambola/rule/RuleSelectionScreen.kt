@@ -319,7 +319,7 @@ fun RuleCard(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Rule Info",
                         tint = if (isSelected) MaterialTheme.colorScheme.onTertiaryContainer
-                        else MaterialTheme.colorScheme.onSecondaryContainer,
+                        else MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(20.dp)
                     )
                 }
