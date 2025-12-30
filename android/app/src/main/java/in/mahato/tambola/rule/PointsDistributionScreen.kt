@@ -289,14 +289,18 @@ fun ModeButton(
         if (selected) backgroundColor else Color.Black.copy(alpha = 0.35f),
         label = "modeColor"
     )
-
+    var submitFocused by remember { mutableStateOf(false) }
     Button(
         onClick = onClick,
-        modifier = modifier.height(52.dp),
+        modifier = modifier.height(52.dp).onFocusChanged { submitFocused = it.isFocused },
         shape = RoundedCornerShape(100.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = if (selected) Color.Black else Color.White
+            containerColor = if (submitFocused)
+                MaterialTheme.colorScheme.background
+            else MaterialTheme.colorScheme.primaryContainer,
+            contentColor = if (submitFocused)
+                MaterialTheme.colorScheme.onTertiary
+            else MaterialTheme.colorScheme.tertiary
         )
     ) {
         Text(text, fontWeight = FontWeight.ExtraBold)
