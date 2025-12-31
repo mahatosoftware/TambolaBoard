@@ -220,7 +220,6 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()
                     .onFocusChanged { confirmDistributionFocused = it.isFocused }
                     .height(60.dp),
 
@@ -238,7 +237,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
                 textAlign = TextAlign.Center
             )
         }

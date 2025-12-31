@@ -197,7 +197,6 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .navigationBarsPadding()
                         .onFocusChanged { submitFocused = it.isFocused }
                         .height(56.dp)
                         .focusable(),
@@ -216,7 +215,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 Text(
                     text = GeneralUtil.getCopyrightMessage(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
                     textAlign = TextAlign.Center
                 )
             }
