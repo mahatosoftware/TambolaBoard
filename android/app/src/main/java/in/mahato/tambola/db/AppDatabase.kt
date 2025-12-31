@@ -12,7 +12,7 @@ import `in`.mahato.tambola.rule.dao.WinningPrizeDao
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 
-@Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class, WinningPrizeEntity::class], version = 6, exportSchema = false)
+@Database(entities = [CalledNumber::class, GameMetadata::class, SavedRuleEntity::class, WinningPrizeEntity::class], version = 7, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun calledNumberDao(): CalledNumberDao
 

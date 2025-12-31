@@ -62,4 +62,8 @@ interface WinningPrizeDao {
 
     @Query("DELETE FROM winning_prizes")
     suspend fun clearAll()
+
+    @Query("UPDATE winning_prizes SET winnerName = :name WHERE prizeId = :id")
+    suspend fun updateWinnerName(id: Int, name: String)
+
 }

@@ -12,6 +12,7 @@ data class WinningPrizeEntity(
 
     @Embedded
     val savedRule: SavedRuleEntity,
+    val winnerName: String?,
 
     val isClaimed: Boolean = false
 )

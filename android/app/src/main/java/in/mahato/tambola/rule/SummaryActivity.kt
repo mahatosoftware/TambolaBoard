@@ -72,6 +72,8 @@ class SummaryActivity : ComponentActivity() {
                     List(savedRule.quantity) {
                         WinningPrizeEntity(
                             savedRule = savedRule,
+                            // todo
+                            winnerName = "",
                             isClaimed = false
                         )
                     }

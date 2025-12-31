@@ -44,6 +44,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -56,6 +58,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -86,7 +90,9 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -101,6 +107,7 @@ import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.util.GeneralUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -517,6 +524,7 @@ fun WinnerBoardDialog(
                     LazyColumn {
                         itemsIndexed(prizes, key = { _, it -> it.prizeId }) { index, prize ->
                             WinnerItemRow(
+                                db= db,
                                 prize = prize,
                                 focusRequester =
                                     if (index == 0) firstItemFocusRequester else null,
@@ -561,6 +569,7 @@ fun WinnerBoardDialog(
 
 @Composable
 fun WinnerItemRow(
+    db :AppDatabase,
     prize: WinningPrizeEntity,
     focusRequester: FocusRequester? = null,
     onClaimToggle: suspend (Boolean) -> Unit
@@ -569,7 +578,8 @@ fun WinnerItemRow(
     val isClaimed = prize.isClaimed
     var isFocused by remember { mutableStateOf(false) }
     var showUnclaimDialog by remember { mutableStateOf(false) }
-
+// State for name editing
+    var editedName by remember(prize.winnerName) { mutableStateOf(prize.winnerName ?: "") }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -610,6 +620,52 @@ fun WinnerItemRow(
                 text = "Prize: ${prize.savedRule.amountPerItem} pts",
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+
+        Column(modifier = Modifier.weight(1f)) {
+            // ⭐ TV-Optimized TextField
+            OutlinedTextField(
+                value = editedName,
+                onValueChange = {
+                    // Update local UI only - this won't trigger a DB refresh
+                    editedName = it
+                },
+                enabled = !isClaimed,
+                placeholder = { Text("Add Winner Name...", color = Color.Gray) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        // Save to DB ONLY when "Done" is pressed on the virtual keyboard
+                        scope.launch(Dispatchers.IO) {
+                            db.winningPrizeDao().updateWinnerName(prize.prizeId, editedName)
+                        }
+                        // This will hide the keyboard automatically
+                        defaultKeyboardAction(ImeAction.Done)
+                    }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        // OPTIONAL: Save when the user navigates the D-pad away from the text box
+                        if (!focusState.isFocused && editedName != prize.winnerName) {
+                            scope.launch(Dispatchers.IO) {
+                                db.winningPrizeDao().updateWinnerName(prize.prizeId, editedName)
+                            }
+                        }
+                    },
+                textStyle = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White
+                ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.Transparent,
+                    disabledBorderColor = Color.Transparent,
+                    cursorColor = Color.White
+                )
             )
         }
 
