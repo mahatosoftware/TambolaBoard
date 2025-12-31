@@ -119,7 +119,7 @@ val tambolaRules = listOf(
     TambolaRule(
         1,
         "Full House",
-        "Complete all numbers on the ticket.",
+        "First Player to Complete all numbers on the ticket.",
         TambolaRuleType.FULL_HOUSE,
         (0..26).toList(),
         weight = 50,
