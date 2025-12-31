@@ -633,7 +633,8 @@ fun WinnerItemRow(
                 },
                 enabled = !isClaimed,
                 placeholder = { Text("Add Winner Name...", color = Color.Gray) },
-                singleLine = true,
+                singleLine = false,
+                maxLines = 2,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {

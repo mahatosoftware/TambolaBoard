@@ -78,6 +78,7 @@ import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.R
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.ui.theme.AppTheme
+import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.parcelize.Parcelize
 
 
@@ -171,40 +172,53 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 ))
         },
         bottomBar = {
-            var submitFocused by remember { mutableStateOf(false) }
-            Button(
-                onClick = {
-                    if (selected.isNotEmpty()) {
-
-                        val intent =
-                            Intent(context, PointsDistributionActivity::class.java)
-
-                        intent.putIntegerArrayListExtra(
-                            "SELECTED_RULE_IDS",
-                            ArrayList(selected)
-                        )
-
-                        context.startActivity(intent)
-                    }
-                },
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .navigationBarsPadding()
-                    .onFocusChanged { submitFocused = it.isFocused }
-                    .height(56.dp)
-                    .focusable(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (submitFocused)
-                        MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = if (submitFocused)
-                        MaterialTheme.colorScheme.onTertiary
-                    else MaterialTheme.colorScheme.tertiary
-                )
-
+                    .navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(" Selected (${selected.size}) Rules Distribute Points", fontSize = 18.sp)
+                var submitFocused by remember { mutableStateOf(false) }
+                Button(
+                    onClick = {
+                        if (selected.isNotEmpty()) {
+
+                            val intent =
+                                Intent(context, PointsDistributionActivity::class.java)
+
+                            intent.putIntegerArrayListExtra(
+                                "SELECTED_RULE_IDS",
+                                ArrayList(selected)
+                            )
+
+                            context.startActivity(intent)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .navigationBarsPadding()
+                        .onFocusChanged { submitFocused = it.isFocused }
+                        .height(56.dp)
+                        .focusable(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (submitFocused)
+                            MaterialTheme.colorScheme.background
+                        else MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = if (submitFocused)
+                            MaterialTheme.colorScheme.onTertiary
+                        else MaterialTheme.colorScheme.tertiary
+                    )
+
+                ) {
+                    Text(" Selected (${selected.size}) Rules Distribute Points", fontSize = 18.sp)
+                }
+                Text(
+                    text = GeneralUtil.getCopyrightMessage(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     ) { padding ->

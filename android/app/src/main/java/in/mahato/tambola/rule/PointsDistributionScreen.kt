@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
+import `in`.mahato.tambola.util.GeneralUtil
 
 
 /* ---------------- COLORS ---------------- */
@@ -234,6 +235,12 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             ) {
                 Text("CONFIRM DISTRIBUTION", fontWeight = FontWeight.ExtraBold)
             }
+            Text(
+                text = GeneralUtil.getCopyrightMessage(),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 

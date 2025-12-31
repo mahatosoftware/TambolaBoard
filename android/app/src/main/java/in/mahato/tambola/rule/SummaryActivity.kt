@@ -33,6 +33,7 @@ import `in`.mahato.tambola.ui.theme.BlackText
 import `in`.mahato.tambola.ui.theme.ShamockGreen
 import `in`.mahato.tambola.ui.theme.WhiteBg
 import `in`.mahato.tambola.ui.theme.WhiteText
+import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {
@@ -201,6 +202,13 @@ fun SummaryScreen(
                     Text("SAVE & DONE", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
                 }
             }
+            Text(
+                text = GeneralUtil.getCopyrightMessage(),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth(),
+                color = WhiteText,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

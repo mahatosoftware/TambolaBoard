@@ -33,7 +33,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".game.GameActivity" />
+        <activity android:name=".game.GameActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true">
+
+        </activity>
 
         <activity android:name=".rule.RuleSelectionActivity" />
         <activity android:name=".rule.PointsDistributionActivity" />
