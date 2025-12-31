@@ -295,12 +295,8 @@ fun ModeButton(
         modifier = modifier.height(52.dp).onFocusChanged { submitFocused = it.isFocused },
         shape = RoundedCornerShape(100.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (submitFocused)
-                MaterialTheme.colorScheme.background
-            else MaterialTheme.colorScheme.primaryContainer,
-            contentColor = if (submitFocused)
-                MaterialTheme.colorScheme.onTertiary
-            else MaterialTheme.colorScheme.tertiary
+            containerColor = containerColor,
+            contentColor = if (selected) Color.Black else Color.White
         )
     ) {
         Text(text, fontWeight = FontWeight.ExtraBold)

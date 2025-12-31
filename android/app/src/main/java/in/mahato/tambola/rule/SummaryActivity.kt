@@ -105,6 +105,7 @@ fun SummaryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(PurpleBgStart, PurpleBgEnd)))
+
             .padding(16.dp)
     ) {
         Column {
@@ -117,7 +118,7 @@ fun SummaryScreen(
 
             // Grand Total Display
             Card(
-                colors = CardDefaults.cardColors(containerColor = MintButton),
+                colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.3f)),
                 modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -126,8 +127,8 @@ fun SummaryScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("GRAND TOTAL", fontWeight = FontWeight.Bold, color = Color.Black)
-                    Text("$total PTS", fontSize = 26.sp, fontWeight = FontWeight.Black, color = Color.Black)
+                    Text("GRAND TOTAL", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
+                    Text("$total PTS", fontSize = 26.sp,  color = GoldButton)
                 }
             }
 

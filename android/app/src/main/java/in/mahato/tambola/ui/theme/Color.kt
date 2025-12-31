@@ -28,7 +28,6 @@ val VerdigrisBG  = Color(0xFF40B5AD)
 val BrightPink =Color(0xFFEDE7F6)
 
 
-val Black = Color(0xFF009E60)
 
 val RoyalViolet = Color(0xFF7C4DFF)
 
