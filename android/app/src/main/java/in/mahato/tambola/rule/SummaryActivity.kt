@@ -28,6 +28,10 @@ import `in`.mahato.tambola.db.AppDatabase
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
+import `in`.mahato.tambola.ui.theme.BlackText
+import `in`.mahato.tambola.ui.theme.ShamockGreen
+import `in`.mahato.tambola.ui.theme.WhiteBg
+import `in`.mahato.tambola.ui.theme.WhiteText
 import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {
@@ -179,18 +183,18 @@ fun SummaryScreen(
                 modifier = Modifier.fillMaxWidth().height(60.dp) .onFocusChanged { saveDistributionFocused = it.isFocused },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (saveDistributionFocused)
-                        MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.primaryContainer,
+                        WhiteBg
+                    else ShamockGreen,
                     contentColor = if (saveDistributionFocused)
-                        MaterialTheme.colorScheme.onTertiary
-                    else MaterialTheme.colorScheme.tertiary
+                        BlackText
+                    else WhiteText
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 if (isSaving) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.Black)
                 } else {
-                    Text("SAVE & DONE", color = Color.Black, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                    Text("SAVE & DONE", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
                 }
             }
         }
