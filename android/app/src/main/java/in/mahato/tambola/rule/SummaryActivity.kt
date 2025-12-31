@@ -182,7 +182,7 @@ fun SummaryScreen(
                     }
                     onConfirmSave(entities)
                 },
-                modifier = Modifier.fillMaxWidth().height(60.dp) .onFocusChanged { saveDistributionFocused = it.isFocused },
+                modifier = Modifier.fillMaxWidth().height(60.dp).navigationBarsPadding() .onFocusChanged { saveDistributionFocused = it.isFocused },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (saveDistributionFocused)
                         WhiteBg

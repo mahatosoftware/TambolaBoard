@@ -474,139 +474,6 @@ fun generateQRCode(text: String): Bitmap? {
         null
     }
 }
-/*
-@Composable
-fun WinnerBoardDialog(db: AppDatabase, onDismiss: () -> Unit) {
-    var savedRules by remember { mutableStateOf<List<SavedRuleEntity>>(emptyList()) }
-    var isLoading by remember { mutableStateOf(true) }
-
-    // Fetch rules from DB when dialog opens
-    LaunchedEffect(Unit) {
-        savedRules = db.ruleDao().getAllSavedRules()
-        isLoading = false
-    }
-
-    Dialog(onDismissRequest = onDismiss) {
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = MaterialTheme.colorScheme.primary,
-            tonalElevation = 8.dp
-        ) {
-            Column(
-                modifier = Modifier
-                    .widthIn(max = 500.dp)
-                    .heightIn(max = 500.dp)
-                    .padding(16.dp)
-            ) {
-
-                // Title
-                Text(
-                    "Winner Board",
-                    fontWeight = FontWeight.Black,
-                    fontSize = 24.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Text(
-                    "Claim prizes as they are won",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                // Scrollable content
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusable() // 🔑 allows DPAD to enter
-                ) {
-                    when {
-                        isLoading -> {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                        savedRules.isEmpty() -> {
-                            Text(
-                                "No point distribution found. Please set rules in settings.",
-                                color = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                        else -> {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                items(savedRules) { rule ->
-                                    WinnerItemRow(rule)
-                                    HorizontalDivider(
-                                        color = Color.LightGray.copy(alpha = 0.5f)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(12.dp))
-
-                Button(
-                    onClick = onDismiss,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1DE9B6)
-                    )
-                ) {
-                    Text(
-                        "Close Board",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-        }
-    }
-
-}
-
-@Composable
-fun WinnerItemRow(rule: SavedRuleEntity) {
-    // State to track if this specific prize is claimed
-    var isClaimed by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = rule.ruleName.uppercase(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = if (isClaimed) Color.Red else  MaterialTheme.colorScheme.onPrimary
-            )
-            Text(
-                text = "Prize: ${rule.amountPerItem} pts",
-                fontSize = 12.sp,
-                color = if (isClaimed) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimary
-            )
-        }
-
-        // Action button to claim
-        Checkbox(
-            checked = isClaimed,
-            onCheckedChange = { isClaimed = it },
-            colors = CheckboxDefaults.colors(
-                uncheckedColor = MaterialTheme.colorScheme.onPrimary,   // 👈 outline color
-                checkedColor = Color.Green,   // 👈 fill + check
-                checkmarkColor = Color.White,
-                disabledUncheckedColor = Color.Gray
-            )
-        )
-    }
-}
-*/
-
 @Composable
 fun WinnerBoardDialog(
     db: AppDatabase,
@@ -735,7 +602,7 @@ fun WinnerItemRow(
                 color =
                     when {
                         isClaimed -> Color.Red
-                        isFocused -> MaterialTheme.colorScheme.onSecondaryContainer
+                        isFocused -> MaterialTheme.colorScheme.onPrimary
                         else -> MaterialTheme.colorScheme.onPrimary
                     }
             )
@@ -748,6 +615,11 @@ fun WinnerItemRow(
 
         Checkbox(
             checked = isClaimed,
+            colors = CheckboxDefaults.colors(
+                checkedColor = if (isFocused) Color.White else Color(0xFF1E88E5),
+                uncheckedColor = if (isFocused) Color.White else Color.Gray,
+                checkmarkColor = if (isFocused) Color(0xFF1E88E5) else Color.White
+            ),
             onCheckedChange = { checked ->
                 if (!checked && isClaimed) {
                     showUnclaimDialog = true
