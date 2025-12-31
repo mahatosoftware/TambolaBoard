@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.RepeatMode
@@ -129,7 +130,7 @@ class GameActivity : ComponentActivity() {
                 tts.speak("Welcome to Tambola Board", TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
-
+        enableEdgeToEdge()
         setContent {
             var showWinnerBoard by remember { mutableStateOf(false) }
             AppTheme {

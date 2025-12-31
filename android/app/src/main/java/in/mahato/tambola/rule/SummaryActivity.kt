@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
@@ -43,6 +44,7 @@ class SummaryActivity : ComponentActivity() {
         val rules = intent.getParcelableArrayListExtra<TambolaRule>("rules") ?: emptyList()
         val totalPoints = intent.getIntExtra("totalPoints", 0)
 
+        enableEdgeToEdge()
         setContent {
             SummaryScreen(
                 rules = rules,
