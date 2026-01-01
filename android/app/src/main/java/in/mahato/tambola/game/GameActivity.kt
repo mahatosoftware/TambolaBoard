@@ -43,7 +43,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -58,7 +57,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -106,7 +104,6 @@ import `in`.mahato.tambola.db.AppDatabase
 import `in`.mahato.tambola.game.entity.CalledNumber
 import `in`.mahato.tambola.game.entity.GameMetadata
 import `in`.mahato.tambola.game.util.FunnyPhraseUtil
-import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.ui.theme.PurpleDark
