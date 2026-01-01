@@ -64,6 +64,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(PurpleBgStart, PurpleBgEnd)))
             .padding(16.dp)
+            .padding(WindowInsets.safeDrawing.asPaddingValues())
     ) {
         Column {
 
@@ -237,7 +238,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
+                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }

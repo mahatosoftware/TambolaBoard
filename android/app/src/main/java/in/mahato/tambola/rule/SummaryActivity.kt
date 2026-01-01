@@ -114,8 +114,9 @@ fun SummaryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(PurpleBgStart, PurpleBgEnd)))
-
+            .padding(WindowInsets.safeDrawing.asPaddingValues())
             .padding(16.dp)
+
     ) {
         Column {
             Text(
@@ -205,7 +206,7 @@ fun SummaryScreen(
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
+                modifier = Modifier.fillMaxWidth(),
                 color = WhiteText,
                 textAlign = TextAlign.Center
             )
