@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import `in`.mahato.tambola.game.GameActivity
 import `in`.mahato.tambola.rule.RuleSelectionActivity
 import `in`.mahato.tambola.ui.theme.AppTheme
+import `in`.mahato.tambola.winner.ViewWinnersActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -51,6 +52,10 @@ fun MainScreenComposable() {
             intent.putExtra("NEW_GAME", false)
             context.startActivity(intent)
             if (context is MainActivity) context.finish()
+        },
+        onViewWinners = {
+            val intent = Intent(context, ViewWinnersActivity::class.java)
+            context.startActivity(intent)
         },
         onExit = {
             if (context is MainActivity) context.finish()

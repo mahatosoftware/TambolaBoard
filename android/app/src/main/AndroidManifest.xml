@@ -44,6 +44,8 @@
 
         <activity android:name=".rule.SummaryActivity" />
 
+        <activity android:name=".winner.ViewWinnersActivity" />
+
     </application>
 
 </manifest>

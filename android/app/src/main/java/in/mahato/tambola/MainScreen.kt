@@ -21,6 +21,7 @@ fun MainScreen(
     onSelectGameRule: () -> Unit,
     onNewGame: () -> Unit,
     onContinue: () -> Unit,
+    onViewWinners : () -> Unit,
     onExit: () -> Unit
 ) {
     val year = Calendar.getInstance().get(Calendar.YEAR)
@@ -35,9 +36,10 @@ fun MainScreen(
     val focusSetRule = remember { FocusRequester() }
     val focusNew = remember { FocusRequester() }
     val focusContinue = remember { FocusRequester() }
+    val focusViewWinners = remember { FocusRequester() }
     val focusExit = remember { FocusRequester() }
 
-    val focusRequesters = listOf(focusSetRule, focusNew, focusContinue, focusExit)
+    val focusRequesters = listOf(focusSetRule, focusNew, focusContinue,focusViewWinners, focusExit)
     var focusedIndex by remember { mutableStateOf(0) }
 
     // Request initial focus
@@ -169,6 +171,40 @@ fun MainScreen(
                 )
             ) {
                 Text(text = "Continue Last Game")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //-------------------------------------------
+// VIEW WINNERS
+//-------------------------------------------
+            var viewWinnersFocused by remember { mutableStateOf(false) }
+            Button(
+                onClick = onViewWinners,
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                    .width(buttonWidth)
+                    .focusRequester(focusViewWinners)
+                    .onFocusChanged { viewWinnersFocused = it.isFocused }
+                    .onKeyEvent {
+                        if (it.type == KeyEventType.KeyDown) {
+                            when (it.key) {
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
+                                else -> false
+                            }
+                        } else false
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (viewWinnersFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (viewWinnersFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
+                )
+            ) {
+                Text(text = "View Winners")
             }
 
             Spacer(modifier = Modifier.height(16.dp))

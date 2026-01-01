@@ -1,5 +1,7 @@
 package `in`.mahato.tambola.game
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -99,6 +101,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.room.Room
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+import `in`.mahato.tambola.MainActivity
 import `in`.mahato.tambola.db.AppDatabase
 import `in`.mahato.tambola.game.entity.CalledNumber
 import `in`.mahato.tambola.game.entity.GameMetadata
@@ -279,7 +282,14 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                             { callNumber() },
                             { isAutoCalling = !isAutoCalling },
                             { resetBoard() },
-                            { (context as GameActivity).finish() },
+                            {
+                                val activity = context as Activity
+                                val intent = Intent(activity, MainActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                }
+                                activity.startActivity(intent)
+                                activity.finish()
+                                },
                             lastNumber,
                             true,
                             isTtsReady,
@@ -303,7 +313,14 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
                         { callNumber() },
                         { isAutoCalling = !isAutoCalling },
                         { resetBoard() },
-                        { (context as GameActivity).finish() },
+                        {
+                            val activity = context as Activity
+                            val intent = Intent(activity, MainActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                            }
+                            activity.startActivity(intent)
+                            activity.finish()
+                        },
                         lastNumber,
                         false,
                         isTtsReady,
@@ -340,7 +357,7 @@ fun GameControls(
     onCall: () -> Unit,
     onAutoToggle: () -> Unit,
     onResetClick: () -> Unit,
-    onExitClick: () -> Unit,
+    onBackClick: () -> Unit,
     lastNumber: Int?,
     isLandscape: Boolean,
     isTtsReady: Boolean,
@@ -429,9 +446,9 @@ fun GameControls(
 
                         Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text("Call Next") }
                         Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) "Pause" else "Auto Call") }
-                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Winner Board") }
+                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Claim Prize") }
                         Button(onClick = { showResetDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Reset") }
-                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Exit") }
+                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Return to Main Menu") }
                     }
                 } else {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
@@ -456,8 +473,8 @@ fun GameControls(
     if (showExitDialog) {
         AlertDialog(onDismissRequest = { showExitDialog = false },
             title = { Text("Exit Game?", color = Color.Red) },
-            text = { Text("Are you sure you want to exit the current game?") },
-            confirmButton = { TextButton(onClick = { onExitClick(); showExitDialog = false }) { Text("Yes") } },
+            text = { Text("Are you sure you want to return to the main Menu?") },
+            confirmButton = { TextButton(onClick = { onBackClick(); showExitDialog = false }) { Text("Yes") } },
             dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text("No") } }
         )
     }
