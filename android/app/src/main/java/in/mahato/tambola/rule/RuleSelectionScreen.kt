@@ -165,6 +165,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
 
 
     Scaffold(
+        modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
         containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
 
@@ -359,7 +360,7 @@ fun RuleCard(
 
             /* 📄 CONTENT */
             Column(
-                modifier = Modifier.fillMaxSize().padding(WindowInsets.safeDrawing.asPaddingValues()),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
