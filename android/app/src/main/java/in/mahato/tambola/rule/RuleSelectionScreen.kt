@@ -165,8 +165,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
 
 
     Scaffold(
-        modifier = Modifier.padding(WindowInsets.safeDrawing.asPaddingValues()),
-        containerColor = MaterialTheme.colorScheme.primary,
+              containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
 
             CenterAlignedTopAppBar(title = { Text("Select Tambola Rules") },
@@ -219,7 +218,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                 Text(
                     text = GeneralUtil.getCopyrightMessage(),
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
+                    modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
             }

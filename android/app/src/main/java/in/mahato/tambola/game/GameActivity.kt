@@ -109,6 +109,7 @@ import `in`.mahato.tambola.game.util.FunnyPhraseUtil
 import `in`.mahato.tambola.rule.entity.SavedRuleEntity
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
+import `in`.mahato.tambola.ui.theme.PurpleDark
 import `in`.mahato.tambola.util.GeneralUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -530,12 +531,16 @@ fun WinnerBoardDialog(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
-                    "Claim prizes as they are won",
+                    "Claim prizes as they are won. Claimed prizes will appear at the Bottom",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
 
                 Spacer(Modifier.height(12.dp))
+
+
+                // ⭐ FIXED HEADER ROW
+                WinnerHeader()
 
                 Box(modifier = Modifier.weight(1f)) {
                     LazyColumn {
@@ -581,6 +586,43 @@ fun WinnerBoardDialog(
         if (prizes.isNotEmpty()) {
             firstItemFocusRequester.requestFocus()
         }
+    }
+}
+
+@Composable
+fun WinnerHeader() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .background(
+                color = PurpleDark,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(vertical = 8.dp, horizontal = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "PRIZE",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White.copy(alpha = 0.7f)
+        )
+        Text(
+            text = "WINNER",
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White.copy(alpha = 0.7f)
+        )
+        Text(
+            text = "CLAIM",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
 }
 
