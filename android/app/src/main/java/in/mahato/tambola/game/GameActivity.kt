@@ -112,6 +112,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import androidx.compose.ui.res.stringResource
+import `in`.mahato.tambola.R
 
 class GameActivity : ComponentActivity() {
     private lateinit var tts: TextToSpeech
@@ -120,6 +122,8 @@ class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val isNewGame = intent.getBooleanExtra("NEW_GAME", false)
+        val gameIdFromIntent = intent.getStringExtra("GAME_ID")
+
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
@@ -135,14 +139,14 @@ class GameActivity : ComponentActivity() {
                     tts.setLanguage(Locale.forLanguageTag("en-US"))
                 }
                 _isTtsReady.value = true
-                tts.speak("Welcome to Tambola Board", TextToSpeech.QUEUE_FLUSH, null, null)
+                tts.speak(getString(R.string.tts_welcome), TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
         enableEdgeToEdge()
         setContent {
             var showWinnerBoard by remember { mutableStateOf(false) }
             AppTheme {
-                TambolaScreen(db, tts, isNewGame, _isTtsReady.value)
+                TambolaScreen(db, tts, isNewGame, _isTtsReady.value, gameIdFromIntent)
             }
 
             if (showWinnerBoard) {
@@ -161,9 +165,10 @@ class GameActivity : ComponentActivity() {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsReady: Boolean) {
+fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsReady: Boolean, gameIdFromIntent: String? = null) {
     val dao = db.calledNumberDao()
     var calledNumbers by remember { mutableStateOf(listOf<Int>()) }
     var lastNumber by remember { mutableStateOf<Int?>(null) }
@@ -220,7 +225,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
         val savedId = dao.getSavedGameId()
         if (isNewGame || savedId == null) {
             dao.resetBoard()
-            val newId = generateId()
+            val newId = gameIdFromIntent ?: generateId() // Use passed ID if available
             dao.saveGameMetadata(GameMetadata(gameId = newId))
             gameId = newId
             calledNumbers = listOf()
@@ -249,7 +254,7 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, isTtsR
         containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Tambola Board", color = MaterialTheme.colorScheme.onPrimary) },
+                title = { Text(stringResource(R.string.app_name), color = MaterialTheme.colorScheme.onPrimary) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
             )
         }
@@ -394,7 +399,7 @@ fun GameControls(
                 qrBitmap?.let {
                     Image(
                         bitmap = it.asImageBitmap(),
-                        contentDescription = "Game QR",
+                        contentDescription = stringResource(R.string.game_qr_desc),
                         modifier = Modifier
                             .size(if (isLandscape) 60.dp else 90.dp)
                             .background(Color.White)
@@ -403,7 +408,7 @@ fun GameControls(
                     )
                 }
                 Text(
-                    "GAME ID: $gameId",
+                    stringResource(R.string.game_id_display, gameId),
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     fontSize = 14.sp
@@ -417,7 +422,7 @@ fun GameControls(
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Column(modifier = Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("LAST NUMBER", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.last_number_label), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                 Text(
                     text = "${lastNumber ?: "--"}",
                     style = if (isLandscape) MaterialTheme.typography.displayMedium else MaterialTheme.typography.displayLarge,
@@ -442,11 +447,11 @@ fun GameControls(
                             )
                         }
 
-                        Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text("Call Next") }
-                        Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) "Pause" else "Auto Call") }
-                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text("Claim Prize") }
-                        Button(onClick = { showResetDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Reset") }
-                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text("Return to Main Menu") }
+                        Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text(stringResource(R.string.btn_call_next)) }
+                        Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) stringResource(R.string.btn_pause) else stringResource(R.string.btn_auto_call)) }
+                        Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text(stringResource(R.string.btn_claim_prize)) }
+                        Button(onClick = { showResetDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text(stringResource(R.string.btn_reset)) }
+                        Button(onClick = { showExitDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text(stringResource(R.string.btn_return_main)) }
                     }
                 } else {
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
@@ -461,19 +466,19 @@ fun GameControls(
 
     if (showResetDialog) {
         AlertDialog(onDismissRequest = { showResetDialog = false },
-            title = { Text("Reset Game?", color = Color.Red) },
-            text = { Text("Are you sure you want to reset the board?") },
-            confirmButton = { TextButton(onClick = { onResetClick(); showResetDialog = false }) { Text("Yes") } },
-            dismissButton = { TextButton(onClick = { showResetDialog = false }) { Text("No") } }
+            title = { Text(stringResource(R.string.dialog_reset_title), color = Color.Red) },
+            text = { Text(stringResource(R.string.dialog_reset_msg)) },
+            confirmButton = { TextButton(onClick = { onResetClick(); showResetDialog = false }) { Text(stringResource(R.string.yes)) } },
+            dismissButton = { TextButton(onClick = { showResetDialog = false }) { Text(stringResource(R.string.no)) } }
         )
     }
 
     if (showExitDialog) {
         AlertDialog(onDismissRequest = { showExitDialog = false },
-            title = { Text("Exit Game?", color = Color.Red) },
-            text = { Text("Are you sure you want to return to the main Menu?") },
-            confirmButton = { TextButton(onClick = { onBackClick(); showExitDialog = false }) { Text("Yes") } },
-            dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text("No") } }
+            title = { Text(stringResource(R.string.dialog_exit_title), color = Color.Red) },
+            text = { Text(stringResource(R.string.dialog_exit_msg)) },
+            confirmButton = { TextButton(onClick = { onBackClick(); showExitDialog = false }) { Text(stringResource(R.string.yes)) } },
+            dismissButton = { TextButton(onClick = { showExitDialog = false }) { Text(stringResource(R.string.no)) } }
         )
     }
 }
@@ -522,13 +527,13 @@ fun WinnerBoardDialog(
             ) {
 
                 Text(
-                    "Winner Board",
+                    stringResource(R.string.winner_board_title),
                     fontWeight = FontWeight.Black,
                     fontSize = 24.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
-                    "Claim prizes as they are won. Claimed prizes will appear at the Bottom",
+                    stringResource(R.string.winner_board_subtitle),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -572,7 +577,7 @@ fun WinnerBoardDialog(
                         else MaterialTheme.colorScheme.tertiary
                     )
                 ) {
-                    Text("Close Board", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.close_board), fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -600,21 +605,21 @@ fun WinnerHeader() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "PRIZE",
+            text = stringResource(R.string.header_child_prize),
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.ExtraBold,
             color = Color.White.copy(alpha = 0.7f)
         )
         Text(
-            text = "WINNER",
+            text = stringResource(R.string.header_child_winner),
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.ExtraBold,
             color = Color.White.copy(alpha = 0.7f)
         )
         Text(
-            text = "CLAIM",
+            text = stringResource(R.string.header_child_claim),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.ExtraBold,
             color = Color.White.copy(alpha = 0.7f),
@@ -673,7 +678,7 @@ fun WinnerItemRow(
                     }
             )
             Text(
-                text = "Prize: ${prize.savedRule.amountPerItem} pts",
+                text = stringResource(R.string.prize_pts_format, prize.savedRule.amountPerItem),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onPrimary
             )
@@ -688,7 +693,7 @@ fun WinnerItemRow(
                     editedName = it
                 },
                 enabled = !isClaimed,
-                placeholder = { Text("Add Winner Name...", color = Color.Gray) },
+                placeholder = { Text(stringResource(R.string.add_winner_placeholder), color = Color.Gray) },
                 singleLine = false,
                 maxLines = 2,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -747,19 +752,19 @@ fun WinnerItemRow(
     if (showUnclaimDialog) {
         AlertDialog(
             onDismissRequest = { showUnclaimDialog = false },
-            title = { Text("Confirm", color = Color.Red) },
-            text = { Text("Are you sure you want to unclaim the Prize?") },
+            title = { Text(stringResource(R.string.dialog_confirm_title), color = Color.Red) },
+            text = { Text(stringResource(R.string.dialog_unclaim_msg)) },
             confirmButton = {
                 TextButton(
                     onClick = {
                         showUnclaimDialog = false
                         scope.launch { onClaimToggle(false) }
                     }
-                ) { Text("Yes") }
+                ) { Text(stringResource(R.string.yes)) }
             },
             dismissButton = {
                 TextButton(onClick = { showUnclaimDialog = false }) {
-                    Text("No")
+                    Text(stringResource(R.string.no))
                 }
             }
         )

@@ -41,4 +41,7 @@ val Bronze = Color(0xFFCD7F32)
 
 val ShamockGreen = Color(0xFF009E60)
 
+val Gold = Color(0xFFFFD700)
+val Saffron = Color(0xFFFF9933)
 
+val errorRed = Color(0xFFC41E3A)

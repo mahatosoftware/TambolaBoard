@@ -28,7 +28,11 @@ private val AppLightColors = lightColorScheme(
 
     secondaryContainer = Byzantium,
 
-    tertiaryContainer = Bronze
+    tertiaryContainer = Bronze,
+
+    errorContainer = errorRed,
+    onErrorContainer = WhiteText,
+    surfaceVariant = SunsPurpleBG,
 
 
 

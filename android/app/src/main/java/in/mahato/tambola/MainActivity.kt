@@ -1,4 +1,3 @@
-
 package `in`.mahato.tambola
 
 import android.content.Intent
@@ -32,28 +31,19 @@ class MainActivity : ComponentActivity() {
 fun MainScreenComposable() {
     val context = LocalContext.current
 
-    MainScreen(
-
-        onSelectGameRule={
-            val intent = Intent(context, RuleSelectionActivity::class.java)
-
+    HomeScreen(
+        onStartNewGame = {
+            val intent = Intent(context, `in`.mahato.tambola.game.NewGameSetupActivity::class.java)
             context.startActivity(intent)
             if (context is MainActivity) context.finish()
         },
-
-        onNewGame = {
-            val intent = Intent(context, GameActivity::class.java)
-            intent.putExtra("NEW_GAME", true)
-            context.startActivity(intent)
-            if (context is MainActivity) context.finish()
-        },
-        onContinue = {
+        onContinueGame = {
             val intent = Intent(context, GameActivity::class.java)
             intent.putExtra("NEW_GAME", false)
             context.startActivity(intent)
             if (context is MainActivity) context.finish()
         },
-        onViewWinners = {
+        onShowWinners = {
             val intent = Intent(context, ViewWinnersActivity::class.java)
             context.startActivity(intent)
         },
@@ -62,4 +52,3 @@ fun MainScreenComposable() {
         }
     )
 }
-

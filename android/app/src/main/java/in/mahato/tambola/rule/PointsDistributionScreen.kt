@@ -30,6 +30,8 @@ import androidx.compose.ui.zIndex
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.util.GeneralUtil
+import androidx.compose.ui.res.stringResource
+import `in`.mahato.tambola.R
 
 
 /* ---------------- COLORS ---------------- */
@@ -44,7 +46,7 @@ val DPadFocusColor = Color.White
 /* ---------------- MAIN SCREEN ---------------- */
 
 @Composable
-fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
+fun PointDistributionScreen(ruleViewModel: RuleViewModel, gameId: String) {
 
     var isManualMode by remember { mutableStateOf(false) }
     var totalPoints by remember { mutableStateOf("1000") }
@@ -69,7 +71,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
         Column {
 
             Text(
-                "DISTRIBUTE POINTS",
+                stringResource(R.string.distribute_points_title),
                 fontSize = 22.sp,
                 color = Color.White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -80,7 +82,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
             OutlinedTextField(
                 value = totalPoints,
                 onValueChange = { totalPoints = it },
-                label = { Text("TOTAL POINTS", ) },
+                label = { Text(stringResource(R.string.total_points_label)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -216,6 +218,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                         // Ensure TambolaRule implements Parcelable
                         putParcelableArrayListExtra("rules", ArrayList(rules))
                         putExtra("totalPoints", totalPointsInt)
+                        putExtra("GAME_ID", gameId)
                     }
                     context.startActivity(intent)
                 },
@@ -232,9 +235,9 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                         MaterialTheme.colorScheme.onTertiary
                     else MaterialTheme.colorScheme.tertiary
                 )
-            ) {
-                Text("CONFIRM DISTRIBUTION", fontWeight = FontWeight.ExtraBold)
-            }
+                ) {
+                    Text(stringResource(R.string.confirm_distribution), fontWeight = FontWeight.ExtraBold)
+                }
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
                 style = MaterialTheme.typography.bodyMedium,
@@ -261,7 +264,7 @@ fun OverlappingModeSelector(
     ) {
 
         ModeButton(
-            text = "AUTOMATIC",
+            text = stringResource(R.string.mode_automatic),
             selected = !isManual,
             backgroundColor = MintButton,
             modifier = Modifier
@@ -272,7 +275,7 @@ fun OverlappingModeSelector(
         )
 
         ModeButton(
-            text = "MANUAL",
+            text = stringResource(R.string.mode_manual),
             selected = isManual,
             backgroundColor = GoldButton,
             modifier = Modifier
@@ -347,13 +350,13 @@ fun SummaryCard(
 
             Column {
                 Text(
-                    text = "SUMMARY",
+                    text = stringResource(R.string.summary_label),
                     fontSize = 10.sp,
                     color = Color.LightGray,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Used: $allocated",
+                    text = stringResource(R.string.used_points, allocated),
                     color = Color.White,
                     fontWeight = FontWeight.Medium
                 )
@@ -361,7 +364,7 @@ fun SummaryCard(
 
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "REMAINING",
+                    text = stringResource(R.string.remaining_label),
                     fontSize = 10.sp,
                     color = Color.LightGray,
                     fontWeight = FontWeight.Bold
@@ -459,9 +462,9 @@ fun RulesHeader() {
             fontSize = 11.sp,
             color = Color.LightGray
         )
-        Text("RULE", Modifier.weight(1.5f), style = style)
-        Text("PERCENT(%)", Modifier.weight(1.5f), style = style, textAlign = TextAlign.Center)
-        Text("QUANTITY", Modifier.weight(1.2f), style = style, textAlign = TextAlign.Center)
-        Text("AMOUNT", Modifier.weight(1f), style = style, textAlign = TextAlign.End)
+        Text(stringResource(R.string.header_rule), Modifier.weight(1.5f), style = style)
+        Text(stringResource(R.string.header_percent), Modifier.weight(1.5f), style = style, textAlign = TextAlign.Center)
+        Text(stringResource(R.string.header_quantity), Modifier.weight(1.2f), style = style, textAlign = TextAlign.Center)
+        Text(stringResource(R.string.header_amount), Modifier.weight(1f), style = style, textAlign = TextAlign.End)
     }
 }

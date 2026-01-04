@@ -21,7 +21,8 @@ class RuleSelectionActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 Surface(color = Color.Transparent) {
-                    TambolaRuleSelectionScreen()
+                    val gameId = intent.getStringExtra("GAME_ID") ?: ""
+                    TambolaRuleSelectionScreen(gameId = gameId)
                 }
             }
         }

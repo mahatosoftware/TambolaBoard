@@ -1,3 +1,91 @@
 <resources>
     <string name="app_name">Tambola Board</string>
+    <string name="tambola_board_title">TAMBOLA BOARD</string>
+    <string name="start_new_game">Start New Game</string>
+    <string name="continue_game">Continue Game</string>
+    <string name="winner_board">Winner Board</string>
+    <string name="exit">Exit</string>
+
+    <!-- New Game Setup Screen -->
+    <string name="new_game_setup_title">NEW GAME SETUP</string>
+    <string name="create_new_game_id">Create New Game ID</string>
+    <string name="use_existing_game_id">Use Existing Game ID</string>
+    <string name="enter_game_id">Enter Game ID:</string>
+    <string name="show_qr_code">Show QR Code</string>
+    <string name="back">Back</string>
+    <string name="game_id_label">Game ID</string>
+    <string name="continue_setup">Continue Setup</string>
+    <string name="banner_ad_placeholder">Banner Ad Placeholder</string>
+    <string name="game_id_qr_desc">Game ID QR Code</string>
+    <string name="generating_qr">Generating QR...</string>
+    <string name="setup_instructions_title">Steps to follow before proceeding further:</string>
+    <string name="setup_instr_1">Generate a Game ID in either the Tambola Board app or the Tambola Tickets app.</string>
+    <string name="setup_instr_2">(Only Game IDs generated today are valid. Older Game IDs may not work.)</string>
+    <string name="setup_instr_3">Complete the ticket distribution for all players.</string>
+    <string name="setup_instr_4">Finalize the total points for the Tambola game.</string>
+    <string name="setup_instr_5">If the Tambola Tickets app is used, both apps must use the same Game ID.</string>
+    <string name="warning">Warning</string>
+    <string name="setup_confirm_msg">Complete ticket distribution and finalize total points for the Tambola game to continue.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Rule Selection Screen -->
+    <string name="select_tambola_rules">Select Tambola Rules</string>
+    <string name="selected_rules_distribute"> Selected (%d) Rules Distribute Points</string>
+    <string name="rule_info_desc">Rule Info</string>
+    <string name="tv_hint_select_info">OK: Select | Hold: Info</string>
+    <string name="close">CLOSE</string>
+    <string name="tambola_board_header">TAMBOLA BOARD</string>
+
+    <!-- Points Distribution Screen -->
+    <string name="distribute_points_title">DISTRIBUTE POINTS</string>
+    <string name="total_points_label">TOTAL POINTS</string>
+    <string name="mode_automatic">AUTOMATIC</string>
+    <string name="mode_manual">MANUAL</string>
+    <string name="header_rule">RULE</string>
+    <string name="header_percent">PERCENT(%)</string>
+    <string name="header_quantity">QUANTITY</string>
+    <string name="header_amount">AMOUNT</string>
+    <string name="summary_label">SUMMARY</string>
+    <string name="used_points">Used: %d</string>
+    <string name="remaining_label">REMAINING</string>
+    <string name="confirm_distribution">CONFIRM DISTRIBUTION</string>
+
+    <!-- Summary Screen -->
+    <string name="msg_dist_saved">Distribution Saved Successfully</string>
+    <string name="error_saving">Error saving: %s</string>
+    <string name="final_dist_summary_title">FINAL DISTRIBUTION SUMMARY</string>
+    <string name="grand_total_label">GRAND TOTAL</string>
+    <string name="points_format">%d PTS</string>
+    <string name="save_and_done">SAVE &amp; DONE</string>
+    <string name="header_qty_short">QTY</string>
+    <string name="percent_of_total">%d%% of total</string>
+
+    <!-- Game Screen -->
+    <string name="tts_welcome">Welcome to Tambola Board</string>
+    <string name="btn_call_next">Call Next</string>
+    <string name="btn_auto_call">Auto Call</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_claim_prize">Claim Prize</string>
+    <string name="btn_reset">Reset</string>
+    <string name="btn_return_main">Return to Main Menu</string>
+    <string name="game_id_display">GAME ID: %s</string>
+    <string name="game_qr_desc">Game QR</string>
+    <string name="last_number_label">LAST NUMBER</string>
+    <string name="dialog_reset_title">Reset Game?</string>
+    <string name="dialog_reset_msg">Are you sure you want to reset the board?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dialog_exit_title">Exit Game?</string>
+    <string name="dialog_exit_msg">Are you sure you want to return to the main Menu?</string>
+    <string name="winner_board_title">Winner Board</string>
+    <string name="winner_board_subtitle">Claim prizes as they are won. Claimed prizes will appear at the Bottom</string>
+    <string name="close_board">Close Board</string>
+    <string name="header_child_prize">PRIZE</string>
+    <string name="header_child_winner">WINNER</string>
+    <string name="header_child_claim">CLAIM</string>
+    <string name="prize_pts_format">Prize: %d pts</string>
+    <string name="add_winner_placeholder">Add Winner Name...</string>
+    <string name="dialog_confirm_title">Confirm</string>
+    <string name="dialog_unclaim_msg">Are you sure you want to unclaim the Prize?</string>
 </resources>

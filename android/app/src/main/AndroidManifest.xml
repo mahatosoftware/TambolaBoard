@@ -46,6 +46,7 @@
         <activity android:name=".rule.SummaryActivity" />
 
         <activity android:name=".winner.ViewWinnersActivity" />
+        <activity android:name=".game.NewGameSetupActivity" />
 
     </application>
 

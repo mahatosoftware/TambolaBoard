@@ -34,6 +34,8 @@ import `in`.mahato.tambola.ui.theme.ShamockGreen
 import `in`.mahato.tambola.ui.theme.WhiteBg
 import `in`.mahato.tambola.ui.theme.WhiteText
 import `in`.mahato.tambola.util.GeneralUtil
+import androidx.compose.ui.res.stringResource
+import `in`.mahato.tambola.R
 import kotlinx.coroutines.launch
 
 class SummaryActivity : ComponentActivity() {
@@ -44,6 +46,7 @@ class SummaryActivity : ComponentActivity() {
         // but keeping your standard implementation for compatibility.
         val rules = intent.getParcelableArrayListExtra<TambolaRule>("rules") ?: emptyList()
         val totalPoints = intent.getIntExtra("totalPoints", 0)
+        val gameId = intent.getStringExtra("GAME_ID") ?: ""
 
         enableEdgeToEdge()
         setContent {
@@ -51,13 +54,13 @@ class SummaryActivity : ComponentActivity() {
                 rules = rules,
                 total = totalPoints,
                 onConfirmSave = { finalEntities ->
-                    saveToDatabase(finalEntities)
+                    saveToDatabase(finalEntities, gameId)
                 }
             )
         }
     }
 
-    private fun saveToDatabase(entities: List<SavedRuleEntity>) {
+    private fun saveToDatabase(entities: List<SavedRuleEntity>, gameId: String) {
         lifecycleScope.launch {
             try {
 
@@ -84,18 +87,20 @@ class SummaryActivity : ComponentActivity() {
                 prizeDao.insertPrizes(prizeEntities)
                 // replaceRules handles the Delete + Insert transaction
                 ruleDao.replaceRules(entities)
-
-                Toast.makeText(this@SummaryActivity, "Distribution Saved Successfully", Toast.LENGTH_SHORT).show()
+                
+                Toast.makeText(this@SummaryActivity, getString(R.string.msg_dist_saved), Toast.LENGTH_SHORT).show()
                 // Redirect to MainActivity
-                val intent = Intent(this@SummaryActivity, MainActivity::class.java).apply {
+                val intent = Intent(this@SummaryActivity, `in`.mahato.tambola.game.GameActivity::class.java).apply {
                     // Clear the backstack so the user can't return to the Summary screen
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra("NEW_GAME", true)
+                    putExtra("GAME_ID", gameId)
                 }
                 startActivity(intent)
                 finish() // Close SummaryActivity
 
             } catch (e: Exception) {
-                Toast.makeText(this@SummaryActivity, "Error saving: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SummaryActivity, getString(R.string.error_saving, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -120,7 +125,7 @@ fun SummaryScreen(
     ) {
         Column {
             Text(
-                "FINAL DISTRIBUTION SUMMARY",
+                stringResource(R.string.final_dist_summary_title),
                 fontSize = 22.sp,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp).align(Alignment.CenterHorizontally)
@@ -137,8 +142,8 @@ fun SummaryScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("GRAND TOTAL", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
-                    Text("$total PTS", fontSize = 26.sp,  color = GoldButton)
+                    Text(stringResource(R.string.grand_total_label), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimary)
+                    Text(stringResource(R.string.points_format, total), fontSize = 26.sp,  color = GoldButton)
                 }
             }
 
@@ -200,7 +205,7 @@ fun SummaryScreen(
                 if (isSaving) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Color.Black)
                 } else {
-                    Text("SAVE & DONE", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                    Text(stringResource(R.string.save_and_done), fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
                 }
             }
             Text(
@@ -217,9 +222,9 @@ fun SummaryScreen(
 @Composable
 fun SummaryHeaderRow() {
     Row(Modifier.fillMaxWidth()) {
-        Text("RULE", Modifier.weight(2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-        Text("QTY", Modifier.weight(0.8f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-        Text("AMOUNT", Modifier.weight(1.2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End)
+        Text(stringResource(R.string.header_rule), Modifier.weight(2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.header_qty_short), Modifier.weight(0.8f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+        Text(stringResource(R.string.header_amount), Modifier.weight(1.2f), color = Color.LightGray, fontSize = 11.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End)
     }
 }
 
@@ -241,7 +246,7 @@ fun SummaryItemRow(rule: TambolaRule, amount: Int) {
     ) {
         Column(Modifier.weight(2f)) {
             Text(rule.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-            Text("${rule.percentage}% of total", color = Color.White.copy(0.5f), fontSize = 11.sp)
+            Text(stringResource(R.string.percent_of_total, rule.percentage), color = Color.White.copy(0.5f), fontSize = 11.sp)
         }
         Text(
             "${rule.quantity}",
