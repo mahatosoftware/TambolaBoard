@@ -159,10 +159,7 @@ fun WinnerCard(item: WinningPrizeEntity) {
                 fontWeight = FontWeight.SemiBold
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Points: ${item.savedRule.totalRuleAmount}",
-                fontSize = 16.sp,
-            )
+            Spacer(modifier = Modifier.height(8.dp))
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Winners:",

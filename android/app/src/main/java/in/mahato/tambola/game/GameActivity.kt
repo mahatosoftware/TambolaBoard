@@ -672,11 +672,6 @@ fun WinnerItemRow(
                         else -> MaterialTheme.colorScheme.onPrimary
                     }
             )
-            Text(
-                text = "Prize: ${prize.savedRule.amountPerItem} pts",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
         }
 
         Column(modifier = Modifier.weight(1f)) {
