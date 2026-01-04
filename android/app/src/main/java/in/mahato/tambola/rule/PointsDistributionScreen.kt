@@ -64,7 +64,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
         Column {
 
             Text(
-                "DISTRIBUTE POINTS",
+                "Select Quantity",
                 fontSize = 22.sp,
                 color = Color.White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -182,7 +182,11 @@ fun ValueStepper(
     onPlus: () -> Unit,
     modifier: Modifier
 ) {
-    Row(modifier = modifier.widthIn(min = 120.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.widthIn(min = 120.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
         StepperIconButton(Icons.Default.Remove, enabled, onMinus)
         Text(value, Modifier.width(32.dp), textAlign = TextAlign.Center)
         StepperIconButton(Icons.Default.Add, enabled, onPlus)
