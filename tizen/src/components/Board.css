@@ -1,0 +1,65 @@
+.board-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    overflow-y: auto;
+    /* Allow scroll if needed on small screens */
+}
+
+.board-cell {
+    position: relative;
+    aspect-ratio: 1;
+    /* Square cells */
+    background-color: var(--color-secondary);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-on-secondary);
+    font-weight: bold;
+    font-size: 1.2rem;
+    /* Scalable font */
+    transition: transform 0.1s;
+}
+
+/* Landscape adjustments for better fit if needed */
+@media (orientation: landscape) {
+    .board-cell {
+        font-size: 1.5rem;
+    }
+}
+
+.board-cell.called {
+    background-color: var(--color-magenta);
+    /* Highlight inside */
+    color: white;
+    border-radius: 50%;
+    /* Circle boundary */
+    border: 2px solid white;
+    /* Visible circle boundary */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    /* Optional glow */
+}
+
+.board-cell.last {
+    animation: flash-animation 0.5s infinite alternate;
+    color: white;
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid #FFFF00;
+    /* Distinct border for last number */
+}
+
+@keyframes flash-animation {
+    from {
+        background-color: var(--color-gray);
+    }
+
+    to {
+        background-color: var(--color-cyan);
+    }
+}

@@ -1,0 +1,110 @@
+.game-mode-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%);
+    color: white;
+    padding: 16px;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.mode-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+}
+
+.mode-header {
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    margin-top: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+}
+
+.mode-container {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    align-items: center;
+    /* Removed flex: 1 */
+    width: 100%;
+    max-width: 900px;
+}
+
+.mode-card {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 300px;
+    justify-content: center;
+}
+
+.mode-card:hover,
+.mode-card:focus,
+.mode-card.focused {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: scale(1.05);
+    border-color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mode-card:hover .mode-title,
+.mode-card:focus .mode-title,
+.mode-card.focused .mode-title {
+    color: #4A148C;
+}
+
+.mode-card:hover .mode-desc,
+.mode-card:focus .mode-desc,
+.mode-card.focused .mode-desc {
+    color: #333;
+}
+
+.mode-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.mode-card.focused .mode-icon {
+    background: #4A148C;
+    color: white;
+}
+
+.mode-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: white;
+}
+
+.mode-desc {
+    font-size: 16px;
+    color: #ccc;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.back-hint {
+    margin-top: 24px;
+    opacity: 0.7;
+    font-size: 14px;
+}

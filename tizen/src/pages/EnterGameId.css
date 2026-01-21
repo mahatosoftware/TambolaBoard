@@ -1,0 +1,93 @@
+.enter-game-id-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%);
+    color: white;
+    padding: 24px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.id-page-header {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 48px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.id-input-container {
+    background-color: rgba(0, 0, 0, 0.25);
+    padding: 40px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.game-id-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 32px;
+    color: white;
+    width: 200px;
+    text-align: center;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.game-id-input:focus {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.status-message {
+    height: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 16px;
+    color: #ff8a80;
+    /* Error color default */
+}
+
+.status-message.info {
+    color: #80d8ff;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-primary-container);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.submit-btn:hover,
+.submit-btn:focus,
+.submit-btn.focused {
+    background-color: var(--color-primary-container);
+    transform: scale(1.02);
+    box-shadow: none;
+    outline: 4px solid #FFD700;
+}
+
+.submit-btn:disabled {
+    background-color: #555;
+    color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

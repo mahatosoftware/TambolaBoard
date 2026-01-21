@@ -1,0 +1,73 @@
+:root {
+  --color-primary: #6C0BA9;
+  --color-on-primary: #FFFFFF;
+  --color-primary-container: #009E60;
+  --color-on-primary-container: #FFFFFF;
+
+  --color-secondary: #4A007E;
+  --color-on-secondary: #FFFFFF;
+  --color-secondary-container: #702963;
+  --color-on-secondary-container: #FFFFFF;
+
+  --color-tertiary: #FFFFFF;
+  --color-on-tertiary: #000000;
+  --color-tertiary-container: #CD7F32;
+
+  --color-background: #FFFFFF;
+  --color-on-background: #000000;
+  --color-surface: #6C0BA9;
+  --color-on-surface: #FFFFFF;
+
+  --color-magenta: #D500F9;
+  --color-cyan: #00FFFF;
+  /* For flash */
+  --color-gray: #808080;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  /* Important for TV apps */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  /* Prevent scrolling, handle in containers */
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TV Focus Styles */
+*:focus-visible {
+  outline: 4px solid #FFD700;
+  outline-offset: 2px;
+  z-index: 10;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+.app-main-header {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}

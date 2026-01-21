@@ -1,0 +1,143 @@
+.quantity-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%);
+    color: white;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.quantity-header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.quantity-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    overflow-y: auto;
+}
+
+.quantity-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+    background-color: var(--color-primary-container);
+    border-radius: 8px;
+}
+
+.header-rule {
+    flex: 1.5;
+    text-align: center;
+}
+
+.header-qty {
+    flex: 1.2;
+    text-align: center;
+}
+
+.quantity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rule-name {
+    flex: 1.5;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.stepper-container {
+    flex: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.stepper-btn {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.stepper-btn:hover,
+.stepper-btn:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.stepper-btn.focused {
+    background-color: white;
+    color: #4A148C;
+}
+
+.qty-value {
+    font-size: 20px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+
+.quantity-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-primary-container);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.save-btn:hover,
+.save-btn:focus {
+    background-color: var(--color-primary-container);
+    transform: scale(1.02);
+    outline: 4px solid #FFD700;
+}
+
+.save-btn.focused {
+    background-color: white;
+    color: #2196F3;
+}
+
+.copyright {
+    font-size: 12px;
+    opacity: 0.7;
+}

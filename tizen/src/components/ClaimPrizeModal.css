@@ -1,0 +1,257 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #4A148C 0%, #7B1FA2 100%);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    border-radius: 20px;
+    padding: 24px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    width: 100%;
+    /* Ensure container is full width */
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-align: center;
+    width: 100%;
+    /* Take full width so text-align center works if it's a block */
+    flex: 1;
+    /* Allow it to grow */
+}
+
+.close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    /* Adjust if needed based on padding */
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.prizes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.prize-item {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 5px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.prize-item.claimed {
+    border-left-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.prize-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prize-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.prize-status {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+}
+
+.prize-item.claimed .prize-status {
+    background: #4CAF50;
+    color: white;
+}
+
+.prize-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.winner-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+    font-size: 1rem;
+}
+
+.winner-input:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.winner-input[readonly] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.2);
+    border-color: transparent;
+}
+
+.claim-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+    white-space: nowrap;
+}
+
+.claim-btn.mark-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.claim-btn.undo-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.claim-btn:active {
+    transform: scale(0.95);
+}
+
+.no-prizes {
+    text-align: center;
+    opacity: 0.7;
+    margin-top: 32px;
+    font-style: italic;
+}
+
+/* Moderated Mode Styles */
+.prize-actions-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+}
+
+.winner-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.moderated-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.winner-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.winner-select:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.winner-select option {
+    background: #4A148C;
+    /* Fallback for safe readability */
+    color: white;
+}
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.winner-chip {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chip-remove {
+    background: none;
+    border: none;
+    color: #ffcccc;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.chip-remove:hover {
+    color: #ff4444;
+}
