@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import `in`.mahato.tambola.util.GeneralUtil
+import androidx.compose.ui.res.stringResource
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,13 +34,13 @@ fun MainScreen(
     // -----------------------------
     // Focus Requesters for 4 buttons
     // -----------------------------
-    val focusSetRule = remember { FocusRequester() }
+
     val focusNew = remember { FocusRequester() }
     val focusContinue = remember { FocusRequester() }
     val focusViewWinners = remember { FocusRequester() }
     val focusExit = remember { FocusRequester() }
 
-    val focusRequesters = listOf(focusSetRule, focusNew, focusContinue,focusViewWinners, focusExit)
+    val focusRequesters = listOf(focusNew, focusContinue,focusViewWinners, focusExit)
     var focusedIndex by remember { mutableStateOf(0) }
 
     // Request initial focus
@@ -61,51 +62,20 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .systemBarsPadding()
                 .padding(24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
-                text = "Tambola time. The Party Starts here!!",
+                text = stringResource(R.string.main_welcome_message),
                 fontSize = 20.sp
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            //-------------------------------------------
-            // SELECT GAME RULES
-            //-------------------------------------------
-            var selectRulesFocused by remember { mutableStateOf(false) }
-            Button(
-                onClick = onSelectGameRule,
-                modifier = Modifier
-                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
-                    .width(buttonWidth)
-                    .focusRequester(focusSetRule)
-                    .onFocusChanged { selectRulesFocused = it.isFocused }
-                    .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown) {
-                            when (it.key) {
-                                Key.DirectionDown -> { moveFocus(false); true }
-                                Key.DirectionUp -> { moveFocus(true); true }
-                                else -> false
-                            }
-                        } else false
-                    },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectRulesFocused)
-                        MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = if (selectRulesFocused)
-                        MaterialTheme.colorScheme.onTertiary
-                    else MaterialTheme.colorScheme.tertiary
-                )
-            ) {
-                Text(text = "Select Game Rules")
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             //-------------------------------------------
             // START NEW GAME
@@ -136,7 +106,7 @@ fun MainScreen(
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text(text = "Start New Game")
+                Text(text = stringResource(R.string.btn_start_new_game))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -170,7 +140,7 @@ fun MainScreen(
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text(text = "Continue Last Game")
+                Text(text = stringResource(R.string.btn_continue_last_game))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -204,7 +174,7 @@ fun MainScreen(
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text(text = "View Winners")
+                Text(text = stringResource(R.string.btn_view_winners))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -238,7 +208,7 @@ fun MainScreen(
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text(text = "Exit")
+                Text(text = stringResource(R.string.btn_exit))
             }
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -21,7 +21,9 @@ class RuleSelectionActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 Surface(color = Color.Transparent) {
-                    TambolaRuleSelectionScreen()
+                    val gameId = intent.getStringExtra("GAME_ID")
+                    val isModerated = intent.getBooleanExtra("IS_MODERATED", false)
+                    TambolaRuleSelectionScreen(gameId = gameId, isModerated = isModerated)
                 }
             }
         }

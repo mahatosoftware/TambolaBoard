@@ -1,6 +1,8 @@
 package `in`.mahato.tambola.winner
 
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Box
@@ -43,6 +45,8 @@ import androidx.compose.ui.unit.sp
 import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.Bronze
 import `in`.mahato.tambola.util.GeneralUtil
+import androidx.compose.ui.res.stringResource
+import `in`.mahato.tambola.R
 
 @Composable
 fun ViewWinnersScreen(
@@ -60,7 +64,7 @@ fun ViewWinnersScreen(
             // Header (Centered)
             // -----------------------------
             Text(
-                text = "Winner Board",
+                text = stringResource(R.string.title_winner_board),
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
@@ -76,7 +80,7 @@ fun ViewWinnersScreen(
                 if (winners.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            text = "No winners yet",
+                            text = stringResource(R.string.msg_no_winners),
                             fontSize = 18.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -115,7 +119,7 @@ fun ViewWinnersScreen(
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text("Back")
+                Text(stringResource(R.string.btn_back))
             }
 
             Text(
@@ -133,20 +137,20 @@ fun ViewWinnersScreen(
 
 @Composable
 fun WinnerCard(item: WinningPrizeEntity) {
-    var focused by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
 
     Card(
         onClick = { /* Handle card click if needed */ },
         modifier = Modifier
             .fillMaxWidth(0.9f)
-            .widthIn(max = 400.dp)
-            .focusable()
-            .onFocusChanged { focused = it.isFocused },
+            .widthIn(max = 400.dp),
+        interactionSource = interactionSource,
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (focused) 12.dp else 6.dp
+            defaultElevation = if (isFocused) 12.dp else 6.dp
         ),
         colors = CardDefaults.cardColors(
-            containerColor = if (focused)
+            containerColor = if (isFocused)
                 MaterialTheme.colorScheme.secondaryContainer
             else
                 MaterialTheme.colorScheme.secondary
@@ -162,7 +166,7 @@ fun WinnerCard(item: WinningPrizeEntity) {
             Spacer(modifier = Modifier.height(8.dp))
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Winners:",
+                text = stringResource(R.string.label_winners),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )

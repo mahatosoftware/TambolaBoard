@@ -16,4 +16,12 @@ object GeneralUtil {
 
         return "© $year $nameToShow."
     }
+
+
+    /**
+     * Generates a random alphanumeric Game ID.
+     */
+    fun generateGameId(): String {
+        return (1..5).map { "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".random() }.joinToString("")
+    }
 }

@@ -6,8 +6,10 @@
     <!-- Make Leanback optional but available -->
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".TambolaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -43,9 +45,11 @@
         <activity android:name=".rule.RuleSelectionActivity" />
         <activity android:name=".rule.PointsDistributionActivity" />
 
-        <activity android:name=".rule.SummaryActivity" />
+
 
         <activity android:name=".winner.ViewWinnersActivity" />
+        <activity android:name=".gamemode.GameModeSelectionActivity" />
+        <activity android:name=".gamemode.GameIdInputActivity" />
 
     </application>
 

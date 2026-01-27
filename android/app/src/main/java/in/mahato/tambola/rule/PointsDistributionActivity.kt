@@ -38,7 +38,9 @@ class PointsDistributionActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     // ✅ Pass ViewModel to screen
-                    PointDistributionScreen(ruleViewModel)
+                    val gameId = intent.getStringExtra("GAME_ID")
+                    val isModerated = intent.getBooleanExtra("IS_MODERATED", false)
+                    PointDistributionScreen(ruleViewModel, gameId, isModerated)
                 }
             }
         }

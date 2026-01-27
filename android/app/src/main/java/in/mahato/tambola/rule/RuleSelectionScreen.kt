@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import `in`.mahato.tambola.R
+import androidx.compose.ui.res.stringResource
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.ui.theme.AppTheme
@@ -152,7 +153,11 @@ val tambolaRules = listOf(
 // -------------------- MAIN SCREEN --------------------
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun TambolaRuleSelectionScreen(
+    ruleViewModel: RuleViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    gameId: String? = null,
+    isModerated: Boolean = false
+) {
     val selectedRules = ruleViewModel.selectedRules
     val context = LocalContext.current
     val selected = selectedRules.map { it.id }.toSet()
@@ -162,8 +167,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
     Scaffold(
               containerColor = MaterialTheme.colorScheme.primary,
         topBar = {
-
-            CenterAlignedTopAppBar(title = { Text("Select Tambola Rules") },
+            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.title_select_rules)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -188,6 +192,10 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                                 "SELECTED_RULE_IDS",
                                 ArrayList(selected)
                             )
+                            if (gameId != null) {
+                                intent.putExtra("GAME_ID", gameId)
+                            }
+                            intent.putExtra("IS_MODERATED", isModerated)
 
                             context.startActivity(intent)
                         }
@@ -208,7 +216,7 @@ fun TambolaRuleSelectionScreen(ruleViewModel: RuleViewModel = androidx.lifecycle
                     )
 
                 ) {
-                    Text(" Selected (${selected.size}) Rules Distribute Points", fontSize = 18.sp)
+                    Text(stringResource(R.string.btn_distribute_points, selected.size), fontSize = 18.sp)
                 }
                 Text(
                     text = GeneralUtil.getCopyrightMessage(),
@@ -328,7 +336,7 @@ fun RuleCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = "Rule Info",
+                        contentDescription = stringResource(R.string.desc_rule_info),
                         tint = if (isSelected) MaterialTheme.colorScheme.onTertiaryContainer
                         else MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(20.dp)
@@ -379,7 +387,7 @@ fun RuleCard(
                 if (isTv ) {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "OK: Select | Hold: Info",
+                        stringResource(R.string.hint_tv_select),
                         fontSize = 10.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onPrimary,
@@ -451,7 +459,7 @@ fun RuleDetailDialog(rule: TambolaRule, onDismiss: () -> Unit) {
                         contentColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
-                    Text("CLOSE", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.btn_close), fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -494,7 +502,7 @@ fun TicketVisualizer(highlighted: List<Int>) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                "TAMBOLA BOARD",
+                stringResource(R.string.header_tambola_board),
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
@@ -554,7 +562,7 @@ fun TicketVisualizer(highlighted: List<Int>) {
 @Preview(device = Devices.PIXEL_4)
 @Composable
 fun PhonePreview() {
-    AppTheme { TambolaRuleSelectionScreen() }
+    AppTheme { TambolaRuleSelectionScreen(gameId = "TEST_GAME", isModerated = true) }
 }
 
 @Preview(device = Devices.PIXEL_C)

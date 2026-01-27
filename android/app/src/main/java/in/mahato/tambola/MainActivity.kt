@@ -12,6 +12,7 @@ import `in`.mahato.tambola.game.GameActivity
 import `in`.mahato.tambola.rule.RuleSelectionActivity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.winner.ViewWinnersActivity
+import `in`.mahato.tambola.gamemode.GameModeSelectionActivity
 
 class MainActivity : ComponentActivity() {
 
@@ -35,17 +36,12 @@ fun MainScreenComposable() {
     MainScreen(
 
         onSelectGameRule={
-            val intent = Intent(context, RuleSelectionActivity::class.java)
-
-            context.startActivity(intent)
-            if (context is MainActivity) context.finish()
+            // No-op or removed, as button will be removed
         },
 
         onNewGame = {
-            val intent = Intent(context, GameActivity::class.java)
-            intent.putExtra("NEW_GAME", true)
+            val intent = Intent(context, GameModeSelectionActivity::class.java)
             context.startActivity(intent)
-            if (context is MainActivity) context.finish()
         },
         onContinue = {
             val intent = Intent(context, GameActivity::class.java)

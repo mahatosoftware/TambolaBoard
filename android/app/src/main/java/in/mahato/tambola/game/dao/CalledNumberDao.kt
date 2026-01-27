@@ -19,6 +19,12 @@ interface CalledNumberDao {
     @Query("UPDATE called_numbers SET isLast = 0")
     suspend fun resetLast()
 
+    @Query("DELETE FROM called_numbers WHERE number = :number")
+    suspend fun delete(number: Int)
+
+    @Query("UPDATE called_numbers SET isLast = 1 WHERE number = :number")
+    suspend fun setLast(number: Int)
+
     @Query("DELETE FROM called_numbers")
     suspend fun clearNumbers()
 

@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import `in`.mahato.tambola.game.model.TambolaRule
 import `in`.mahato.tambola.rule.viewmodel.RuleViewModel
 import `in`.mahato.tambola.util.GeneralUtil
+import androidx.compose.ui.res.stringResource
+import `in`.mahato.tambola.R
 
 
 /* ---------------- COLORS ---------------- */
@@ -44,7 +46,11 @@ val DPadFocusColor = Color.White
 /* ---------------- MAIN SCREEN ---------------- */
 
 @Composable
-fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
+fun PointDistributionScreen(
+    ruleViewModel: RuleViewModel,
+    gameId: String? = null,
+    isModerated: Boolean = false
+) {
 
     var isManualMode by remember { mutableStateOf(false) }
     val totalPoints = "1000"
@@ -64,7 +70,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
         Column {
 
             Text(
-                "Select Quantity",
+                stringResource(R.string.title_select_quantity),
                 fontSize = 22.sp,
                 color = Color.White,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -108,10 +114,17 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                 onClick = {
                     val totalPointsInt = 1000 // Fixed value as per previous refactor
                     ruleViewModel.saveRules(totalPointsInt) {
-                        Toast.makeText(context, "Rules Saved Successfully", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(context, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        val intent = Intent(context, `in`.mahato.tambola.game.GameActivity::class.java)
+                        intent.putExtra("NEW_GAME", true)
+                        
+                        // Use existing Game ID if available (Moderated Game), otherwise generate new (Host Game)
+                        val finalGameId = gameId ?: GeneralUtil.generateGameId()
+                        intent.putExtra("GAME_ID", finalGameId)
+                        
+                        if (isModerated) {
+                            intent.putExtra("IS_MODERATED", true)
                         }
+                        
                         context.startActivity(intent)
                     }
                 },
@@ -129,7 +142,7 @@ fun PointDistributionScreen(ruleViewModel: RuleViewModel) {
                     else MaterialTheme.colorScheme.tertiary
                 )
             ) {
-                Text("Save Rules", fontWeight = FontWeight.ExtraBold)
+                Text(stringResource(R.string.btn_save_rules), fontWeight = FontWeight.ExtraBold)
             }
             Text(
                 text = GeneralUtil.getCopyrightMessage(),
@@ -210,7 +223,7 @@ fun RulesHeader() {
             fontSize = 11.sp,
             color = Color.LightGray
         )
-        Text("RULE", Modifier.weight(1.5f), style = style)
-        Text("QUANTITY", Modifier.weight(1.2f), style = style, textAlign = TextAlign.Center)
+        Text(stringResource(R.string.header_rule), Modifier.weight(1.5f), style = style)
+        Text(stringResource(R.string.header_quantity), Modifier.weight(1.2f), style = style, textAlign = TextAlign.Center)
     }
 }

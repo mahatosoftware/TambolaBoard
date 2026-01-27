@@ -66,4 +66,9 @@ interface WinningPrizeDao {
     @Query("UPDATE winning_prizes SET winnerName = :name WHERE prizeId = :id")
     suspend fun updateWinnerName(id: Int, name: String)
 
+    @Query("SELECT COUNT(*) FROM winning_prizes")
+    suspend fun getCount(): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(prize: WinningPrizeEntity)
 }
