@@ -55,7 +55,7 @@
     <string name="error_auth_disabled">Authentication Error: Anonymous Sign-in is disabled. Please enable it in the Firebase Console (Authentication -> Sign-in method).</string>
     <string name="btn_submit">Submit</string>
     <string name="title_select_rules">Select Tambola Rules</string>
-    <string name="btn_distribute_points"> Selected (%1$d) Rules Distribute Points</string>
+    <string name="btn_distribute_points"> Selected (%1$d) Rules Select Quantity</string>
     <string name="hint_tv_select">OK: Select | Hold: Info</string>
     <string name="desc_rule_info">Rule Info</string>
     <string name="btn_close">CLOSE</string>
