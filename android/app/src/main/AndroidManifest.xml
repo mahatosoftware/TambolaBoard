@@ -50,6 +50,10 @@
         <activity android:name=".winner.ViewWinnersActivity" />
         <activity android:name=".gamemode.GameModeSelectionActivity" />
         <activity android:name=".gamemode.GameIdInputActivity" />
+        
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
 
     </application>
 

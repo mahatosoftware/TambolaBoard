@@ -15,8 +15,8 @@ android {
         applicationId = "in.mahato.tambola"
         minSdk = 23
         targetSdk = 36
-        versionCode = 32
-        versionName = "1.0.32"
+        versionCode = 33
+        versionName = "1.0.33"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.firebase.appcheck.playintegrity)
     implementation(libs.firebase.appcheck.debug)
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.play.services.ads)
 
     // Tests
     testImplementation(libs.junit)

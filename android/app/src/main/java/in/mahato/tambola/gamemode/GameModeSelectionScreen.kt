@@ -19,6 +19,7 @@ import `in`.mahato.tambola.game.GameActivity
 import `in`.mahato.tambola.util.GeneralUtil
 import androidx.compose.ui.res.stringResource
 import `in`.mahato.tambola.R
+import `in`.mahato.tambola.util.AdBannerWidget
 
 @Composable
 fun GameModeSelectionScreen(
@@ -57,101 +58,124 @@ fun GameModeSelectionScreen(
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = stringResource(R.string.title_select_game_mode),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-            Spacer(modifier = Modifier.height(48.dp))
-
-            // -------------------------------------------
-            // MODERATED BUTTON
-            // -------------------------------------------
-            var moderatedFocused by remember { mutableStateOf(false) }
-            Button(
-                onClick = {
-                    val intent = Intent(context, GameIdInputActivity::class.java)
-                    context.startActivity(intent)
-                    onFinish()
-                },
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
-                    .width(buttonWidth)
-                    .focusRequester(focusModerated)
-                    .onFocusChanged { moderatedFocused = it.isFocused }
-                    .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown) {
-                            when (it.key) {
-                                Key.DirectionDown -> { moveFocus(false); true }
-                                Key.DirectionUp -> { moveFocus(true); true }
-                                else -> false
-                            }
-                        } else false
-                    },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (moderatedFocused)
-                        MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = if (moderatedFocused)
-                        MaterialTheme.colorScheme.onTertiary
-                    else MaterialTheme.colorScheme.tertiary
-                )
+                    .fillMaxSize()
+                    .systemBarsPadding()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = stringResource(R.string.btn_moderated), fontSize = 18.sp)
+                Text(
+                    text = stringResource(R.string.title_select_game_mode),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                // -------------------------------------------
+                // MODERATED BUTTON
+                // -------------------------------------------
+                var moderatedFocused by remember { mutableStateOf(false) }
+                Button(
+                    onClick = {
+                        val intent = Intent(context, GameIdInputActivity::class.java)
+                        context.startActivity(intent)
+                        onFinish()
+                    },
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                        .width(buttonWidth)
+                        .focusRequester(focusModerated)
+                        .onFocusChanged { moderatedFocused = it.isFocused }
+                        .onKeyEvent {
+                            if (it.type == KeyEventType.KeyDown) {
+                                when (it.key) {
+                                    Key.DirectionDown -> {
+                                        moveFocus(false); true
+                                    }
+
+                                    Key.DirectionUp -> {
+                                        moveFocus(true); true
+                                    }
+
+                                    else -> false
+                                }
+                            } else false
+                        },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (moderatedFocused)
+                            MaterialTheme.colorScheme.background
+                        else MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = if (moderatedFocused)
+                            MaterialTheme.colorScheme.onTertiary
+                        else MaterialTheme.colorScheme.tertiary
+                    )
+                ) {
+                    Text(text = stringResource(R.string.btn_moderated), fontSize = 18.sp)
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // -------------------------------------------
+                // UNMODERATED BUTTON
+                // -------------------------------------------
+                var unmoderatedFocused by remember { mutableStateOf(false) }
+                Button(
+                    onClick = {
+                        val intent = Intent(
+                            context,
+                            `in`.mahato.tambola.rule.RuleSelectionActivity::class.java
+                        )
+                        context.startActivity(intent)
+                        onFinish()
+                    },
+                    modifier = Modifier
+                        .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                        .width(buttonWidth)
+                        .focusRequester(focusUnmoderated)
+                        .onFocusChanged { unmoderatedFocused = it.isFocused }
+                        .onKeyEvent {
+                            if (it.type == KeyEventType.KeyDown) {
+                                when (it.key) {
+                                    Key.DirectionDown -> {
+                                        moveFocus(false); true
+                                    }
+
+                                    Key.DirectionUp -> {
+                                        moveFocus(true); true
+                                    }
+
+                                    else -> false
+                                }
+                            } else false
+                        },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (unmoderatedFocused)
+                            MaterialTheme.colorScheme.background
+                        else MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = if (unmoderatedFocused)
+                            MaterialTheme.colorScheme.onTertiary
+                        else MaterialTheme.colorScheme.tertiary
+                    )
+                ) {
+                    Text(text = stringResource(R.string.btn_unmoderated), fontSize = 18.sp)
+                }
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                Text(
+                    text = GeneralUtil.getCopyrightMessage(),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // -------------------------------------------
-            // UNMODERATED BUTTON
-            // -------------------------------------------
-            var unmoderatedFocused by remember { mutableStateOf(false) }
-            Button(
-                onClick = {
-                    val intent = Intent(context, `in`.mahato.tambola.rule.RuleSelectionActivity::class.java)
-                    context.startActivity(intent)
-                    onFinish()
-                },
+            AdBannerWidget(
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
-                    .width(buttonWidth)
-                    .focusRequester(focusUnmoderated)
-                    .onFocusChanged { unmoderatedFocused = it.isFocused }
-                    .onKeyEvent {
-                        if (it.type == KeyEventType.KeyDown) {
-                            when (it.key) {
-                                Key.DirectionDown -> { moveFocus(false); true }
-                                Key.DirectionUp -> { moveFocus(true); true }
-                                else -> false
-                            }
-                        } else false
-                    },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (unmoderatedFocused)
-                        MaterialTheme.colorScheme.background
-                    else MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = if (unmoderatedFocused)
-                        MaterialTheme.colorScheme.onTertiary
-                    else MaterialTheme.colorScheme.tertiary
-                )
-            ) {
-                Text(text = stringResource(R.string.btn_unmoderated), fontSize = 18.sp)
-            }
-            
-            Spacer(modifier = Modifier.height(48.dp))
-            
-            Text(
-                text = GeneralUtil.getCopyrightMessage(),
-                style = MaterialTheme.typography.bodyMedium
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp) // Add some padding from the bottom
             )
         }
     }

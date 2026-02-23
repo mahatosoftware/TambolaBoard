@@ -9,6 +9,7 @@ window = "1.5.1"
 zxing = "3.5.4"
 google-services = "4.4.2"
 firebase-bom = "33.7.0"
+play-services-ads = "23.6.0"
 
 junit = "4.13.2"
 androidx-junit = "1.2.1"
@@ -72,3 +73,4 @@ firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-appcheck-playintegrity = { module = "com.google.firebase:firebase-appcheck-playintegrity" }
 firebase-appcheck-debug = { module = "com.google.firebase:firebase-appcheck-debug" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version = "1.7.3" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "play-services-ads" }

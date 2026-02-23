@@ -2,6 +2,7 @@ package `in`.mahato.tambola
 
 import android.app.Application
 import com.google.firebase.FirebaseApp
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
@@ -9,6 +10,7 @@ import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderF
 class TambolaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        MobileAds.initialize(this) {}
         FirebaseApp.initializeApp(this)
         
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
