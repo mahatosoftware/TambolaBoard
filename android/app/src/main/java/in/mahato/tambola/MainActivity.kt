@@ -13,6 +13,8 @@ import `in`.mahato.tambola.rule.RuleSelectionActivity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.winner.ViewWinnersActivity
 import `in`.mahato.tambola.gamemode.GameModeSelectionActivity
+import `in`.mahato.tambola.util.AdInterstitialHelper
+import android.app.Activity
 
 class MainActivity : ComponentActivity() {
 
@@ -20,6 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+        AdInterstitialHelper.loadInterstitialAd(this)
 
         setContent {
             AppTheme {
@@ -40,8 +43,15 @@ fun MainScreenComposable() {
         },
 
         onNewGame = {
-            val intent = Intent(context, GameModeSelectionActivity::class.java)
-            context.startActivity(intent)
+            if (context is Activity) {
+                AdInterstitialHelper.showInterstitialAd(context) {
+                    val intent = Intent(context, GameModeSelectionActivity::class.java)
+                    context.startActivity(intent)
+                }
+            } else {
+                val intent = Intent(context, GameModeSelectionActivity::class.java)
+                context.startActivity(intent)
+            }
         },
         onContinue = {
             val intent = Intent(context, GameActivity::class.java)
