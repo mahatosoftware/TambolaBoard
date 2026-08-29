@@ -9,14 +9,14 @@ plugins {
 
 android {
     namespace = "in.mahato.tambola"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "in.mahato.tambola"
         minSdk = 23
-        targetSdk = 36
-        versionCode = 36
-        versionName = "1.0.36"
+        targetSdk = 37
+        versionCode = 37
+        versionName = "1.0.37"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -32,8 +32,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -48,7 +48,7 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget.set(
-            org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+            org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         )
     }
 }
