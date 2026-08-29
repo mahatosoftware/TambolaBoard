@@ -32,16 +32,19 @@ fun MainScreen(
     val buttonWidth = screenWidth * 0.3f
 
     // -----------------------------
-    // Focus Requesters for 4 buttons
+    // Focus Requesters for 5 buttons
     // -----------------------------
 
     val focusNew = remember { FocusRequester() }
     val focusContinue = remember { FocusRequester() }
     val focusViewWinners = remember { FocusRequester() }
+    val focusSettings = remember { FocusRequester() }
     val focusExit = remember { FocusRequester() }
 
-    val focusRequesters = listOf(focusNew, focusContinue,focusViewWinners, focusExit)
+    val focusRequesters = listOf(focusNew, focusContinue, focusViewWinners, focusSettings, focusExit)
     var focusedIndex by remember { mutableStateOf(0) }
+
+    var showSettingsDialog by remember { mutableStateOf(false) }
 
     // Request initial focus
     LaunchedEffect(Unit) {
@@ -146,8 +149,8 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             //-------------------------------------------
-// VIEW WINNERS
-//-------------------------------------------
+            // VIEW WINNERS
+            //-------------------------------------------
             var viewWinnersFocused by remember { mutableStateOf(false) }
             Button(
                 onClick = onViewWinners,
@@ -175,6 +178,40 @@ fun MainScreen(
                 )
             ) {
                 Text(text = stringResource(R.string.btn_view_winners))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //-------------------------------------------
+            // SETTINGS BUTTON
+            //-------------------------------------------
+            var settingsFocused by remember { mutableStateOf(false) }
+            Button(
+                onClick = { showSettingsDialog = true },
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                    .width(buttonWidth)
+                    .focusRequester(focusSettings)
+                    .onFocusChanged { settingsFocused = it.isFocused }
+                    .onKeyEvent {
+                        if (it.type == KeyEventType.KeyDown) {
+                            when (it.key) {
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
+                                else -> false
+                            }
+                        } else false
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (settingsFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (settingsFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
+                )
+            ) {
+                Text(text = stringResource(R.string.btn_settings))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -221,5 +258,14 @@ fun MainScreen(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+
+    if (showSettingsDialog) {
+        `in`.mahato.tambola.ui.LanguageSettingsDialog(
+            onDismiss = { showSettingsDialog = false },
+            onLanguageChanged = { _ ->
+                // Language updated
+            }
+        )
     }
 }

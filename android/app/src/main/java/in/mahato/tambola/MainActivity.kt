@@ -3,7 +3,7 @@ package `in`.mahato.tambola
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
@@ -16,12 +16,14 @@ import `in`.mahato.tambola.gamemode.GameModeSelectionActivity
 import `in`.mahato.tambola.util.AdInterstitialHelper
 import android.app.Activity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+        val currentLang = `in`.mahato.tambola.util.LanguageUtil.getSelectedLanguage(this)
+        `in`.mahato.tambola.util.LanguageUtil.applyLanguage(currentLang)
         AdInterstitialHelper.loadInterstitialAd(this)
 
         setContent {

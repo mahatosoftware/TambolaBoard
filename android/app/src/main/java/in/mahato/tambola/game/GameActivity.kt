@@ -137,7 +137,9 @@ import java.util.Locale
 import androidx.compose.ui.res.stringResource
 import `in`.mahato.tambola.R
 
-class GameActivity : ComponentActivity() {
+import androidx.appcompat.app.AppCompatActivity
+
+class GameActivity : AppCompatActivity() {
     private lateinit var tts: TextToSpeech
     private var _isTtsReady = mutableStateOf(false)
     private var isInPipMode = mutableStateOf(false)
@@ -154,11 +156,12 @@ class GameActivity : ComponentActivity() {
 
         tts = TextToSpeech(this) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val result = tts.setLanguage(Locale.forLanguageTag("hi-IN"))
+                val ttsLocale = `in`.mahato.tambola.util.LanguageUtil.getTtsLocale(this)
+                val result = tts.setLanguage(ttsLocale)
                 if (result == TextToSpeech.LANG_MISSING_DATA ||
                     result == TextToSpeech.LANG_NOT_SUPPORTED
                 ) {
-                    tts.setLanguage(Locale.forLanguageTag("en-US"))
+                    tts.setLanguage(Locale.US)
                 }
                 _isTtsReady.value = true
                 tts.speak(getString(R.string.welcome_speech), TextToSpeech.QUEUE_FLUSH, null, null)
@@ -242,7 +245,8 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, intent
                 dao.insert(CalledNumber(newNumber, isLast = true))
             }
 
-            val funnyphrase = FunnyPhraseUtil.getFunnyPhrase(newNumber)
+            val langCode = `in`.mahato.tambola.util.LanguageUtil.getSelectedLanguage(context)
+            val funnyphrase = FunnyPhraseUtil.getFunnyPhrase(newNumber, langCode)
             tts.speak("$funnyphrase", TextToSpeech.QUEUE_FLUSH, null, null)
         } else {
             isAutoCalling = false

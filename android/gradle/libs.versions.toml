@@ -28,6 +28,7 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 
 # ---------- Core ----------
 androidx-core-ktx = "androidx.core:core-ktx:1.15.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-activity-compose = "androidx.activity:activity-compose:1.10.1"
 
