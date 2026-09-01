@@ -42,6 +42,16 @@ object ScreenSizeUtil {
     }
 
     /**
+     * Checks if the device is an Android TV / Leanback device
+     */
+    fun isTv(context: Context): Boolean {
+        val uiMode = context.resources.configuration.uiMode
+        val isTvUi = (uiMode and android.content.res.Configuration.UI_MODE_TYPE_MASK) == android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
+        val hasLeanback = context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+        return isTvUi || hasLeanback
+    }
+
+    /**
      * Legacy fallback (if needed) – works on all old devices
      */
     fun getScreenSizeLegacy(context: Context): Pair<Int, Int> {

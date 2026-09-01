@@ -9,6 +9,11 @@ import androidx.compose.material3.Surface
 import `in`.mahato.tambola.ui.theme.AppTheme
 
 class GameModeSelectionActivity : ComponentActivity() {
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(`in`.mahato.tambola.util.LanguageUtil.wrapContext(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

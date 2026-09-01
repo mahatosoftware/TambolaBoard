@@ -139,7 +139,12 @@ import `in`.mahato.tambola.R
 
 import androidx.appcompat.app.AppCompatActivity
 
-class GameActivity : AppCompatActivity() {
+class GameActivity : ComponentActivity() {
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(`in`.mahato.tambola.util.LanguageUtil.wrapContext(newBase))
+    }
+
     private lateinit var tts: TextToSpeech
     private var _isTtsReady = mutableStateOf(false)
     private var isInPipMode = mutableStateOf(false)
@@ -273,30 +278,100 @@ fun TambolaScreen(db: AppDatabase, tts: TextToSpeech, isNewGame: Boolean, intent
     }
 
     suspend fun syncPlayers(gId: String) {
+        if (gId.length != 6) return
         try {
             val firestore = FirebaseFirestore.getInstance()
-            val playersSnapshot = firestore.collection("games")
-                .document(gId)
-                .collection("tickets")
-                .get()
-                .await()
+            val namesSet = mutableSetOf<String>()
 
-            val players = playersSnapshot.documents.mapNotNull { doc ->
-                val name = doc.getString("name")
-                if (!name.isNullOrEmpty()) {
-                    PlayerEntity(
-                        gameId = gId,
-                        name = name
-                    )
-                } else null
+            // 1. Check "tickets" subcollection
+            try {
+                val ticketsSnapshot = firestore.collection("games")
+                    .document(gId)
+                    .collection("tickets")
+                    .get()
+                    .await()
+
+                for (doc in ticketsSnapshot.documents) {
+                    val name = doc.getString("name")
+                        ?: doc.getString("playerName")
+                        ?: doc.getString("player_name")
+                        ?: doc.getString("userName")
+                        ?: doc.getString("user_name")
+                        ?: doc.getString("ticketHolder")
+                    if (!name.isNullOrBlank()) {
+                        namesSet.add(name.trim())
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("GameActivity", "Error checking tickets subcollection: ${e.message}")
+            }
+
+            // 2. Check "players" subcollection
+            try {
+                val playersSnapshot = firestore.collection("games")
+                    .document(gId)
+                    .collection("players")
+                    .get()
+                    .await()
+
+                for (doc in playersSnapshot.documents) {
+                    val name = doc.getString("name")
+                        ?: doc.getString("playerName")
+                        ?: doc.getString("player_name")
+                        ?: doc.getString("userName")
+                        ?: doc.getString("user_name")
+                    if (!name.isNullOrBlank()) {
+                        namesSet.add(name.trim())
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("GameActivity", "Error checking players subcollection: ${e.message}")
+            }
+
+            // 3. Check root document "games/{gId}" fields
+            try {
+                val gameDoc = firestore.collection("games")
+                    .document(gId)
+                    .get()
+                    .await()
+
+                if (gameDoc.exists()) {
+                    val playersList = gameDoc.get("players") as? List<*>
+                    playersList?.forEach { item ->
+                        if (item is String && item.isNotBlank()) {
+                            namesSet.add(item.trim())
+                        } else if (item is Map<*, *>) {
+                            val name = (item["name"] ?: item["playerName"] ?: item["userName"]) as? String
+                            if (!name.isNullOrBlank()) {
+                                namesSet.add(name.trim())
+                            }
+                        }
+                    }
+
+                    val ticketsList = gameDoc.get("tickets") as? List<*>
+                    ticketsList?.forEach { item ->
+                        if (item is Map<*, *>) {
+                            val name = (item["name"] ?: item["playerName"] ?: item["userName"]) as? String
+                            if (!name.isNullOrBlank()) {
+                                namesSet.add(name.trim())
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("GameActivity", "Error checking root game document: ${e.message}")
+            }
+
+            val playerEntities = namesSet.map { name ->
+                PlayerEntity(gameId = gId, name = name)
             }
 
             // Save to local DB
             withContext(Dispatchers.IO) {
-                db.playerDao().deleteByGameId(gId) // Clear old if any
-                db.playerDao().insertAll(players)
+                db.playerDao().deleteByGameId(gId)
+                db.playerDao().insertAll(playerEntities)
             }
-            android.util.Log.d("GameActivity", "Synced ${players.size} players for game $gId")
+            android.util.Log.d("GameActivity", "Synced ${playerEntities.size} players for game $gId")
         } catch (e: Exception) {
             android.util.Log.e("GameActivity", "Error syncing players: ${e.message}")
         }
@@ -791,7 +866,32 @@ fun WinnerBoardDialog(
                     }
                 }
 
+                val context = androidx.compose.ui.platform.LocalContext.current
+                val isTv = remember { `in`.mahato.tambola.util.ScreenSizeUtil.isTv(context) }
+
                 Spacer(Modifier.height(12.dp))
+
+                if (!isTv && prizes.isNotEmpty()) {
+                    Button(
+                        onClick = {
+                            `in`.mahato.tambola.util.PdfShareUtil.generateAndShareWinnerPdf(context, prizes, gameId)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.btn_share_pdf),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
+
                 var closeDialogFocused by remember { mutableStateOf(false) }
                 Button(
                     onClick = onDismiss,
@@ -808,6 +908,13 @@ fun WinnerBoardDialog(
                     Text(stringResource(R.string.btn_close_board), fontWeight = FontWeight.Bold)
                 }
             }
+        }
+    }
+
+    // ⭐ Auto-sync players from Firestore when opening for a 6-char game ID
+    LaunchedEffect(gameId) {
+        if (gameId.length == 6) {
+            onReloadPlayers()
         }
     }
 

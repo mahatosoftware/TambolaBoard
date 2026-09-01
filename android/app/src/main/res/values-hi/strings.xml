@@ -70,4 +70,6 @@
     <string name="btn_settings">Settings (सेटिंग्स)</string>
     <string name="title_settings">Settings (सेटिंग्स)</string>
     <string name="label_select_language">Select Language (भाषा चुनें)</string>
+    <string name="btn_share_pdf">Share Winner PDF (विजेता लिस्ट साझा करें)</string>
+    <string name="hint_tv_language_select">भाषा चुनने के लिए OK दबाएं, पुष्टि के लिए फिर से OK दबाएं</string>
 </resources>

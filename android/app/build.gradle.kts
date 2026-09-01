@@ -15,8 +15,8 @@ android {
         applicationId = "in.mahato.tambola"
         minSdk = 23
         targetSdk = 37
-        versionCode = 38
-        versionName = "1.0.38"
+        versionCode = 41
+        versionName = "1.0.41"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

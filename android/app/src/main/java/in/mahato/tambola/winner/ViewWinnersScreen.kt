@@ -51,6 +51,7 @@ import `in`.mahato.tambola.R
 @Composable
 fun ViewWinnersScreen(
     winners: List<WinningPrizeEntity>,
+    gameId: String = "",
     onBack: () -> Unit
 ) {
     val focusbackButton = remember { FocusRequester() }
@@ -101,9 +102,34 @@ fun ViewWinnersScreen(
             }
 
             // -----------------------------
-            // Footer (Button & Copyright)
+            // Footer (Share PDF & Back Button)
             // -----------------------------
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val isTv = remember { `in`.mahato.tambola.util.ScreenSizeUtil.isTv(context) }
+
             Spacer(modifier = Modifier.height(16.dp))
+
+            if (!isTv && winners.isNotEmpty()) {
+                Button(
+                    onClick = {
+                        `in`.mahato.tambola.util.PdfShareUtil.generateAndShareWinnerPdf(context, winners, gameId)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.btn_share_pdf),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
             var backButtonFocused by remember { mutableStateOf(false) }
             Button(
                 onClick = onBack,

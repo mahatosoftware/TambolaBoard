@@ -13,6 +13,10 @@ import `in`.mahato.tambola.ui.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 class RuleSelectionActivity : ComponentActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(`in`.mahato.tambola.util.LanguageUtil.wrapContext(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -13,6 +13,10 @@ import `in`.mahato.tambola.ui.theme.AppTheme
 
 class PointsDistributionActivity : ComponentActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(`in`.mahato.tambola.util.LanguageUtil.wrapContext(newBase))
+    }
+
     // ✅ Proper ViewModel (lifecycle-aware)
     private val ruleViewModel: RuleViewModel by viewModels()
 

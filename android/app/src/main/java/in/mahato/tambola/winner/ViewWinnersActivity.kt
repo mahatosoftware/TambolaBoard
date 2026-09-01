@@ -18,6 +18,10 @@ import `in`.mahato.tambola.ui.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 class ViewWinnersActivity : ComponentActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(`in`.mahato.tambola.util.LanguageUtil.wrapContext(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,13 +41,20 @@ class ViewWinnersActivity : ComponentActivity() {
                         .getAllPrizes()
                         .collectAsState(initial = emptyList())
 
+                    val savedGameId by db.calledNumberDao()
+                        .getSavedGameIdFlow()
+                        .collectAsState(initial = "")
+
                     // Sort the list based on totalRuleAmount
                     // remember(winnersList) ensures sorting only happens when the list changes
                     val sortedWinners = remember(winnersList) {
                         winnersList.sortedByDescending { it.savedRule.totalRuleAmount }
                     }
-                    ViewWinnersScreen(   winners = sortedWinners,
-                        onBack = { finish() })
+                    ViewWinnersScreen(
+                        winners = sortedWinners,
+                        gameId = savedGameId ?: "",
+                        onBack = { finish() }
+                    )
                 }
             }
         }

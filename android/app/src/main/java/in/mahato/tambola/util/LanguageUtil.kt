@@ -1,6 +1,9 @@
 package `in`.mahato.tambola.util
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
@@ -52,7 +55,23 @@ object LanguageUtil {
     fun setSelectedLanguage(context: Context, languageCode: String) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_LANGUAGE, languageCode).apply()
+
         applyLanguage(languageCode)
+
+        // Force-update current context resources configuration
+        val locale = getTtsLocaleByCode(languageCode)
+        Locale.setDefault(locale)
+
+        val res = context.resources
+        val config = Configuration(res.configuration)
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+        @Suppress("DEPRECATION")
+        res.updateConfiguration(config, res.displayMetrics)
+
+        // Recreate activity so Compose re-evaluates stringResource() with new locale
+        val activity = findActivity(context)
+        activity?.recreate()
     }
 
     fun applyLanguage(languageCode: String) {
@@ -60,8 +79,33 @@ object LanguageUtil {
         AppCompatDelegate.setApplicationLocales(appLocales)
     }
 
+    fun wrapContext(context: Context): Context {
+        val languageCode = getSelectedLanguage(context)
+        val locale = getTtsLocaleByCode(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+        config.setLayoutDirection(locale)
+
+        return context.createConfigurationContext(config)
+    }
+
+    fun findActivity(context: Context): Activity? {
+        var ctx = context
+        while (ctx is ContextWrapper) {
+            if (ctx is Activity) return ctx
+            ctx = ctx.baseContext
+        }
+        return null
+    }
+
     fun getTtsLocale(context: Context): Locale {
-        return when (getSelectedLanguage(context)) {
+        return getTtsLocaleByCode(getSelectedLanguage(context))
+    }
+
+    private fun getTtsLocaleByCode(code: String): Locale {
+        return when (code) {
             "hi" -> Locale("hi", "IN")
             "bn" -> Locale("bn", "IN")
             "or" -> Locale("or", "IN")

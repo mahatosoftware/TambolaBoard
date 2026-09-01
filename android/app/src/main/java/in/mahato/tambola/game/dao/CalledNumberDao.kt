@@ -34,6 +34,9 @@ interface CalledNumberDao {
     @Query("SELECT gameId FROM game_metadata WHERE id = 1")
     suspend fun getSavedGameId(): String?
 
+    @Query("SELECT gameId FROM game_metadata WHERE id = 1")
+    fun getSavedGameIdFlow(): kotlinx.coroutines.flow.Flow<String?>
+
     @Query("DELETE FROM game_metadata")
     suspend fun clearMetadata()
 
