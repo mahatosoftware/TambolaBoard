@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">নতুন গেম আৰম্ভ কৰক</string>
     <string name="btn_continue_last_game">শেষৰ গেম চলাই নিয়ক</string>
     <string name="btn_view_winners">বিজয়ীসকলক চাওক</string>
+    <string name="btn_how_to_play">কেনেকৈ খেলিব</string>
     <string name="btn_exit">প্ৰস্থান</string>
     <string name="title_select_game_mode">গেম মোড বাছনি কৰক</string>
     <string name="btn_moderated">মডাৰেটেড</string>

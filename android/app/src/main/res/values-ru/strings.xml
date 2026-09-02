@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Начать новую игру</string>
     <string name="btn_continue_last_game">Продолжить последнюю игру</string>
     <string name="btn_view_winners">Посмотреть победителей</string>
+    <string name="btn_how_to_play">Как играть</string>
     <string name="btn_exit">Выход</string>
     <string name="title_select_game_mode">Выбрать режим игры</string>
     <string name="btn_moderated">С модерацией</string>

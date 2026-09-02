@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">开始新游戏</string>
     <string name="btn_continue_last_game">继续上次游戏</string>
     <string name="btn_view_winners">查看获胜者</string>
+    <string name="btn_how_to_play">玩法说明</string>
     <string name="btn_exit">退出</string>
     <string name="title_select_game_mode">选择游戏模式</string>
     <string name="btn_moderated">主持模式</string>

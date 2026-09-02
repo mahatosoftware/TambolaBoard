@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Inizia nuova partita</string>
     <string name="btn_continue_last_game">Continua ultima partita</string>
     <string name="btn_view_winners">Vedi vincitori</string>
+    <string name="btn_how_to_play">Come giocare</string>
     <string name="btn_exit">Esci</string>
     <string name="title_select_game_mode">Seleziona modalità di gioco</string>
     <string name="btn_moderated">Moderato</string>

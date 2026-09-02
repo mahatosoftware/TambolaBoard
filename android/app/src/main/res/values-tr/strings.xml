@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Yeni Oyun Başlat</string>
     <string name="btn_continue_last_game">Son Oyuna Devam Et</string>
     <string name="btn_view_winners">Kazananları Gör</string>
+    <string name="btn_how_to_play">Nasıl Oynanır</string>
     <string name="btn_exit">Çıkış</string>
     <string name="title_select_game_mode">Oyun Modunu Seçin</string>
     <string name="btn_moderated">Yönetilen</string>

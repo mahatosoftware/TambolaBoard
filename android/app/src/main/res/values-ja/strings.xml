@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">新しいゲームを開始</string>
     <string name="btn_continue_last_game">前回のゲームを継続</string>
     <string name="btn_view_winners">勝者を見る</string>
+    <string name="btn_how_to_play">遊び方</string>
     <string name="btn_exit">終了</string>
     <string name="title_select_game_mode">ゲームモードを選択</string>
     <string name="btn_moderated">モデレート</string>

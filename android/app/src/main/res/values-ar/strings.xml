@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">بدء لعبة جديدة</string>
     <string name="btn_continue_last_game">متابعة اللعبة الأخيرة</string>
     <string name="btn_view_winners">عرض الفائزين</string>
+    <string name="btn_how_to_play">كيفية اللعب</string>
     <string name="btn_exit">خروج</string>
     <string name="title_select_game_mode">اختر وضع اللعبة</string>
     <string name="btn_moderated">بإشراف</string>

@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Mulai Permainan Baru</string>
     <string name="btn_continue_last_game">Lanjutkan Permainan Terakhir</string>
     <string name="btn_view_winners">Lihat Pemenang</string>
+    <string name="btn_how_to_play">Cara Bermain</string>
     <string name="btn_exit">Keluar</string>
     <string name="title_select_game_mode">Pilih Mode Permainan</string>
     <string name="btn_moderated">Dimoderasi</string>

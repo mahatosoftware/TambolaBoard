@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">ਨਵੀਂ ਗੇਮ ਸ਼ੁਰੂ ਕਰੋ</string>
     <string name="btn_continue_last_game">ਪਿਛਲੀ ਗੇਮ ਜਾਰੀ ਰੱਖੋ</string>
     <string name="btn_view_winners">ਜੇਤੂ ਦੇਖੋ</string>
+    <string name="btn_how_to_play">ਕਿਵੇਂ ਖੇਡਣਾ ਹੈ</string>
     <string name="btn_exit">ਬਾਹਰ ਜਾਓ</string>
     <string name="title_select_game_mode">ਗੇਮ ਮੋਡ ਚੁਣੋ</string>
     <string name="btn_moderated">ਮੋਡਰੇਟਡ</string>

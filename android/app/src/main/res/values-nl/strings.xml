@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Nieuw spel starten</string>
     <string name="btn_continue_last_game">Laatste spel voortzetten</string>
     <string name="btn_view_winners">Bekijk winnaars</string>
+    <string name="btn_how_to_play">Hoe te spelen</string>
     <string name="btn_exit">Aflsuiten</string>
     <string name="title_select_game_mode">Selecteer spelmodus</string>
     <string name="btn_moderated">Gefaciliteerd</string>

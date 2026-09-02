@@ -38,6 +38,7 @@
     <string name="btn_start_new_game">Bắt đầu trò chơi mới</string>
     <string name="btn_continue_last_game">Tiếp tục trò chơi trước</string>
     <string name="btn_view_winners">Xem người thắng</string>
+    <string name="btn_how_to_play">Cách chơi</string>
     <string name="btn_exit">Thoát</string>
     <string name="title_select_game_mode">Chọn chế độ chơi</string>
     <string name="btn_moderated">Có quản trò</string>
