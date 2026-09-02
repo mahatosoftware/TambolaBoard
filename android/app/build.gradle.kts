@@ -15,8 +15,8 @@ android {
         applicationId = "in.mahato.tambola"
         minSdk = 23
         targetSdk = 37
-        versionCode = 41
-        versionName = "1.0.41"
+        versionCode = 42
+        versionName = "1.0.42"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,7 @@ dependencies {
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
