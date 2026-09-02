@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">तंबोला बोर्ड</string>
     <string name="welcome_speech">तंबोला बोर्डमध्ये आपले स्वागत आहे</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">गेम आयडी तपासत आहे...</string>
     <string name="error_game_id_not_found">गेम आयडी सापडला नाही.</string>
     <string name="error_verification_timeout">तपासणीची वेळ संपली.</string>
-
     <string name="btn_submit">सबमिट करा</string>
     <string name="title_select_rules">तंबोला नियम निवडा</string>
     <string name="btn_distribute_points">निवडलेले (%1$d) नियम</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">अजून एकही विजेता नाही</string>
     <string name="btn_back">मागे</string>
     <string name="label_winners">विजेते:</string>
+
+    <string name="btn_undo">पूर्ववत करा</string>
+    <string name="btn_how_to_play">कसे खेळायचे</string>
+    <string name="title_how_to_play">तंबोला बोर्ड कसे खेळायचे</string>
+    <string name="subtitle_how_to_play">तुम्हाला तुमचा तंबोला गेम कसा चालवायचा आहे ते निवडा.</string>
+    <string name="badge_recommended_app">तंबोला तिकीट ॲप वापरत असल्यास शिफारस केलेले</string>
+    <string name="mode_moderated_title">📱 मॉडरेटेड मोड</string>
+    <string name="mode_moderated_subtitle">तंबोला तिकीट ॲप वापरा</string>
+    <string name="mode_moderated_desc">जेव्हा जेव्हा तंबोला तिकीट ॲप तुमच्या गेमचा भाग असेल तेव्हा हा मोड निवडा.</string>
+    <string name="scenario_digital_title">📱 डिजिटल तिकिटे</string>
+    <string name="scenario_digital_desc">खेळाडू तंबोला तिकीट ॲपमध्ये डिजिटल तिकिटे वापरतात. ते गेम आयडीने जोडले जातात आणि त्यांची तिकिटे होस्टशी सिंक राहतात.</string>
+    <string name="scenario_paper_title">🎟 कागदी तिकिटे</string>
+    <string name="scenario_paper_desc">खेळाडू कागदी तिकिटे वापरतात तर गेम व्यवस्थापित करण्यासाठी तंबोला तिकीट ॲप वापरले जाते.</string>
+    <string name="rule_moderated_banner">✓ तंबोला तिकीट ॲप वापरत आहे → मॉडरेटेड मोड</string>
+    <string name="btn_get_tickets_app">📲 गुगल प्लेवर तंबोला तिकीट ॲप मिळवा</string>
+    <string name="mode_unmoderated_title">🎟 अन-मॉडरेटेड मोड</string>
+    <string name="mode_unmoderated_subtitle">होस्ट गेम चालवतो</string>
+    <string name="mode_unmoderated_desc">तिकिटे व्यवस्थापित करण्यासाठी तंबोला तिकीट ॲप वापरले जात नसताना हा मोड निवडा.</string>
+    <string name="unmoderated_bullet_1">• होस्ट तंबोला बोर्डवरून नंबर पुकारतो</string>
+    <string name="unmoderated_bullet_2">• खेळाडू त्यांच्या तिकिटांवर मॅन्युअली खूण करतात</string>
+    <string name="unmoderated_bullet_3">• खेळाडू त्यांचे दावे तोंडी घोषित करतात</string>
+    <string name="unmoderated_bullet_4">• होस्ट मॅन्युअली विजेत्यांची पडताळणी व नोंद करतो</string>
+    <string name="rule_unmoderated_banner">✓ तंबोला तिकीट ॲप नाही → अन-मॉडरेटेड मोड</string>
+    <string name="step_1_title">गेम मोड निवडा</string>
+    <string name="step_2_title">विजयाचे नियम आणि बक्षीस सेट करा</string>
+    <string name="step_2_desc">अर्ली ५, टॉप लाइन, मिडल लाइन, बॉटम लाइन, कॉर्नर्स आणि फुल हाऊस यांसारखे विजयाचे पॅटर्न निवडा.</string>
+    <string name="step_3_title">नंबर पुकारा</string>
+    <string name="step_3_desc">१ ते ९० नंबर काढण्यासाठी Call Next वापरा किंवा ऑटो कॉल सक्षम करा.</string>
+    <string name="step_4_title">विजेते तपासा आणि नोंदवा</string>
+    <string name="step_4_desc">जेव्हा खेळाडू बक्षीस सांगेल, तेव्हा नियम निवडून तिकीट तपासा आणि विजेत्याची नोंद करा.</string>
+    <string name="step_5_title">विजेते पहा आणि शेअर करा</string>
+    <string name="step_5_desc_mobile">विजेते पाहण्यासाठी आणि पीडीएफ शेअर करण्यासाठी कोणत्याही वेळी विजेते पहा उघडा.</string>
+    <string name="step_5_desc_tv">दावा केलेले सर्व बक्षीस पाहण्यासाठी कोणत्याही वेळी विजेते पहा उघडा.</string>
+    <string name="hint_tv_language_select">निवडण्यासाठी ओके दाबा, पुष्टी करण्यासाठी पुन्हा ओके दाबा</string>
     <string name="btn_settings">Settings (सेटिंग्ज)</string>
     <string name="title_settings">Settings (सेटिंग्ज)</string>
     <string name="label_select_language">Select Language (भाषा निवडा)</string>

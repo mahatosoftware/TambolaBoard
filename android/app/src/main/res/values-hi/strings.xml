@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">तंबोला बोर्ड</string>
     <string name="welcome_speech">तंबोला बोर्ड में आपका स्वागत है</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">गेम आईडी सत्यापित हो रही है...</string>
     <string name="error_game_id_not_found">गेम आईडी नहीं मिली।</string>
     <string name="error_verification_timeout">सत्यापन का समय समाप्त हो गया।</string>
-
     <string name="btn_submit">सबमिट करें</string>
     <string name="title_select_rules">तंबोला नियम चुनें</string>
     <string name="btn_distribute_points">चयनित (%1$d) नियम</string>
@@ -67,9 +66,42 @@
     <string name="msg_no_winners">अभी तक कोई विजेता नहीं</string>
     <string name="btn_back">पीछे</string>
     <string name="label_winners">विजेता:</string>
+    <string name="btn_share_pdf">Share Winner PDF (विजेता लिस्ट साझा करें)</string>
+
+    <string name="btn_undo">पूर्ववत करें</string>
+    <string name="btn_how_to_play">कैसे खेलें</string>
+    <string name="title_how_to_play">तंबोला बोर्ड कैसे खेलें</string>
+    <string name="subtitle_how_to_play">चुनें कि आप अपना तंबोला गेम कैसे चलाना चाहते हैं।</string>
+    <string name="badge_recommended_app">तंबोला टिकट्स ऐप का उपयोग करने पर अनुशंसित</string>
+    <string name="mode_moderated_title">📱 मॉडरेटेड मोड</string>
+    <string name="mode_moderated_subtitle">तंबोला टिकट्स ऐप का उपयोग करें</string>
+    <string name="mode_moderated_desc">जब भी तंबोला टिकट्स ऐप आपके गेम का हिस्सा हो तो इस मोड को चुनें।</string>
+    <string name="scenario_digital_title">📱 डिजिटल टिकट</string>
+    <string name="scenario_digital_desc">खिलाड़ी तंबोला टिकट्स ऐप में डिजिटल टिकट का उपयोग करते हैं। वे गेम आईडी से जुड़ते हैं और उनके टिकट होस्ट के साथ सिंक रहते हैं।</string>
+    <string name="scenario_paper_title">🎟 कागजी टिकट</string>
+    <string name="scenario_paper_desc">खिलाड़ी कागजी टिकटों का उपयोग करते हैं जबकि तंबोला टिकट्स ऐप का उपयोग गेम को प्रबंधित करने के लिए किया जाता है।</string>
+    <string name="rule_moderated_banner">✓ तंबोला टिकट्स ऐप का उपयोग → मॉडरेटेड मोड</string>
+    <string name="btn_get_tickets_app">📲 गूगल प्ले पर तंबोला टिकट्स ऐप प्राप्त करें</string>
+    <string name="mode_unmoderated_title">🎟 अन-मॉडरेटेड मोड</string>
+    <string name="mode_unmoderated_subtitle">होस्ट गेम चलाता है</string>
+    <string name="mode_unmoderated_desc">इस मोड को तब चुनें जब खिलाड़ी के टिकटों को प्रबंधित करने के लिए तंबोला टिकट्स ऐप का उपयोग नहीं किया जा रहा हो।</string>
+    <string name="unmoderated_bullet_1">• होस्ट तंबोला बोर्ड से नंबर पुकारता है</string>
+    <string name="unmoderated_bullet_2">• खिलाड़ी अपने भौतिक टिकटों को मैन्युअल रूप से कट करते हैं</string>
+    <string name="unmoderated_bullet_3">• खिलाड़ी मौखिक रूप से अपने दावों की घोषणा करते हैं</string>
+    <string name="unmoderated_bullet_4">• होस्ट मैन्युअल रूप से विजेताओं को सत्यापित और दर्ज करता है</string>
+    <string name="rule_unmoderated_banner">✓ तंबोला टिकट्स ऐप नहीं → अन-मॉडरेटेड मोड</string>
+    <string name="step_1_title">गेम मोड चुनें</string>
+    <string name="step_2_title">जीतने के नियम और पुरस्कार सेट करें</string>
+    <string name="step_2_desc">अपने गेम के लिए जीतने के पैटर्न चुनें, जैसे अर्ली 5, टॉप लाइन, मिडिल लाइन, बॉटम लाइन, कॉर्नर और फुल हाउस। प्रत्येक नियम को पुरस्कार या अंक प्रदान करें।</string>
+    <string name="step_3_title">नंबर पुकारें</string>
+    <string name="step_3_desc">1 से 90 तक नंबर निकालने के लिए Call Next का उपयोग करें, या ऑटो कॉल सक्षम करें। वॉयस घोषणाएं प्रत्येक नंबर बोलेंगी।</string>
+    <string name="step_4_title">विजेताओं का दावा और सत्यापन करें</string>
+    <string name="step_4_desc">जब कोई खिलाड़ी पुरस्कार का दावा करता है, तो नियम चुनें, टिकट सत्यापित करें और विजेता दर्ज करें। मॉडरेटेड मोड में, सिंक किए गए टिकटों का सीधे सत्यापन किया जा सकता है।</string>
+    <string name="step_5_title">विजेता देखें और शेयर करें</string>
+    <string name="step_5_desc_mobile">दावा किए गए सभी पुरस्कार देखने और शेयर करने के लिए पीडीएफ के रूप में विजेता सारांश निर्यात करने के लिए किसी भी समय विजेता देखें खोलें।</string>
+    <string name="step_5_desc_tv">दावा किए गए सभी पुरस्कार देखने के लिए किसी भी समय विजेता देखें खोलें।</string>
+    <string name="hint_tv_language_select">चुनने के लिए ओके दबाएं, पुष्टि करने के लिए दोबारा ओके दबाएं</string>
     <string name="btn_settings">Settings (सेटिंग्स)</string>
     <string name="title_settings">Settings (सेटिंग्स)</string>
     <string name="label_select_language">Select Language (भाषा चुनें)</string>
-    <string name="btn_share_pdf">Share Winner PDF (विजेता लिस्ट साझा करें)</string>
-    <string name="hint_tv_language_select">भाषा चुनने के लिए OK दबाएं, पुष्टि के लिए फिर से OK दबाएं</string>
 </resources>

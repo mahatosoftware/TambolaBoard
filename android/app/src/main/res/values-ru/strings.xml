@@ -69,5 +69,5 @@
     <string name="label_winners">Победители:</string>
     <string name="btn_settings">Settings (Настройки)</string>
     <string name="title_settings">Settings (Настройки)</string>
-    <string name="label_select_language">Select Language (Выбрать язык)</string>
+    <string name="label_select_language">Select Language (Выберите язык)</string>
 </resources>

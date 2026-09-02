@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">தம்போலா போர்டு</string>
     <string name="welcome_speech">தம்போலா போர்டிற்கு நல்வரவு</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">கேம் ID சரிபார்க்கப்படுகிறது...</string>
     <string name="error_game_id_not_found">கேம் ID கிடைக்கவில்லை.</string>
     <string name="error_verification_timeout">சரிபார்ப்பு நேரம் முடிந்தது.</string>
-
     <string name="btn_submit">சமர்ப்பி</string>
     <string name="title_select_rules">தம்போலா விதிகளைத் தேர்ந்தெடுக்கவும்</string>
     <string name="btn_distribute_points">தேர்ந்தெடுக்கப்பட்ட (%1$d) விதிகள்</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">இன்னும் வெற்றியாளர்கள் இல்லை</string>
     <string name="btn_back">பின்செல்</string>
     <string name="label_winners">வெற்றியாளர்கள்:</string>
+
+    <string name="btn_undo">செயல்தவிர்</string>
+    <string name="btn_how_to_play">எப்படி விளையாடுவது</string>
+    <string name="title_how_to_play">தம்போலா போர்டு எப்படி விளையாடுவது</string>
+    <string name="subtitle_how_to_play">உங்கள் தம்போலா கேமை எவ்வாறு நடத்த வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="badge_recommended_app">தம்போலா டிக்கெட்ஸ் ஆப் பயன்படுத்தினால் பரிந்துரைக்கப்படுகிறது</string>
+    <string name="mode_moderated_title">📱 மாடரேட்டட் மோட்</string>
+    <string name="mode_moderated_subtitle">தம்போலா டிக்கெட்ஸ் ஆப் பயன்படுத்தவும்</string>
+    <string name="mode_moderated_desc">தம்போலா டிக்கெட்ஸ் ஆப் உங்கள் விளையாட்டின் பகுதியாக இருக்கும்போதெல்லாம் இந்த பயன்முறையைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="scenario_digital_title">📱 டிஜிட்டல் டிக்கெட்டுகள்</string>
+    <string name="scenario_digital_desc">விளையாட்டாளர்கள் தம்போலா டிக்கெட்ஸ் ஆப்பில் டிஜிட்டல் டிக்கெட்டுகளைப் பயன்படுத்துகின்றனர்.</string>
+    <string name="scenario_paper_title">🎟 பேப்பர் டிக்கெட்டுகள்</string>
+    <string name="scenario_paper_desc">கேமை நிர்வகிக்க தம்போலா டிக்கெட்ஸ் ஆப் பயன்படுத்தப்படும் அதே வேளையில் பேப்பர் டிக்கெட்டுகளைப் பயன்படுத்தலாம்.</string>
+    <string name="rule_moderated_banner">✓ தம்போலா டிக்கெட்ஸ் ஆப் பயன்பாட்டில் உள்ளதா → மாடரேட்டட் மோட்</string>
+    <string name="btn_get_tickets_app">📲 கூகுள் பிளேயில் தம்போலா டிக்கெட்ஸ் ஆப் பெறவும்</string>
+    <string name="mode_unmoderated_title">🎟 அன்-மாடரேட்டட் மோட்</string>
+    <string name="mode_unmoderated_subtitle">ஹோஸ்ட் கேமை நடத்துகிறார்</string>
+    <string name="mode_unmoderated_desc">டிக்கெட்டுகளை நிர்வகிக்க தம்போலா டிக்கெட்ஸ் ஆப் பயன்படுத்தப்படாதபோது இந்த பயன்முறையைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="unmoderated_bullet_1">• ஹோஸ்ட் தம்போலா போர்டிலிருந்து எண்களை அழைக்கிறார்</string>
+    <string name="unmoderated_bullet_2">• விளையாட்டாளர்கள் தங்கள் பேப்பர் டிக்கெட்டுகளை கைமுறையாகக் குறிக்கிறார்கள்</string>
+    <string name="unmoderated_bullet_3">• விளையாட்டாளர்கள் தங்கள் வெற்றியை வாய்மொழியாக அறிவிக்கிறார்கள்</string>
+    <string name="unmoderated_bullet_4">• ஹோஸ்ட் கைமுறையாக வெற்றியாளர்களை சரிபார்த்துப் பதிவுசெய்கிறார்</string>
+    <string name="rule_unmoderated_banner">✓ தம்போலா டிக்கெட்ஸ் ஆப் இல்லை → அன்-மாடரேட்டட் மோட்</string>
+    <string name="step_1_title">கேம் மோட் தேர்ந்தெடுக்கவும்</string>
+    <string name="step_2_title">வெற்றி விதிகள் மற்றும் பரிசுகளை அமைக்கவும்</string>
+    <string name="step_2_desc">ஏர்லி 5, டாப் லைன், மிடில் லைன், பாட்டம் லைன், கார்னர்ஸ் மற்றும் ஃபுல் ஹவுஸ் போன்ற வெற்றி அமைப்புகளைத் தேர்ந்தெடுக்கவும்.</string>
+    <string name="step_3_title">எண்களை அழைக்கவும்</string>
+    <string name="step_3_desc">1 முதல் 90 வரையிலான எண்களை எடுக்க Call Next பயன்படுத்தவும் அல்லது ஆட்டோ கால் இயக்கவும்.</string>
+    <string name="step_4_title">வெற்றியாளர்களை சரிபார்க்கவும்</string>
+    <string name="step_4_desc">ஒரு விளையாட்டாளர் பரிசைக் கோரும்போது, விதியைத் தேர்ந்தெடுத்து டிக்கெட்டைச் சரிபார்த்து வெற்றியாளரைப் பதிவுசெய்யவும்.</string>
+    <string name="step_5_title">வெற்றியாளர்களைப் பார்க்கவும் பகிர்ந்துகொள்ளவும்</string>
+    <string name="step_5_desc_mobile">வெற்றியாளர்களைப் பார்க்கவும் PDF அறிக்கையைப் பகிரவும் எப்போது வேண்டுமானாலும் வெற்றியாளர்களைப் பார் திறக்கவும்.</string>
+    <string name="step_5_desc_tv">வென்ற பரிசுகளைப் பார்க்க எப்போது வேண்டுமானாலும் வெற்றியாளர்களைப் பார் திறக்கவும்.</string>
+    <string name="hint_tv_language_select">தேர்ந்தெடுக்க சரி அழுத்தவும், உறுதிப்படுத்த மீண்டும் சரி அழுத்தவும்</string>
     <string name="btn_settings">Settings (அமைப்புகள்)</string>
     <string name="title_settings">Settings (அமைப்புகள்)</string>
     <string name="label_select_language">Select Language (மொழியைத் தேர்ந்தெடுக்கவும்)</string>

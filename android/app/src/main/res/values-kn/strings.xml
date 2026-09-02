@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">ತಂಬೋಲ ಬೋರ್ಡ್</string>
     <string name="welcome_speech">ತಂಬೋಲ ಬೋರ್ಡ್‌ಗೆ ಸುಸ್ವಾಗತ</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">ಗೇಮ್ ID ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...</string>
     <string name="error_game_id_not_found">ಗೇಮ್ ID ಸಿಗಲಿಲ್ಲ.</string>
     <string name="error_verification_timeout">ಪರಿಶೀಲನೆ ಸಮಯ ಮೀರಿದೆ.</string>
-
     <string name="btn_submit">ಸಲ್ಲಿಸಿ</string>
     <string name="title_select_rules">ತಂಬೋಲ ನಿಯಮಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="btn_distribute_points">ಆಯ್ಕೆಮಾಡಿದ (%1$d) ನಿಯಮಗಳು</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">ಇನ್ನೂ ಯಾವುದೇ ವಿಜೇತರಿಲ್ಲ</string>
     <string name="btn_back">ಹಿಂದೆ</string>
     <string name="label_winners">ವಿಜೇತರು:</string>
+
+    <string name="btn_undo">ರದ್ದುಮಾಡಿ</string>
+    <string name="btn_how_to_play">ಆಡುವುದು ಹೇಗೆ</string>
+    <string name="title_how_to_play">ತಂಬೋಲಾ ಬೋರ್ಡ್ ಆಡುವುದು ಹೇಗೆ</string>
+    <string name="subtitle_how_to_play">ನಿಮ್ಮ ತಂಬೋಲಾ ಆಟವನ್ನು ಹೇಗೆ ನಡೆಸಬೇಕೆಂದು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="badge_recommended_app">ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಬಳಸುತ್ತಿದ್ದರೆ ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ</string>
+    <string name="mode_moderated_title">📱 ಮಾಡರೇಟೆಡ್ ಮೋಡ್</string>
+    <string name="mode_moderated_subtitle">ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಬಳಸಿ</string>
+    <string name="mode_moderated_desc">ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ನಿಮ್ಮ ಆಟದ ಭಾಗವಾಗಿದ್ದಾಗ ಈ ಮೋಡ್ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="scenario_digital_title">📱 ಡಿಜಿಟಲ್ ಟಿಕೆಟ್‌ಗಳು</string>
+    <string name="scenario_digital_desc">ಆಟಗಾರರು ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್‌ನಲ್ಲಿ ಡಿಜಿಟಲ್ ಟಿಕೆಟ್ ಬಳಸುತ್ತಾರೆ.</string>
+    <string name="scenario_paper_title">🎟 ಪೇಪರ್ ಟಿಕೆಟ್‌ಗಳು</string>
+    <string name="scenario_paper_desc">ಆಟವನ್ನು ನಿರ್ವಹಿಸಲು ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಬಳಸುವಾಗ ಪೇಪರ್ ಟಿಕೆಟ್ ಬಳಸಬಹುದು.</string>
+    <string name="rule_moderated_banner">✓ ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಬಳಕೆಯಲ್ಲಿದೆ → ಮಾಡರೇಟೆಡ್ ಮೋಡ್</string>
+    <string name="btn_get_tickets_app">📲 ಗೂಗಲ್ ಪ್ಲೇನಲ್ಲಿ ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಪಡೆಯಿರಿ</string>
+    <string name="mode_unmoderated_title">🎟 ಅನ್-ಮಾಡರೇಟೆಡ್ ಮೋಡ್</string>
+    <string name="mode_unmoderated_subtitle">ಹೋಸ್ಟ್ ಆಟವನ್ನು ನಡೆಸುತ್ತಾರೆ</string>
+    <string name="mode_unmoderated_desc">ಟಿಕೆಟ್ ನಿರ್ವಹಣೆಗೆ ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಬಳಸದಿರುವಾಗ ಈ ಮೋಡ್ ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="unmoderated_bullet_1">• ಹೋಸ್ಟ್ ತಂಬೋಲಾ ಬೋರ್ಡ್‌ನಿಂದ ಸಂಖ್ಯೆ ಕರೆ ನೀಡುತ್ತಾರೆ</string>
+    <string name="unmoderated_bullet_2">• ಆಟಗಾರರು ಪೇಪರ್ ಟಿಕೆಟ್‌ನಲ್ಲಿ ಮ್ಯಾನುಯಲ್ ಆಗಿ ಗುರುತಿಸುತ್ತಾರೆ</string>
+    <string name="unmoderated_bullet_3">• ಆಟಗಾರರು ತಮ್ಮ ಗೆಲುವನ್ನು ಬಾಯಿಯಿಂದ ಪ್ರಕಟಿಸುತ್ತಾರೆ</string>
+    <string name="unmoderated_bullet_4">• ಹೋಸ್ಟ್ ಮ್ಯಾನುಯಲ್ ಆಗಿ ವಿಜೇತರನ್ನು ಪರಿಶೀಲಿಸಿ ದಾಖಲಿಸುತ್ತಾರೆ</string>
+    <string name="rule_unmoderated_banner">✓ ತಂಬೋಲಾ ಟಿಕೆಟ್ಸ್ ಆಪ್ ಇಲ್ಲ → ಅನ್-ಮಾಡರೇಟೆಡ್ ಮೋಡ್</string>
+    <string name="step_1_title">ಆಟದ ಮೋಡ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="step_2_title">ಗೆಲುವಿನ ನಿಯಮಗಳು ಮತ್ತು ಬಹುಮಾನ ಹೊಂದಿಸಿ</string>
+    <string name="step_2_desc">ಅರ್ಲಿ 5, ಟಾಪ್ ಲೈನ್, ಮಿಡಲ್ ಲೈನ್, ಬಾಟಮ್ ಲೈನ್, ಕಾರ್ನರ್ಸ್ ಮತ್ತು ಫುಲ್ ಹೌಸ್ ನಿಯಮಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ.</string>
+    <string name="step_3_title">ಸಂಖ್ಯೆಗಳನ್ನು ಕರೆಯಿರಿ</string>
+    <string name="step_3_desc">1 ರಿಂದ 90 ಸಂಖ್ಯೆಗಳನ್ನು ಡ್ರಾ ಮಾಡಲು Call Next ಬಳಸಿ ಅಥವಾ ಆಟೋ ಕಾಲ್ ಸಕ್ರಿಯಗೊಳಿಸಿ.</string>
+    <string name="step_4_title">ವಿಜೇತರನ್ನು ಪರಿಶೀಲಿಸಿ నమోదు ಮಾಡಿ</string>
+    <string name="step_4_desc">ಆಟಗಾರ ಬಹುಮಾನ ಕ್ಲೈಮ್ ಮಾಡಿದಾಗ ನಿಯಮ ಆಯ್ಕೆಮಾಡಿ ಟಿಕೆಟ್ ಪರಿಶೀಲಿಸಿ ವಿಜೇತರನ್ನು నమోదు ಮಾಡಿ.</string>
+    <string name="step_5_title">ವಿಜೇತರನ್ನು ವೀಕ್ಷಿಸಿ ಮತ್ತು ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="step_5_desc_mobile">ವಿಜೇತರನ್ನು ವೀಕ್ಷಿಸಲು ಮತ್ತು PDF ವರದಿಯನ್ನು ಹಂಚಿಕೊಳ್ಳಲು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ವಿಜೇತರನ್ನು ವೀಕ್ಷಿಸಿ ತೆರೆಯಿರಿ.</string>
+    <string name="step_5_desc_tv">ವಿಜೇತರನ್ನು ವೀಕ್ಷಿಸಲು ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ವಿಜೇತರನ್ನು ವೀಕ್ಷಿಸಿ ತೆರೆಯಿರಿ.</string>
+    <string name="hint_tv_language_select">ಆಯ್ಕೆ ಮಾಡಲು ಸರಿ ಒತ್ತಿ, ಖಚಿತಪಡಿಸಲು ಮತ್ತೆ ಸರಿ ಒತ್ತಿ</string>
     <string name="btn_settings">Settings (ಸೆಟ್ಟಿಂಗ್ಸ್)</string>
     <string name="title_settings">Settings (ಸೆಟ್ಟಿಂಗ್ಸ್)</string>
     <string name="label_select_language">Select Language (ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ)</string>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">તંબોલા બોર્ડ</string>
     <string name="welcome_speech">તંબોલા બોર્ડમાં આપનું સ્વાગત છે</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">ગેમ ID ચકાસાઈ રહ્યો છે...</string>
     <string name="error_game_id_not_found">ગેમ ID મળ્યો નથી.</string>
     <string name="error_verification_timeout">સમય સમાપ્ત થયો.</string>
-
     <string name="btn_submit">સબમિટ કરો</string>
     <string name="title_select_rules">તંબોલા નિયમો પસંદ કરો</string>
     <string name="btn_distribute_points">પસંદ કરેલ (%1$d) નિયમો</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">હજુ સુધી કોઈ વિજેતા નથી</string>
     <string name="btn_back">પાછા</string>
     <string name="label_winners">વિજેતાઓ:</string>
+
+    <string name="btn_undo">રદ કરો</string>
+    <string name="btn_how_to_play">કેવી રીતે રમવું</string>
+    <string name="title_how_to_play">તંબોલા બોર્ડ કેવી રીતે રમવું</string>
+    <string name="subtitle_how_to_play">તમારી તંબોલા ગેમ કેવી રીતે ચલાવવી તે પસંદ કરો.</string>
+    <string name="badge_recommended_app">તંબોલા ટિકિટ્સ એપનો ઉપયોગ કરતી વખતે ભલામણ કરેલ</string>
+    <string name="mode_moderated_title">📱 મોડરેટેડ મોડ</string>
+    <string name="mode_moderated_subtitle">તંબોલા ટિકિટ્સ એપનો ઉપયોગ કરો</string>
+    <string name="mode_moderated_desc">જ્યારે પણ તંબોલા ટિકિટ્સ એપ તમારી ગેમનો ભાગ હોય ત્યારે આ મોડ પસંદ કરો.</string>
+    <string name="scenario_digital_title">📱 ડિજિટલ ટિકિટ</string>
+    <string name="scenario_digital_desc">ખેલાડીઓ તંબોલા ટિકિટ્સ એપમાં ડિજિટલ ટિકિટનો ઉપયોગ કરે છે.</string>
+    <string name="scenario_paper_title">🎟 કાગળની ટિકિટ</string>
+    <string name="scenario_paper_desc">ગેમનું સંચાલન કરવા તંબોલા ટિકિટ્સ એપ વપરાતી હોય ત્યારે કાગળની ટિકિટનો ઉપયોગ કરી શકાય.</string>
+    <string name="rule_moderated_banner">✓ તંબોલા ટિકિટ્સ એપ વપરાય છે → મોડરેટેડ મોડ</string>
+    <string name="btn_get_tickets_app">📲 ગૂગલ પ્લે પરથી તંબોલા ટિકિટ્સ એપ મેળવો</string>
+    <string name="mode_unmoderated_title">🎟 અન-મોડરેટેડ મોડ</string>
+    <string name="mode_unmoderated_subtitle">હોસ્ટ ગેમ ચલાવે છે</string>
+    <string name="mode_unmoderated_desc">ટિકિટનું સંચાલન કરવા માટે તંબોલા ટિકિટ્સ એપનો ઉપયોગ ન થતો હોય ત્યારે આ મોડ પસંદ કરો.</string>
+    <string name="unmoderated_bullet_1">• હોસ્ટ તંબોલા બોર્ડમાંથી નંબર બોલે છે</string>
+    <string name="unmoderated_bullet_2">• ખેલાડીઓ તેમની કાગળની ટિકિટ પર મેન્યુઅલી માર્ક કરે છે</string>
+    <string name="unmoderated_bullet_3">• ખેલાડીઓ તેમના વિજયની જાહેરાત મોઢેથી કરે છે</string>
+    <string name="unmoderated_bullet_4">• હોસ્ટ મેન્યુઅલી વિજેતા ચકાસે છે અને નોંધે છે</string>
+    <string name="rule_unmoderated_banner">✓ તંબોલા ટિકિટ્સ એપ નથી → અન-મોડરેટેડ મોડ</string>
+    <string name="step_1_title">ગેમ મોડ પસંદ કરો</string>
+    <string name="step_2_title">વિજેતા નિયમો અને ઈનામો સેટ કરો</string>
+    <string name="step_2_desc">અર્લી 5, ટોપ લાઇન, મિડલ લાઇન, બોટમ લાઇન, કોર્નર્સ અને ફુલ હાઉસ જેવા વિજેતા પેટર્ન પસંદ કરો.</string>
+    <string name="step_3_title">નંબર બોલો</string>
+    <string name="step_3_desc">1 થી 90 નંબર ડ્રો કરવા Call Next નો ઉપયોગ કરો અથવા ઓટો કોલ ચાલુ કરો.</string>
+    <string name="step_4_title">વિજેતા ચકાસો અને નોંધો</string>
+    <string name="step_4_desc">જ્યારે ખેલાડી ઈનામનો દાવો કરે, ત્યારે નિયમ પસંદ કરી ટિકિટ ચકાસો અને વિજેતાની નોંધ કરો.</string>
+    <string name="step_5_title">વિજેતાઓ જુઓ અને શેર કરો</string>
+    <string name="step_5_desc_mobile">વિજેતાઓ જોવા અને PDF રિપોર્ટ શેર કરવા ગમે ત્યારે વિજેતાઓ જુઓ ખોલો.</string>
+    <string name="step_5_desc_tv">ઈનામોની યાદી જોવા ગમે ત્યારે વિજેતાઓ જુઓ ખોલો.</string>
+    <string name="hint_tv_language_select">પસંદ કરવા માટે ઓકે દબાવો, પુષ્ટિ કરવા માટે ફરી ઓકે દબાવો</string>
     <string name="btn_settings">Settings (સેટિંગ્સ)</string>
     <string name="title_settings">Settings (સેટિંગ્સ)</string>
     <string name="label_select_language">Select Language (ભાષા પસંદ કરો)</string>

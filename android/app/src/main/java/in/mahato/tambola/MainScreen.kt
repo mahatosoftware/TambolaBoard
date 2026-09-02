@@ -38,13 +38,15 @@ fun MainScreen(
     val focusNew = remember { FocusRequester() }
     val focusContinue = remember { FocusRequester() }
     val focusViewWinners = remember { FocusRequester() }
+    val focusHowToPlay = remember { FocusRequester() }
     val focusSettings = remember { FocusRequester() }
     val focusExit = remember { FocusRequester() }
 
-    val focusRequesters = listOf(focusNew, focusContinue, focusViewWinners, focusSettings, focusExit)
+    val focusRequesters = listOf(focusNew, focusContinue, focusViewWinners, focusHowToPlay, focusSettings, focusExit)
     var focusedIndex by remember { mutableStateOf(0) }
 
     var showSettingsDialog by remember { mutableStateOf(false) }
+    var showHowToPlayDialog by remember { mutableStateOf(false) }
 
     // Request initial focus
     LaunchedEffect(Unit) {
@@ -183,6 +185,40 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             //-------------------------------------------
+            // HOW TO PLAY BUTTON
+            //-------------------------------------------
+            var howToPlayFocused by remember { mutableStateOf(false) }
+            Button(
+                onClick = { showHowToPlayDialog = true },
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 300.dp, minHeight = 50.dp)
+                    .width(buttonWidth)
+                    .focusRequester(focusHowToPlay)
+                    .onFocusChanged { howToPlayFocused = it.isFocused }
+                    .onKeyEvent {
+                        if (it.type == KeyEventType.KeyDown) {
+                            when (it.key) {
+                                Key.DirectionDown -> { moveFocus(false); true }
+                                Key.DirectionUp -> { moveFocus(true); true }
+                                else -> false
+                            }
+                        } else false
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (howToPlayFocused)
+                        MaterialTheme.colorScheme.background
+                    else MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = if (howToPlayFocused)
+                        MaterialTheme.colorScheme.onTertiary
+                    else MaterialTheme.colorScheme.tertiary
+                )
+            ) {
+                Text(text = stringResource(R.string.btn_how_to_play))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            //-------------------------------------------
             // SETTINGS BUTTON
             //-------------------------------------------
             var settingsFocused by remember { mutableStateOf(false) }
@@ -258,6 +294,12 @@ fun MainScreen(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+
+    if (showHowToPlayDialog) {
+        `in`.mahato.tambola.ui.HowToPlayDialog(
+            onDismiss = { showHowToPlayDialog = false }
+        )
     }
 
     if (showSettingsDialog) {

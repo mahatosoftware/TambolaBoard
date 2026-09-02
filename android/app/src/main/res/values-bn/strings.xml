@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">তাম্বোলা বোর্ড</string>
     <string name="welcome_speech">তাম্বোলা বোর্ডে স্বাগতম</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">গেম আইডি যাচাই করা হচ্ছে...</string>
     <string name="error_game_id_not_found">গেম আইডি পাওয়া যায়নি।</string>
     <string name="error_verification_timeout">যাচাইকরণের সময় শেষ হয়েছে।</string>
-
     <string name="btn_submit">জমা দিন</string>
     <string name="title_select_rules">তাম্বোলা নিয়ম নির্বাচন করুন</string>
     <string name="btn_distribute_points">নির্বাচিত (%1$d) নিয়মসমূহ</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">এখনও কোনো বিজয়ী নেই</string>
     <string name="btn_back">ফিরে যান</string>
     <string name="label_winners">বিজয়ীগণ:</string>
+
+    <string name="btn_undo">পূর্বাবস্থায় ফেরান</string>
+    <string name="btn_how_to_play">কীভাবে খেলবেন</string>
+    <string name="title_how_to_play">তম্বোলা বোর্ড কীভাবে খেলবেন</string>
+    <string name="subtitle_how_to_play">আপনার তম্বোলা গেমটি কীভাবে পরিচালনা করতে চান তা চয়ন করুন।</string>
+    <string name="badge_recommended_app">তম্বোলা টিকিট অ্যাপ ব্যবহার করলে সুপারিশকৃত</string>
+    <string name="mode_moderated_title">📱 মডারেটেড মোড</string>
+    <string name="mode_moderated_subtitle">তম্বোলা টিকিট অ্যাপ ব্যবহার করুন</string>
+    <string name="mode_moderated_desc">যখনই তম্বোলা টিকিট অ্যাপটি আপনার গেমের অংশ হয় তখনই এই মোডটি চয়ন করুন।</string>
+    <string name="scenario_digital_title">📱 ডিজিটাল টিকিট</string>
+    <string name="scenario_digital_desc">খেলোয়াড়রা তম্বোলা টিকিট অ্যাপে ডিজিটাল টিকিট ব্যবহার করে। তারা গেম আইডি দিয়ে যোগ দেয় এবং টিকিট হোস্টের সাথে সিঙ্ক থাকে।</string>
+    <string name="scenario_paper_title">🎟 কাগজের টিকিট</string>
+    <string name="scenario_paper_desc">খেলোয়াড়রা কাগজের টিকিট ব্যবহার করে যখন গেমটি পরিচালনা করতে তম্বোলা টিকিট অ্যাপ ব্যবহার করা হয়।</string>
+    <string name="rule_moderated_banner">✓ তম্বোলা টিকিট অ্যাপ ব্যবহার করছেন → মডারেটেড মোড</string>
+    <string name="btn_get_tickets_app">📲 গুগল প্লেতে তম্বোলা টিকিট অ্যাপ পান</string>
+    <string name="mode_unmoderated_title">🎟 আন-মডারেটেড মোড</string>
+    <string name="mode_unmoderated_subtitle">হোস্ট গেম পরিচালনা করে</string>
+    <string name="mode_unmoderated_desc">টিকিট পরিচালনার জন্য তম্বোলা টিকিট অ্যাপ ব্যবহার না করা হলে এই মোডটি বেছে নিন।</string>
+    <string name="unmoderated_bullet_1">• হোস্ট তম্বোলা বোর্ড থেকে নম্বর ডাকেন</string>
+    <string name="unmoderated_bullet_2">• খেলোয়াড়রা ম্যানুয়ালি তাদের কাগজের টিকিট মার্ক করে</string>
+    <string name="unmoderated_bullet_3">• খেলোয়াড়রা তাদের দাবি মুখে ঘোষণা করে</string>
+    <string name="unmoderated_bullet_4">• হোস্ট ম্যানুয়ালি বিজয়ীদের যাচাই ও রেকর্ড করেন</string>
+    <string name="rule_unmoderated_banner">✓ কোনো তম্বোলা টিকিট অ্যাপ নেই → আন-মডারেটেড মোড</string>
+    <string name="step_1_title">গেম মোড বেছে নিন</string>
+    <string name="step_2_title">বিজয়ের নিয়ম ও পুরস্কার সেট করুন</string>
+    <string name="step_2_desc">আপনার গেমের জন্য বিজয়ের প্যাটার্ন বেছে নিন যেমন আর্লি ৫, টপ লাইন, মিডল লাইন, বটম লাইন, কর্নার এবং ফুল হাউস।</string>
+    <string name="step_3_title">নম্বর ডাকুন</string>
+    <string name="step_3_desc">১ থেকে ৯০ পর্যন্ত নম্বর ড্র করতে Call Next ব্যবহার করুন বা অটো কল চালু করুন।</string>
+    <string name="step_4_title">বিজয়ীদের দাবি ও যাচাই করুন</string>
+    <string name="step_4_desc">যখন কোনো খেলোয়াড় পুরস্কারের দাবি করে, নিয়ম সিলেক্ট করুন, টিকিট যাচাই করুন এবং বিজয়ের নাম নথিভুক্ত করুন।</string>
+    <string name="step_5_title">বিজয়ীদের দেখুন ও শেয়ার করুন</string>
+    <string name="step_5_desc_mobile">যেকোনো সময় বিজয়ীদের তালিকা দেখতে এবং পিডিএফ আকারে শেয়ার করতে বিজয়ী দেখুন বিকল্প খুলুন।</string>
+    <string name="step_5_desc_tv">যেকোনো সময় বিজয়ীদের তালিকা দেখতে বিজয়ী দেখুন বিকল্প খুলুন।</string>
+    <string name="hint_tv_language_select">নির্বাচন করতে ওকে চাপুন, নিশ্চিত করতে আবার ওকে চাপুন</string>
     <string name="btn_settings">Settings (সেটিংস)</string>
     <string name="title_settings">Settings (সেটিংস)</string>
     <string name="label_select_language">Select Language (ভাষা নির্বাচন করুন)</string>

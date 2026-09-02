@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Tambola Board</string>
     <string name="welcome_speech">Bienvenido a Tambola Board</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">Verificando ID del juego...</string>
     <string name="error_game_id_not_found">ID del juego no encontrado.</string>
     <string name="error_verification_timeout">Tiempo de verificación agotado.</string>
-
     <string name="btn_submit">Enviar</string>
     <string name="title_select_rules">Seleccionar reglas de Tambola</string>
     <string name="btn_distribute_points">Reglas seleccionadas (%1$d)</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">Aún no hay ganadores</string>
     <string name="btn_back">Atrás</string>
     <string name="label_winners">Ganadores:</string>
+
+    <string name="btn_undo">Deshacer</string>
+    <string name="btn_how_to_play">Cómo jugar</string>
+    <string name="title_how_to_play">Cómo jugar a Tambola Board</string>
+    <string name="subtitle_how_to_play">Elige cómo quieres dirigir tu juego de Tambola.</string>
+    <string name="badge_recommended_app">"RECOMENDADO SI SE USA LA APP TAMBOLA TICKETS"</string>
+    <string name="mode_moderated_title">📱 MODO MODERADO</string>
+    <string name="mode_moderated_subtitle">"Usa la aplicación Tambola Tickets"</string>
+    <string name="mode_moderated_desc">"Elige este modo siempre que la app Tambola Tickets sea parte de tu juego."</string>
+    <string name="scenario_digital_title">📱 Billetes Digitales</string>
+    <string name="scenario_digital_desc">"Los jugadores usan billetes digitales en la app Tambola Tickets. Se unen con el ID del juego y sus billetes se sincronizan con el anfitrión."</string>
+    <string name="scenario_paper_title">🎟 Billetes de Papel</string>
+    <string name="scenario_paper_desc">"Los jugadores usan billetes de papel mientras la app Tambola Tickets se usa para gestionar el juego."</string>
+    <string name="rule_moderated_banner">"✓ Usando la app Tambola Tickets → MODO MODERADO"</string>
+    <string name="btn_get_tickets_app">📲 Obtener Tambola Tickets en Google Play</string>
+    <string name="mode_unmoderated_title">🎟 MODO NO MODERADO</string>
+    <string name="mode_unmoderated_subtitle">El anfitrión dirige el juego</string>
+    <string name="mode_unmoderated_desc">"Elige este modo cuando la app Tambola Tickets no se use para gestionar los billetes."</string>
+    <string name="unmoderated_bullet_1">• El anfitrión canta los números desde Tambola Board</string>
+    <string name="unmoderated_bullet_2">• Los jugadores marcan sus billetes de papel manualmente</string>
+    <string name="unmoderated_bullet_3">• Los jugadores anuncian sus premios verbalmente</string>
+    <string name="unmoderated_bullet_4">• El anfitrión verifica y registra los ganadores manualmente</string>
+    <string name="rule_unmoderated_banner">"✓ Sin la app Tambola Tickets → MODO NO MODERADO"</string>
+    <string name="step_1_title">Elegir Modo de Juego</string>
+    <string name="step_2_title">Configurar Reglas y Premios</string>
+    <string name="step_2_desc">Elige los patrones ganadores como Primeros 5, Línea Superior, Línea Media, Línea Inferior, Esquinas y Cartón Lleno. Asigna premios o puntos a cada regla.</string>
+    <string name="step_3_title">Cantar Números</string>
+    <string name="step_3_desc">Usa Llamar Siguiente para extraer números del 1 al 90 o activa Llamada Automática. Los anuncios de voz cantarán cada número.</string>
+    <string name="step_4_title">Reclamar y Verificar Ganadores</string>
+    <string name="step_4_desc">Cuando un jugador reclame un premio, selecciona la regla ganadora, verifica el billete y registra al ganador. En Modo Moderado, el anfitrión puede verificar billetes sincronizados directamente.</string>
+    <string name="step_5_title">Ver y Compartir Ganadores</string>
+    <string name="step_5_desc_mobile">Abre Ver Ganadores en cualquier momento para ver los premios reclamados y exportar un resumen en PDF para compartir.</string>
+    <string name="step_5_desc_tv">Abre Ver Ganadores en cualquier momento para consultar todos los premios reclamados.</string>
+    <string name="hint_tv_language_select">Presiona OK para seleccionar, presiona OK de nuevo para confirmar</string>
     <string name="btn_settings">Settings (Ajustes)</string>
     <string name="title_settings">Settings (Ajustes)</string>
     <string name="label_select_language">Select Language (Seleccionar idioma)</string>

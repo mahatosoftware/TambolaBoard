@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">తంబోలా బోర్డ్</string>
     <string name="welcome_speech">తంబోలా బోర్డ్‌కి స్వాగతం</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">గేమ్ ID ని సరిచూస్తోంది...</string>
     <string name="error_game_id_not_found">గేమ్ ID లభించలేదు.</string>
     <string name="error_verification_timeout">సమయం ముగిసింది.</string>
-
     <string name="btn_submit">సమర్పించు</string>
     <string name="title_select_rules">తంబోలా నియమాలను ఎంచుకోండి</string>
     <string name="btn_distribute_points">ఎంచుకున్న (%1$d) నియమాలు</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">ఇంకా విజేతలు ఎవరూ లేరు</string>
     <string name="btn_back">వెనుకకు</string>
     <string name="label_winners">విజేతలు:</string>
+
+    <string name="btn_undo">రద్దు చేయి</string>
+    <string name="btn_how_to_play">ఎలా ఆడాలి</string>
+    <string name="title_how_to_play">తంబోలా బోర్డ్ ఎలా ఆడాలి</string>
+    <string name="subtitle_how_to_play">మీ తంబోలా గేమ్‌ను ఎలా నిర్వహించాలో ఎంచుకోండి.</string>
+    <string name="badge_recommended_app">తంబోలా టికెట్స్ యాప్ వాడితే సిఫార్సు చేయబడింది</string>
+    <string name="mode_moderated_title">📱 మోడరేటెడ్ మోడ్</string>
+    <string name="mode_moderated_subtitle">తంబోలా టికెట్స్ యాప్ ఉపయోగించండి</string>
+    <string name="mode_moderated_desc">తంబోలా టికెట్స్ యాప్ మీ గేమ్‌లో భాగమైనప్పుడు ఈ మోడ్‌ను ఎంచుకోండి.</string>
+    <string name="scenario_digital_title">📱 డిజిటల్ టికెట్లు</string>
+    <string name="scenario_digital_desc">ఆటగాళ్ళు తంబోలా టికెట్స్ యాప్‌లో డిజిటల్ టికెట్లను ఉపయోగిస్తారు.</string>
+    <string name="scenario_paper_title">🎟 పేపర్ టికెట్లు</string>
+    <string name="scenario_paper_desc">గేమ్‌ను మేనేజ్ చేయడానికి తంబోలా టికెట్స్ యాప్ ఉపయోగిస్తున్నప్పుడు పేపర్ టికెట్లను ఉపయోగించవచ్చు.</string>
+    <string name="rule_moderated_banner">✓ తంబోలా టికెట్స్ యాప్ ఉపయోగిస్తున్నారు → మోడరేటెడ్ మోడ్</string>
+    <string name="btn_get_tickets_app">📲 గూగుల్ ప్లేలో తంబోలా టికెట్స్ యాప్ పొందండి</string>
+    <string name="mode_unmoderated_title">🎟 అన్-మోడరేటెడ్ మోడ్</string>
+    <string name="mode_unmoderated_subtitle">హోస్ట్ గేమ్ నిర్వహిస్తారు</string>
+    <string name="mode_unmoderated_desc">టికెట్లను మేనేజ్ చేయడానికి తంబోలా టికెట్స్ యాప్ ఉపయోగించనప్పుడు ఈ మోడ్‌ను ఎంచుకోండి.</string>
+    <string name="unmoderated_bullet_1">• హోస్ట్ తంబోలా బోర్డ్ నుండి నంబర్లను పిలుస్తారు</string>
+    <string name="unmoderated_bullet_2">• ఆటగాళ్ళు తమ పేపర్ టికెట్లను మాన్యువల్‌గా మార్క్ చేస్తారు</string>
+    <string name="unmoderated_bullet_3">• ఆటగాళ్ళు తమ గెలుపును నోటిమాటగా ప్రకటిస్తారు</string>
+    <string name="unmoderated_bullet_4">• హోస్ట్ మాన్యువల్‌గా విజేతలను పరిశీలించి నమోదు చేస్తారు</string>
+    <string name="rule_unmoderated_banner">✓ తంబోలా టికెట్స్ యాప్ లేదు → అన్-మోడరేటెడ్ మోడ్</string>
+    <string name="step_1_title">గేమ్ మోడ్ ఎంచుకోండి</string>
+    <string name="step_2_title">గెలుపు నియమాలు &amp; బహుమతులు సెట్ చేయండి</string>
+    <string name="step_2_desc">ఎర్లీ 5, టాప్ లైన్, మిడిల్ లైన్, బాటమ్ లైన్, కార్నర్స్, ఫుల్ హౌస్ వంటి నియమాలను ఎంచుకోండి.</string>
+    <string name="step_3_title">నంబర్లు పిలవండి</string>
+    <string name="step_3_desc">1 నుండి 90 నంబర్లను డ్రా చేయడానికి Call Next ఉపయోగించండి లేదా ఆటో కాల్ ఎనేబుల్ చేయండి.</string>
+    <string name="step_4_title">విజేతలను ధృవీకరించండి</string>
+    <string name="step_4_desc">ఆటగాడు బహుమతి క్లెయిమ్ చేసినప్పుడు, నియమాన్ని ఎంచుకుని టికెట్ ధృవీకరించి విజేతను నమోదు చేయండి.</string>
+    <string name="step_5_title">విజేతలను చూడండి &amp; షేర్ చేయండి</string>
+    <string name="step_5_desc_mobile">విజేతలను చూడటానికి మరియు PDF నివేదికను షేర్ చేయడానికి ఎప్పుడైనా విజేతలను చూడండి తెరవండి.</string>
+    <string name="step_5_desc_tv">క్లెయిమ్ చేసిన బహుమతులను చూడటానికి ఎప్పుడైనా విజేతలను చూడండి తెరవండి.</string>
+    <string name="hint_tv_language_select">ఎంచుకోవడానికి సరే నొక్కండి, నిరారించేందుకు మళ్ళీ సరే నొక్కండి</string>
     <string name="btn_settings">Settings (సెట్టింగ్‌లు)</string>
     <string name="title_settings">Settings (సెట్టింగ్‌లు)</string>
     <string name="label_select_language">Select Language (భాషను ఎంచుకోండి)</string>

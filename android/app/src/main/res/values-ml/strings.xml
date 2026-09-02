@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">തമ്പോള ബോർഡ്</string>
     <string name="welcome_speech">തമ്പോള ബോർഡിലേക്ക് സ്വാഗതം</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">ഗെയിം ID പരിശോധിക്കുന്നു...</string>
     <string name="error_game_id_not_found">ഗെയിം ID കണ്ടെത്താനായില്ല.</string>
     <string name="error_verification_timeout">സമയപരിധി കഴിഞ്ഞു.</string>
-
     <string name="btn_submit">സമർപ്പിക്കുക</string>
     <string name="title_select_rules">തമ്പോള നിയമങ്ങൾ തിരഞ്ഞെടുക്കുക</string>
     <string name="btn_distribute_points">തിരഞ്ഞെടുത്ത (%1$d) നിയമങ്ങൾ</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">ഇതുവരെ വിജയികളൊന്നുമില്ല</string>
     <string name="btn_back">പിന്നോട്ട്</string>
     <string name="label_winners">വിജയികൾ:</string>
+
+    <string name="btn_undo">തിരുത്തുക</string>
+    <string name="btn_how_to_play">എങ്ങനെ കളിക്കാം</string>
+    <string name="title_how_to_play">തമ്പോള ബോർഡ് എങ്ങനെ കളിക്കാം</string>
+    <string name="subtitle_how_to_play">നിങ്ങളുടെ തമ്പോള ഗെയിം എങ്ങനെ നടത്തണമെന്ന് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="badge_recommended_app">തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് ഉപയോഗിക്കുമ്പോൾ ശുപാർശ ചെയ്യുന്നത്</string>
+    <string name="mode_moderated_title">📱 മോഡറേറ്റഡ് മോഡ്</string>
+    <string name="mode_moderated_subtitle">തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് ഉപയോഗിക്കുക</string>
+    <string name="mode_moderated_desc">തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് നിങ്ങളുടെ ഗെയിമിന്റെ ഭാഗമായിരിക്കുമ്പോൾ ഈ മോഡ് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="scenario_digital_title">📱 ഡിജിറ്റൽ ടിക്കറ്റുകൾ</string>
+    <string name="scenario_digital_desc">കളിക്കാർ തമ്പോള ടിക്കറ്റ്സ് ആപ്പിൽ ഡിജിറ്റൽ ടിക്കറ്റുകൾ ഉപയോഗിക്കുന്നു.</string>
+    <string name="scenario_paper_title">🎟 പേപ്പർ ടിക്കറ്റുകൾ</string>
+    <string name="scenario_paper_desc">ഗെയിം മാനേജ് ചെയ്യാൻ തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് ഉപയോഗിക്കുമ്പോൾ പേപ്പർ ടിക്കറ്റുകൾ ഉപയോഗിക്കാം.</string>
+    <string name="rule_moderated_banner">✓ തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് ഉപയോഗിക്കുന്നു → മോഡറേറ്റഡ് മോഡ്</string>
+    <string name="btn_get_tickets_app">📲 ഗൂഗിൾ പ്ലേയിൽ നിന്ന് തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് നേടുക</string>
+    <string name="mode_unmoderated_title">🎟 അൺ-മോഡറേറ്റഡ് മോഡ്</string>
+    <string name="mode_unmoderated_subtitle">ഹോസ്റ്റ് ഗെയിം നടത്തുന്നു</string>
+    <string name="mode_unmoderated_desc">ടിക്കറ്റുകൾ മാനേജ് ചെയ്യാൻ ആപ്പ് ഉപയോഗിക്കാത്തപ്പോൾ ഈ മോഡ് തിരഞ്ഞെടുക്കുക.</string>
+    <string name="unmoderated_bullet_1">• ഹോസ്റ്റ് തമ്പോള ബോർഡിൽ നിന്ന് നമ്പറുകൾ വിളിക്കുന്നു</string>
+    <string name="unmoderated_bullet_2">• കളിക്കാർ പേപ്പർ ടിക്കറ്റിൽ സ്വയം മാർക്ക് ചെയ്യുന്നു</string>
+    <string name="unmoderated_bullet_3">• കളിക്കാർ വിജയം വിളിച്ചുപറയുന്നു</string>
+    <string name="unmoderated_bullet_4">• ഹോസ്റ്റ് വിജയികളെ പരിശോധിച്ച് രേഖപ്പെടുത്തുന്നു</string>
+    <string name="rule_unmoderated_banner">✓ തമ്പോള ടിക്കറ്റ്സ് ആപ്പ് ഇല്ല → അൺ-മോഡറേറ്റഡ് മോഡ്</string>
+    <string name="step_1_title">ഗെയിം മോഡ് തിരഞ്ഞെടുക്കുക</string>
+    <string name="step_2_title">വിജയ നിയമങ്ങളും സമ്മാനങ്ങളും സജ്ജമാക്കുക</string>
+    <string name="step_2_desc">ഏർളി 5, ടോപ്പ് ലൈൻ, മിഡിൽ ലൈൻ, ബോട്ടം ലൈൻ, കോർണേഴ്സ്, ഫുൾ ഹൗസ് എന്നിവ തിരഞ്ഞെടുക്കുക.</string>
+    <string name="step_3_title">നമ്പറുകൾ വിളിക്കുക</string>
+    <string name="step_3_desc">1 മുതൽ 90 വരെയുള്ള നമ്പറുകൾ എടുക്കാൻ Call Next അല്ലെങ്കിൽ ഓട്ടോ കോൾ ഉപയോഗിക്കുക.</string>
+    <string name="step_4_title">വിജയികളെ പരിശോധിച്ച് രേഖപ്പെടുത്തുക</string>
+    <string name="step_4_desc">കളിക്കാരൻ സമ്മാനം അവകാശപ്പെടുമ്പോൾ ടിക്കറ്റ് പരിശോധിച്ച് വിജയിയെ രേഖപ്പെടുത്തുക.</string>
+    <string name="step_5_title">വിജയികളെ കാണുക &amp; പങ്കിടുക</string>
+    <string name="step_5_desc_mobile">വിജയികളെ കാണാനും PDF റിപ്പോർട്ട് പങ്കിടാനും വിജയികളെ കാണുക തുറക്കുക.</string>
+    <string name="step_5_desc_tv">വിജയികളെ കാണാൻ ഏതുസമയത്തും വിജയികളെ കാണുക തുറക്കുക.</string>
+    <string name="hint_tv_language_select">തിരഞ്ഞെടുക്കാൻ ശരി അമർത്തുക, സ്ഥിരീകരിക്കാൻ വീണ്ടും ശരി അമർത്തുക</string>
     <string name="btn_settings">Settings (ക്രമീകരണങ്ങൾ)</string>
     <string name="title_settings">Settings (ക്രമീകരണങ്ങൾ)</string>
     <string name="label_select_language">Select Language (ഭാഷ തിരഞ്ഞെടുക്കുക)</string>

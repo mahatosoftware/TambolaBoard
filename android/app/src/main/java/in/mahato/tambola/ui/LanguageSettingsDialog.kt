@@ -50,17 +50,18 @@ fun LanguageSettingsDialog(
             ) {
                 Text(
                     text = stringResource(R.string.title_settings),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 24.sp,
+                    color = Color.White
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
                     text = stringResource(R.string.label_select_language),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f)
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp,
+                    color = Color(0xFFE0E0E0)
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -69,7 +70,7 @@ fun LanguageSettingsDialog(
                     text = stringResource(R.string.hint_tv_language_select),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = Color(0xFFFFD700),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
 

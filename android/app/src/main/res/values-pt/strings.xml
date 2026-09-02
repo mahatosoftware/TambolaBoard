@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Tambola Board</string>
     <string name="welcome_speech">Bem-vindo ao Tambola Board</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">Verificando ID do jogo...</string>
     <string name="error_game_id_not_found">ID do jogo não encontrado.</string>
     <string name="error_verification_timeout">Tempo de verificação esgotado.</string>
-
     <string name="btn_submit">Enviar</string>
     <string name="title_select_rules">Selecionar regras do Tambola</string>
     <string name="btn_distribute_points">Regras selecionadas (%1$d)</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">Ainda não há vencedores</string>
     <string name="btn_back">Voltar</string>
     <string name="label_winners">Vencedores:</string>
+
+    <string name="btn_undo">Desfazer</string>
+    <string name="btn_how_to_play">Como Jogar</string>
+    <string name="title_how_to_play">Como Jogar Tambola Board</string>
+    <string name="subtitle_how_to_play">Escolha como deseja realizar o seu jogo de Tambola.</string>
+    <string name="badge_recommended_app">RECOMENDADO SE USAR O APP TAMBOLA TICKETS</string>
+    <string name="mode_moderated_title">📱 MODO MODERADO</string>
+    <string name="mode_moderated_subtitle">Use o aplicativo Tambola Tickets</string>
+    <string name="mode_moderated_desc">Escolha este modo sempre que o app Tambola Tickets fizer parte do jogo.</string>
+    <string name="scenario_digital_title">📱 Bilhetes Digitais</string>
+    <string name="scenario_digital_desc">Os jogadores usam bilhetes digitais no app Tambola Tickets. Eles entram com o ID do jogo e os bilhetes ficam sincronizados.</string>
+    <string name="scenario_paper_title">🎟 Bilhetes de Papel</string>
+    <string name="scenario_paper_desc">Os jogadores usam bilhetes de papel enquanto o app Tambola Tickets é usado para gerenciar o jogo.</string>
+    <string name="rule_moderated_banner">✓ Usando o app Tambola Tickets → MODO MODERADO</string>
+    <string name="btn_get_tickets_app">📲 Baixar Tambola Tickets no Google Play</string>
+    <string name="mode_unmoderated_title">🎟 MODO NÃO MODERADO</string>
+    <string name="mode_unmoderated_subtitle">O anfitrião comanda o jogo</string>
+    <string name="mode_unmoderated_desc">Escolha este modo quando o app Tambola Tickets não for usado para gerenciar os bilhetes.</string>
+    <string name="unmoderated_bullet_1">• O anfitrião sorteia os números pelo Tambola Board</string>
+    <string name="unmoderated_bullet_2">• Os jogadores marcam os bilhetes de papel manualmente</string>
+    <string name="unmoderated_bullet_3">• Os jogadores anunciam suas vitórias verbalmente</string>
+    <string name="unmoderated_bullet_4">• O anfitrião verifica e registra os ganhadores</string>
+    <string name="rule_unmoderated_banner">✓ Sem app Tambola Tickets → MODO NÃO MODERADO</string>
+    <string name="step_1_title">Escolha o Modo de Jogo</string>
+    <string name="step_2_title">Defina Regras e Prêmios</string>
+    <string name="step_2_desc">Escolha os padrões vencedores como Primeiros 5, Linha Superior, Linha Central, Linha Inferior, Cantos e Cartela Cheia.</string>
+    <string name="step_3_title">Sortear Números</string>
+    <string name="step_3_desc">Use Chamada Seguinte para sortear números de 1 a 90 ou ative a Chamada Automática com voz.</string>
+    <string name="step_4_title">Validar Ganhadores</string>
+    <string name="step_4_desc">Quando um jogador reivindicar um prêmio, selecione a regra, verifique o bilhete e registre o ganhador.</string>
+    <string name="step_5_title">Ver e Compartilhar</string>
+    <string name="step_5_desc_mobile">Abra Ver Ganhadores para consultar prêmios e exportar o resumo em PDF.</string>
+    <string name="step_5_desc_tv">Abra Ver Ganhadores para consultar todos os prêmios reivindicados.</string>
+    <string name="hint_tv_language_select">Pressione OK para selecionar, pressione OK novamente para confirmar</string>
     <string name="btn_settings">Settings (Configurações)</string>
     <string name="title_settings">Settings (Configurações)</string>
     <string name="label_select_language">Select Language (Selecionar idioma)</string>

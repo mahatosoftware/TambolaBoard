@@ -2,12 +2,14 @@ package `in`.mahato.tambola.gamemode
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.focus.FocusRequester
@@ -100,6 +102,27 @@ fun GameIdInputScreen(
                 modifier = Modifier.padding(top = 8.dp)
             )
 
+            Spacer(modifier = Modifier.height(12.dp))
+
+            var isGetTicketsAppFocused by remember { mutableStateOf(false) }
+            OutlinedButton(
+                onClick = { `in`.mahato.tambola.util.GeneralUtil.openPlayStore(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { isGetTicketsAppFocused = it.isFocused },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = if (isGetTicketsAppFocused) Color.White else Color.Transparent,
+                    contentColor = if (isGetTicketsAppFocused) Color.Black else Color.White
+                ),
+                border = BorderStroke(1.5.dp, Color.White)
+            ) {
+                Text(
+                    text = "📲 Get Tambola Tickets App on Google Play",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+
             if (errorMessage != null) {
                 Text(
                     text = errorMessage!!,
@@ -109,7 +132,7 @@ fun GameIdInputScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {

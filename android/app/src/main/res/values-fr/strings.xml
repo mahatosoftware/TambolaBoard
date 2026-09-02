@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Tambola Board</string>
     <string name="welcome_speech">Bienvenue sur Tambola Board</string>
@@ -50,7 +50,6 @@
     <string name="status_verifying_game_id">Vérification de l\'ID du jeu...</string>
     <string name="error_game_id_not_found">ID du jeu non trouvé.</string>
     <string name="error_verification_timeout">Délai de vérification dépassé.</string>
-
     <string name="btn_submit">Soumettre</string>
     <string name="title_select_rules">Sélectionner les règles du Tambola</string>
     <string name="btn_distribute_points">Règles sélectionnées (%1$d)</string>
@@ -67,6 +66,40 @@
     <string name="msg_no_winners">Pas encore de gagnants</string>
     <string name="btn_back">Retour</string>
     <string name="label_winners">Gagnants:</string>
+
+    <string name="btn_undo">Annuler</string>
+    <string name="btn_how_to_play">Comment jouer</string>
+    <string name="title_how_to_play">"Comment jouer à Tambola Board"</string>
+    <string name="subtitle_how_to_play">"Choisissez comment organiser votre partie de Tambola."</string>
+    <string name="badge_recommended_app">"RECOMMANDÉ SI L'APPLICATION TAMBOLA TICKETS EST UTILISÉE"</string>
+    <string name="mode_moderated_title">📱 MODE MODÉRÉ</string>
+    <string name="mode_moderated_subtitle">"Utiliser l'application Tambola Tickets"</string>
+    <string name="mode_moderated_desc">"Choisissez ce mode dès que l'application Tambola Tickets fait partie de votre jeu."</string>
+    <string name="scenario_digital_title">📱 Tickets Numériques</string>
+    <string name="scenario_digital_desc">"Les joueurs utilisent des tickets numériques dans l'application Tambola Tickets. Ils rejoignent avec l'ID du jeu et leurs tickets restent synchronisés."</string>
+    <string name="scenario_paper_title">🎟 Tickets Papier</string>
+    <string name="scenario_paper_desc">"Les joueurs utilisent des tickets papier pendant que l'application Tambola Tickets gére le jeu."</string>
+    <string name="rule_moderated_banner">"✓ Application Tambola Tickets utilisée → MODE MODÉRÉ"</string>
+    <string name="btn_get_tickets_app">📲 Obtenir Tambola Tickets sur Google Play</string>
+    <string name="mode_unmoderated_title">🎟 MODE NON MODÉRÉ</string>
+    <string name="mode_unmoderated_subtitle">"L'hôte dirige le jeu"</string>
+    <string name="mode_unmoderated_desc">"Choisissez ce mode lorsque l'application Tambola Tickets n'est pas utilisée."</string>
+    <string name="unmoderated_bullet_1">"• L'hôte annonce les numéros depuis Tambola Board"</string>
+    <string name="unmoderated_bullet_2">• Les joueurs cochent manuellement leurs tickets papier</string>
+    <string name="unmoderated_bullet_3">• Les joueurs annoncent leurs gains oralement</string>
+    <string name="unmoderated_bullet_4">"• L'hôte vérifie et enregistre manuellement les gagnants"</string>
+    <string name="rule_unmoderated_banner">"✓ Pas d'application Tambola Tickets → MODE NON MODÉRÉ"</string>
+    <string name="step_1_title">Choisir le mode de jeu</string>
+    <string name="step_2_title">Définir les règles &amp; prix</string>
+    <string name="step_2_desc">Choisissez les combinaisons gagnantes (5 premiers, Ligne haute, Ligne médiane, Ligne basse, Coins, Carton plein).</string>
+    <string name="step_3_title">Tirer les numéros</string>
+    <string name="step_3_desc">Utilisez Suivant pour tirer les numéros de 1 à 90 ou activez le tirage automatique.</string>
+    <string name="step_4_title">Valider les gagnants</string>
+    <string name="step_4_desc">"Lorsqu'un joueur réclame un lot, sélectionnez la règle, vérifiez le ticket et enregistrez le gagnant."</string>
+    <string name="step_5_title">Consulter &amp; Partager</string>
+    <string name="step_5_desc_mobile">Ouvrez Voir les gagnants pour consulter la liste et exporter le récapitulatif au format PDF.</string>
+    <string name="step_5_desc_tv">Ouvrez Voir les gagnants pour consulter la liste des gagnants à tout moment.</string>
+    <string name="hint_tv_language_select">Appuyez sur OK pour sélectionner, réappuyez sur OK pour confirmer</string>
     <string name="btn_settings">Settings (Paramètres)</string>
     <string name="title_settings">Settings (Paramètres)</string>
     <string name="label_select_language">Select Language (Choisir la langue)</string>
