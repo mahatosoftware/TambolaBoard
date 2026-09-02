@@ -208,8 +208,32 @@ fun ValueStepper(
 
 @Composable
 fun StepperIconButton(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-    IconButton(enabled = enabled, onClick = onClick,modifier = Modifier.size(32.dp)) {
-        Icon(icon, null, tint = if (enabled) Color.White else Color.Gray)
+    var isFocused by remember { mutableStateOf(false) }
+    IconButton(
+        enabled = enabled,
+        onClick = onClick,
+        modifier = Modifier
+            .size(36.dp)
+            .onFocusChanged { isFocused = it.isFocused }
+            .background(
+                color = if (isFocused) Color.White else Color.Transparent,
+                shape = androidx.compose.foundation.shape.CircleShape
+            )
+            .border(
+                width = if (isFocused) 2.dp else 0.dp,
+                color = if (isFocused) Color.Yellow else Color.Transparent,
+                shape = androidx.compose.foundation.shape.CircleShape
+            )
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = when {
+                !enabled -> Color.Gray
+                isFocused -> Color.Black
+                else -> Color.White
+            }
+        )
     }
 }
 

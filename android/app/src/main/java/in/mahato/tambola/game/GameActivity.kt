@@ -90,8 +90,10 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.key.Key.Companion.DirectionDown
 import androidx.compose.ui.input.key.Key.Companion.DirectionLeft
 import androidx.compose.ui.input.key.Key.Companion.DirectionRight
+import androidx.compose.ui.input.key.Key.Companion.DirectionUp
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -597,8 +599,14 @@ fun GameControls(
     fun handleDpad(event: KeyEvent, current: Int): Boolean {
         if (event.type != KeyEventType.KeyDown) return false
         when (event.key) {
-            DirectionRight -> { requesters[(current + 1) % 6].requestFocus(); return true }
-            DirectionLeft -> { requesters[(current - 1 + 6) % 6].requestFocus(); return true }
+            DirectionRight, DirectionDown -> {
+                requesters[(current + 1) % 6].requestFocus()
+                return true
+            }
+            DirectionLeft, DirectionUp -> {
+                requesters[(current - 1 + 6) % 6].requestFocus()
+                return true
+            }
         }
         return false
     }
@@ -692,14 +700,22 @@ fun GameControls(
             }
         }
 
-        Box(modifier = Modifier.height(130.dp), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxWidth().wrapContentHeight().heightIn(min = 100.dp), contentAlignment = Alignment.Center) {
             AnimatedContent(
                 targetState = isTtsReady,
                 transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(500)) },
                 label = "TtsLoading"
             ) { ready ->
                 if (ready) {
-                    FlowRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, maxItemsInEachRow = 3) {
+                    LaunchedEffect(Unit) {
+                        kotlinx.coroutines.delay(100)
+                        frCall.requestFocus()
+                    }
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
                         val getBtnColors = @Composable { index: Int ->
                             ButtonDefaults.buttonColors(
                                 containerColor = if (focusedIndex == index) MaterialTheme.colorScheme.background
@@ -711,7 +727,7 @@ fun GameControls(
                         Button(onClick = onCall, colors = getBtnColors(0), modifier = Modifier.padding(4.dp).focusRequester(frCall).onFocusChanged { if (it.isFocused) focusedIndex = 0 }.onKeyEvent { handleDpad(it, 0) }) { Text(stringResource(R.string.btn_call_next)) }
                         Button(onClick = onAutoToggle, colors = getBtnColors(1), modifier = Modifier.padding(4.dp).focusRequester(frAuto).onFocusChanged { if (it.isFocused) focusedIndex = 1 }.onKeyEvent { handleDpad(it, 1) }) { Text(if (isAutoCalling) stringResource(R.string.btn_pause) else stringResource(R.string.btn_auto_call)) }
                         Button(onClick = { showWinnerBoard = true }, colors = getBtnColors(2), modifier = Modifier.padding(4.dp).focusRequester(frWinner).onFocusChanged { if (it.isFocused) focusedIndex = 2 }.onKeyEvent { handleDpad(it, 2) }) { Text(stringResource(R.string.btn_claim_prize)) }
-                        Button(onClick = { showUndoDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frUndo).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text("Undo") }
+                        Button(onClick = { showUndoDialog = true }, colors = getBtnColors(3), modifier = Modifier.padding(4.dp).focusRequester(frUndo).onFocusChanged { if (it.isFocused) focusedIndex = 3 }.onKeyEvent { handleDpad(it, 3) }) { Text(stringResource(R.string.btn_undo)) }
                         Button(onClick = { showResetDialog = true }, colors = getBtnColors(4), modifier = Modifier.padding(4.dp).focusRequester(frReset).onFocusChanged { if (it.isFocused) focusedIndex = 4 }.onKeyEvent { handleDpad(it, 4) }) { Text(stringResource(R.string.btn_reset)) }
                         Button(onClick = { showExitDialog = true }, colors = getBtnColors(5), modifier = Modifier.padding(4.dp).focusRequester(frExit).onFocusChanged { if (it.isFocused) focusedIndex = 5 }.onKeyEvent { handleDpad(it, 5) }) { Text(stringResource(R.string.btn_return_main_menu)) }
                     }

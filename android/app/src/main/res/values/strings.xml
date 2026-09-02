@@ -8,6 +8,7 @@
     <string name="btn_pause">Pause</string>
     <string name="btn_auto_call">Auto Call</string>
     <string name="btn_claim_prize">Claim Prize</string>
+    <string name="btn_undo">Undo</string>
     <string name="btn_reset">Reset</string>
     <string name="btn_return_main_menu">Return to Main Menu</string>
     <string name="dialog_reset_title">Reset Game?</string>
