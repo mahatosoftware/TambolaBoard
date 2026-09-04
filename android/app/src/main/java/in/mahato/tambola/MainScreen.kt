@@ -2,8 +2,10 @@ package `in`.mahato.tambola
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -66,24 +68,30 @@ fun MainScreen(
                 .padding(horizontal = 24.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Title with Prominent App Logo for TV & Tablet
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(vertical = 8.dp)
+            Spacer(modifier = Modifier.height(if (isWideScreen) 24.dp else 96.dp))
+
+            // Header Title with App Logo centered above text
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
             ) {
-                if (isWideScreen) {
+                Box(
+                    modifier = Modifier
+                        .size(if (isWideScreen) 160.dp else 130.dp)
+                        .clip(RoundedCornerShape(26.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
                     Image(
-                        painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                        painter = painterResource(id = R.drawable.app_logo),
                         contentDescription = stringResource(R.string.app_name),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(110.dp)
-                            .scale(1.4f)
-                            .clip(RoundedCornerShape(22.dp))
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.fillMaxSize()
                     )
-                    Spacer(modifier = Modifier.width(20.dp))
                 }
+                Spacer(modifier = Modifier.height(if (isWideScreen) 12.dp else 8.dp))
                 Text(
                     text = stringResource(R.string.main_welcome_message),
                     fontSize = if (isWideScreen) 26.sp else 20.sp,

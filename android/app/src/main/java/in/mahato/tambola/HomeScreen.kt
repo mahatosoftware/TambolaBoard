@@ -16,6 +16,14 @@ import androidx.compose.ui.unit.*
 import androidx.compose.ui.focus.onFocusChanged
 
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+
 @Composable
 fun HomeScreen(
     welcomeText: String,
@@ -38,15 +46,38 @@ fun HomeScreen(
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(96.dp))
 
-            // Title
-            Text(
-                text = welcomeText,
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 40.dp),
-                lineHeight = 36.sp
-            )
+            // Title with logo centered above text
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 28.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(130.dp)
+                        .clip(RoundedCornerShape(26.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.app_logo),
+                        contentDescription = null,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = welcomeText,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.headlineMedium,
+                    lineHeight = 36.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
 
             // START NEW GAME button
             ThemedButton(
