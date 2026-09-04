@@ -89,12 +89,6 @@ fun LanguageSettingsDialog(
                             onSelect = {
                                 if (currentLang.value != option.code) {
                                     currentLang.value = option.code
-                                    android.widget.Toast.makeText(
-                                        context,
-                                        context.getString(R.string.hint_tv_language_select),
-                                        android.widget.Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
                                     LanguageUtil.setSelectedLanguage(context, option.code)
                                     onLanguageChanged(option.code)
                                 }

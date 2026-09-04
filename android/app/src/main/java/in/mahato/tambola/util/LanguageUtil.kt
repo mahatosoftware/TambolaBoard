@@ -56,12 +56,19 @@ object LanguageUtil {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_LANGUAGE, languageCode).apply()
 
-        applyLanguage(languageCode)
-
-        // Force-update current context resources configuration
         val locale = getTtsLocaleByCode(languageCode)
         Locale.setDefault(locale)
 
+        // Force-update application resources
+        val appCtx = context.applicationContext
+        val appRes = appCtx.resources
+        val appConfig = Configuration(appRes.configuration)
+        appConfig.setLocale(locale)
+        appConfig.setLayoutDirection(locale)
+        @Suppress("DEPRECATION")
+        appRes.updateConfiguration(appConfig, appRes.displayMetrics)
+
+        // Force-update current context resources
         val res = context.resources
         val config = Configuration(res.configuration)
         config.setLocale(locale)
@@ -69,9 +76,21 @@ object LanguageUtil {
         @Suppress("DEPRECATION")
         res.updateConfiguration(config, res.displayMetrics)
 
-        // Recreate activity so Compose re-evaluates stringResource() with new locale
+        applyLanguage(languageCode)
+
+        // Restart activity so MainActivity recreates with updated attachBaseContext
         val activity = findActivity(context)
-        activity?.recreate()
+        if (activity != null) {
+            val intent = activity.intent
+            activity.finish()
+            activity.startActivity(intent)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                activity.overrideActivityTransition(Activity.OVERRIDE_TRANSITION_CLOSE, 0, 0)
+            } else {
+                @Suppress("DEPRECATION")
+                activity.overridePendingTransition(0, 0)
+            }
+        }
     }
 
     fun applyLanguage(languageCode: String) {
