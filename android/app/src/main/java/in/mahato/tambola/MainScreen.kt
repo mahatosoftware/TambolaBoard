@@ -22,6 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.Image
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import `in`.mahato.tambola.util.GeneralUtil
 import `in`.mahato.tambola.util.ScreenSizeUtil
 import java.util.Calendar
@@ -59,17 +63,34 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
+                .padding(horizontal = 24.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header Title
-            Text(
-                text = stringResource(R.string.main_welcome_message),
-                fontSize = if (isWideScreen) 24.sp else 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
+            // Header Title with Prominent App Logo for TV & Tablet
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                if (isWideScreen) {
+                    Image(
+                        painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                        contentDescription = stringResource(R.string.app_name),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(110.dp)
+                            .scale(1.4f)
+                            .clip(RoundedCornerShape(22.dp))
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                }
+                Text(
+                    text = stringResource(R.string.main_welcome_message),
+                    fontSize = if (isWideScreen) 26.sp else 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
