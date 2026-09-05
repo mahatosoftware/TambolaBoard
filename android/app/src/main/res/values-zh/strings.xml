@@ -42,7 +42,7 @@
     <string name="btn_exit">退出</string>
     <string name="title_select_game_mode">选择游戏模式</string>
     <string name="btn_moderated">主持模式</string>
-    <string name="btn_unmoderated">自由模式</string>
+    <string name="btn_unmoderated">非主持模式</string>
     <string name="title_enter_game_id">输入游戏 ID</string>
     <string name="hint_game_id">输入来自 Tambola Tickets 应用的 6 位游戏 ID</string>
     <string name="label_game_id">游戏 ID</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (设置)</string>
     <string name="title_settings">Settings (设置)</string>
     <string name="label_select_language">Select Language (选择语言)</string>
+    <string name="btn_share_pdf">分享获胜者 PDF</string>
 </resources>

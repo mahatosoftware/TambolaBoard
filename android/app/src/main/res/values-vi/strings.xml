@@ -42,7 +42,7 @@
     <string name="btn_exit">Thoát</string>
     <string name="title_select_game_mode">Chọn chế độ chơi</string>
     <string name="btn_moderated">Có quản trò</string>
-    <string name="btn_unmoderated">Tự do</string>
+    <string name="btn_unmoderated">Không có người điều hành</string>
     <string name="title_enter_game_id">Nhập ID trò chơi</string>
     <string name="hint_game_id">Nhập ID 6 ký tự từ ứng dụng Tambola Tickets</string>
     <string name="label_game_id">ID trò chơi</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (Cài đặt)</string>
     <string name="title_settings">Settings (Cài đặt)</string>
     <string name="label_select_language">Select Language (Chọn ngôn ngữ)</string>
+    <string name="btn_share_pdf">Chia sẻ PDF người thắng</string>
 </resources>

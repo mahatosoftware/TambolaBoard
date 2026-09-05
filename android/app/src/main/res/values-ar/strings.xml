@@ -12,14 +12,14 @@
     <string name="btn_reset">إعادة ضبط</string>
     <string name="btn_return_main_menu">العودة إلى القائمة الرئيسية</string>
     <string name="dialog_reset_title">إعادة ضبط اللعبة؟</string>
-    <string name="dialog_reset_message">هل أنت تأكد من إمكانية إعادة ضبط اللوحة؟</string>
+    <string name="dialog_reset_message">هل أنت متأكد أنك تريد إعادة ضبط اللوحة؟</string>
     <string name="dialog_yes">نعم</string>
     <string name="dialog_no">لا</string>
     <string name="dialog_exit_title">الخروج من اللعبة؟</string>
     <string name="dialog_exit_message">هل تريد العودة إلى القائمة الرئيسية؟</string>
     <string name="dialog_winner_board_title">لوحة الفائزين</string>
     <string name="desc_reload_players">إعادة تحميل اللاعبين</string>
-    <string name="winner_board_instruction">طالب بالجوائز فور فوزك.</string>
+    <string name="winner_board_instruction">اطلب الجوائز فور الفوز. ستظهر الجوائز المطالب بها في الأسفل.</string>
     <string name="header_prize">الجائزة</string>
     <string name="header_winner">الفائز</string>
     <string name="header_claim">المطالبة</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (الإعدادات)</string>
     <string name="title_settings">Settings (الإعدادات)</string>
     <string name="label_select_language">Select Language (اختر اللغة)</string>
+    <string name="btn_share_pdf">مشاركة ملف PDF للفائزين</string>
 </resources>

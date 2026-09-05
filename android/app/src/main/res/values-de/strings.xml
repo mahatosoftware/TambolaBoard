@@ -103,4 +103,5 @@
     <string name="btn_settings">Settings (Einstellungen)</string>
     <string name="title_settings">Settings (Einstellungen)</string>
     <string name="label_select_language">Select Language (Sprache auswählen)</string>
+    <string name="btn_share_pdf">Gewinner-PDF teilen</string>
 </resources>

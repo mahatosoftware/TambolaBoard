@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (ਸੈਟਿੰਗਾਂ)</string>
     <string name="title_settings">Settings (ਸੈਟਿੰਗਾਂ)</string>
     <string name="label_select_language">Select Language (ਭਾਸ਼ਾ ਚੁਣੋ)</string>
+    <string name="btn_share_pdf">ਜੇਤੂਆਂ ਦੀ PDF ਸਾਂਝੀ ਕਰੋ</string>
 </resources>

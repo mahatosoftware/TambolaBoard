@@ -15,7 +15,7 @@
     <string name="dialog_reset_message">Weet u zeker dat u het bord wilt resetten?</string>
     <string name="dialog_yes">Ja</string>
     <string name="dialog_no">Nee</string>
-    <string name="dialog_exit_title">Spel verlassen?</string>
+    <string name="dialog_exit_title">Spel verlaten?</string>
     <string name="dialog_exit_message">Wilt u terugkeren naar het hoofdmenu?</string>
     <string name="dialog_winner_board_title">Winnaarsbord</string>
     <string name="desc_reload_players">Spelers herladen</string>
@@ -39,10 +39,10 @@
     <string name="btn_continue_last_game">Laatste spel voortzetten</string>
     <string name="btn_view_winners">Bekijk winnaars</string>
     <string name="btn_how_to_play">Hoe te spelen</string>
-    <string name="btn_exit">Aflsuiten</string>
+    <string name="btn_exit">Afsluiten</string>
     <string name="title_select_game_mode">Selecteer spelmodus</string>
     <string name="btn_moderated">Gefaciliteerd</string>
-    <string name="btn_unmoderated">Vrij spel</string>
+    <string name="btn_unmoderated">Zonder begeleiding</string>
     <string name="title_enter_game_id">Voer spel-ID in</string>
     <string name="hint_game_id">Voer de 6-letterige spel-ID in uit de Tambola Tickets-app</string>
     <string name="label_game_id">Spel-ID</string>
@@ -50,7 +50,7 @@
     <string name="status_authenticating">Verifiëren...</string>
     <string name="status_verifying_game_id">Spel-ID controleren...</string>
     <string name="error_game_id_not_found">Spel-ID niet gevonden.</string>
-    <string name="error_verification_timeout">Verificatie vertraagd.</string>
+    <string name="error_verification_timeout">De verificatie is verlopen.</string>
 
     <string name="btn_submit">Verzenden</string>
     <string name="title_select_rules">Selecteer Tambola-regels</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (Instellingen)</string>
     <string name="title_settings">Settings (Instellingen)</string>
     <string name="label_select_language">Select Language (Taal selecteren)</string>
+    <string name="btn_share_pdf">PDF van winnaars delen</string>
 </resources>

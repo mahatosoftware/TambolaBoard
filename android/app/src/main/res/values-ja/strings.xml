@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (設定)</string>
     <string name="title_settings">Settings (設定)</string>
     <string name="label_select_language">Select Language (言語を選択)</string>
+    <string name="btn_share_pdf">受賞者PDFを共有</string>
 </resources>

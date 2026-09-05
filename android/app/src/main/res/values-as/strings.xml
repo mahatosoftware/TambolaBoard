@@ -5,8 +5,8 @@
     <string name="game_id_label">গেম আইডি: </string>
     <string name="game_qr_desc">গেম কিউআৰ</string>
     <string name="last_number_label">শেষৰ সংখ্যা</string>
-    <string name="btn_call_next">পরবর্তী মাতক</string>
-    <string name="btn_pause">রওক</string>
+    <string name="btn_call_next">পৰৱৰ্তী সংখ্যাটো কওক</string>
+    <string name="btn_pause">বিৰতি</string>
     <string name="btn_auto_call">অটো কল</string>
     <string name="btn_claim_prize">পুৰস্কাৰ দাবী কৰক</string>
     <string name="btn_reset">ৰিছেট</string>
@@ -61,7 +61,7 @@
     <string name="header_tambola_board">তাম্বোলা বোৰ্ড</string>
     <string name="title_select_quantity">পৰিমাণ বাছনি কৰক</string>
     <string name="msg_rules_saved">নিয়মসমূহ সফলতাৰে সংৰক্ষিত হ’ল</string>
-    <string name="btn_save_rules">পরবর্তী</string>
+    <string name="btn_save_rules">পৰৱৰ্তী</string>
     <string name="header_rule">নিয়ম</string>
     <string name="header_quantity">পৰিমাণ</string>
     <string name="title_winner_board">বিজয়ী বোৰ্ড</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (ছেটিংছ)</string>
     <string name="title_settings">Settings (ছেটিংছ)</string>
     <string name="label_select_language">Select Language (ভাষা বাছক)</string>
+    <string name="btn_share_pdf">বিজয়ীসকলৰ PDF ভাগ-বতৰা কৰক</string>
 </resources>

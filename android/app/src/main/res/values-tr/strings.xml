@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (Ayarlar)</string>
     <string name="title_settings">Settings (Ayarlar)</string>
     <string name="label_select_language">Select Language (Dil Seçin)</string>
+    <string name="btn_share_pdf">Kazananların PDF’sini paylaş</string>
 </resources>

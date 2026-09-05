@@ -47,7 +47,7 @@
     <string name="hint_game_id">Masukkan ID 6 huruf dari aplikasi Tambola Tickets</string>
     <string name="label_game_id">ID Permainan</string>
     <string name="error_empty_game_id">Silakan masukkan ID permainan</string>
-    <string name="status_authenticating">Mementifikasi...</string>
+    <string name="status_authenticating">Mengautentikasi...</string>
     <string name="status_verifying_game_id">Memverifikasi ID permainan...</string>
     <string name="error_game_id_not_found">ID permainan tidak ditemukan.</string>
     <string name="error_verification_timeout">Waktu verifikasi habis.</string>
@@ -71,4 +71,5 @@
     <string name="btn_settings">Settings (Pengaturan)</string>
     <string name="title_settings">Settings (Pengaturan)</string>
     <string name="label_select_language">Select Language (Pilih Bahasa)</string>
+    <string name="btn_share_pdf">Bagikan PDF pemenang</string>
 </resources>
