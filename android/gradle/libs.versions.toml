@@ -10,6 +10,9 @@ zxing = "3.5.4"
 google-services = "4.4.2"
 firebase-bom = "33.10.0"
 play-services-ads = "24.0.0"
+coil = "2.7.0"
+
+
 
 fragment = "1.8.5"
 junit = "4.13.2"
@@ -69,7 +72,11 @@ androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
+# ---------- Image Loading ----------
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
 # ---------- Firebase ----------
+
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }

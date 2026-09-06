@@ -1,21 +1,34 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# -----------------------------------------------------------------------------
+# R8 / ProGuard Optimization & Obfuscation Rules
+# -----------------------------------------------------------------------------
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Enable aggressive R8 optimizations & access modification
+-optimizationpasses 5
+-allowaccessmodification
+-repackageclasses ''
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Preserve line numbers and source files for clean crash traces (Play Console / Crashlytics)
+-keepattributes SourceFile,LineNumberTable,*Annotation*,Signature,InnerClasses,EnclosingMethod
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Renaming source file attribute for cleaner obfuscation output
+-renamesourcefileattribute SourceFile
+
+# -----------------------------------------------------------------------------
+# App Specific Rules
+# -----------------------------------------------------------------------------
+
+# Keep Room DB entities, DAOs and migrations
+-keepclassmembers class * extends androidx.room.RoomDatabase {
+    <init>();
+}
+-keep @androidx.room.Entity class * { *; }
+-dontwarn androidx.room.paging.**
+
+# Keep Data Models / Entities if serialized or passed via Parcelable
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+# Firebase & Play Services Ads optimization
+-dontwarn com.google.android.gms.**
+-dontwarn com.google.firebase.**

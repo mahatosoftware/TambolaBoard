@@ -15,8 +15,8 @@ android {
         applicationId = "in.mahato.tambola"
         minSdk = 23
         targetSdk = 37
-        versionCode = 47
-        versionName = "1.0.47"
+        versionCode = 48
+        versionName = "1.0.48"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,12 +24,14 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -86,7 +88,11 @@ dependencies {
     // QR
     implementation(libs.zxing.core)
 
+    // Image Loading (Coil)
+    implementation(libs.coil.compose)
+
     // Firebase
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)

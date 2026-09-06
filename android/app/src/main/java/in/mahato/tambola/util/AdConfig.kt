@@ -1,10 +1,20 @@
 package `in`.mahato.tambola.util
 
-object AdConfig {
-    // AdMob Application ID (for reference, actual value is in AndroidManifest.xml)
-    // Application ID: ca-app-pub-8382655413286804~6423628765
+import `in`.mahato.tambola.BuildConfig
 
-    // Ad Unit IDs (AdMob Test Ad Unit IDs by default)
-    const val BANNER_AD_UNIT_ID = "ca-app-pub-8382655413286804/7364823698"
-    const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-8382655413286804/2266125437"
+object AdConfig {
+    // Official Google AdMob Test Ad Unit IDs
+    private const val TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
+    private const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
+
+    // Production Ad Unit IDs
+    private const val PROD_BANNER_AD_UNIT_ID = "ca-app-pub-8382655413286804/7364823698"
+    private const val PROD_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-8382655413286804/2266125437"
+
+    val BANNER_AD_UNIT_ID: String
+        get() = if (BuildConfig.DEBUG) TEST_BANNER_AD_UNIT_ID else PROD_BANNER_AD_UNIT_ID
+
+    val INTERSTITIAL_AD_UNIT_ID: String
+        get() = if (BuildConfig.DEBUG) TEST_INTERSTITIAL_AD_UNIT_ID else PROD_INTERSTITIAL_AD_UNIT_ID
 }
+

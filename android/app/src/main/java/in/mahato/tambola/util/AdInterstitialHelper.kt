@@ -4,11 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.app.UiModeManager
+import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+
+private const val TAG = "AdInterstitialHelper"
 
 object AdInterstitialHelper {
     private var interstitialAd: InterstitialAd? = null
@@ -22,16 +25,19 @@ object AdInterstitialHelper {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(context, AdConfig.INTERSTITIAL_AD_UNIT_ID, adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdLoaded(ad: InterstitialAd) {
+                Log.d(TAG, "Interstitial ad loaded successfully.")
                 interstitialAd = ad
                 isAdLoading = false
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.e(TAG, "Interstitial ad failed to load: ${adError.message} (Code: ${adError.code})")
                 interstitialAd = null
                 isAdLoading = false
             }
         })
     }
+
 
     fun showInterstitialAd(activity: Activity, onAdDismissed: () -> Unit) {
         if (!isPhoneOrTablet(activity)) {
