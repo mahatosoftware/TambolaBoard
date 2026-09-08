@@ -16,11 +16,7 @@ import `in`.mahato.tambola.gamemode.GameModeSelectionActivity
 import `in`.mahato.tambola.util.AdInterstitialHelper
 import android.app.Activity
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import `in`.mahato.tambola.ui.SplashScreen
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,14 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             AppTheme {
-                var showSplash by remember { mutableStateOf(true) }
-                if (showSplash) {
-                    SplashScreen(
-                        onSplashFinished = { showSplash = false }
-                    )
-                } else {
-                    MainScreenComposable()
-                }
+                MainScreenComposable()
             }
         }
     }
