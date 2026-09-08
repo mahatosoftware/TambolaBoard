@@ -80,8 +80,8 @@ fun MainScreen(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(if (isWideScreen) 160.dp else 130.dp)
-                        .clip(RoundedCornerShape(26.dp)),
+                        .size(if (isWideScreen) 180.dp else 140.dp)
+                        .padding(4.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(

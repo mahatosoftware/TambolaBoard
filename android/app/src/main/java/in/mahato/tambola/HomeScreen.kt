@@ -58,8 +58,8 @@ fun HomeScreen(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(130.dp)
-                        .clip(RoundedCornerShape(26.dp)),
+                        .size(140.dp)
+                        .padding(4.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
