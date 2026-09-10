@@ -32,3 +32,8 @@
 # Firebase & Play Services Ads optimization
 -dontwarn com.google.android.gms.**
 -dontwarn com.google.firebase.**
+
+# Keep Google Mobile Ads SDK and AdConfig for release builds
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.google.ads.** { *; }
+-keep class in.mahato.tambola.util.AdConfig { *; }
