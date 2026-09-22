@@ -127,6 +127,7 @@ import `in`.mahato.tambola.rule.entity.WinningPrizeEntity
 import `in`.mahato.tambola.ui.theme.AppTheme
 import `in`.mahato.tambola.ui.theme.PurpleDark
 import `in`.mahato.tambola.util.GeneralUtil
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -153,6 +154,7 @@ class GameActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         val isNewGame = intent.getBooleanExtra("NEW_GAME", false)
         val intentGameId = intent.getStringExtra("GAME_ID") ?: ""
         val db = Room.databaseBuilder(
@@ -174,7 +176,6 @@ class GameActivity : ComponentActivity() {
                 tts.speak(getString(R.string.welcome_speech), TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
-        enableEdgeToEdge()
         setContent {
             var showWinnerBoard by remember { mutableStateOf(false) }
             AppTheme {
@@ -194,8 +195,16 @@ class GameActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        tts.stop()
-        tts.shutdown()
+        if (::tts.isInitialized) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    tts.stop()
+                    tts.shutdown()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     override fun onUserLeaveHint() {
