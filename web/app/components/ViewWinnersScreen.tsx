@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { PrizeItem } from "../lib/storage";
 import { jsPDF } from "jspdf";
 import { useTranslation } from "../lib/useTranslation";
+import { listenToGame } from "../lib/tambola/tickets";
 
 interface ViewWinnersScreenProps {
   gameId: string;
@@ -17,6 +18,21 @@ export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
   onBack
 }) => {
   const { t } = useTranslation();
+  const [localPrizes, setLocalPrizes] = useState<PrizeItem[]>(prizes);
+
+  useEffect(() => {
+    setLocalPrizes(prizes);
+  }, [prizes]);
+
+  useEffect(() => {
+    if (!gameId) return;
+    const unsub = listenToGame(gameId, (gDoc) => {
+      if (gDoc && gDoc.prizes && Array.isArray(gDoc.prizes) && gDoc.prizes.length > 0) {
+        setLocalPrizes(gDoc.prizes);
+      }
+    });
+    return () => unsub();
+  }, [gameId]);
 
   const handleDownloadPdf = () => {
     const doc = new jsPDF();
@@ -41,7 +57,7 @@ export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
     doc.setFont("helvetica", "normal");
     doc.setTextColor(0, 0, 0);
 
-    prizes.forEach((prize) => {
+    localPrizes.forEach((prize) => {
       doc.text(prize.ruleName.toUpperCase(), 18, y);
       doc.text(prize.winnerName || t.unclaimedStatus, 110, y);
       y += 10;
@@ -79,13 +95,13 @@ export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
         display: "flex",
         flexDirection: "column"
       }}>
-        {prizes.length === 0 ? (
+        {localPrizes.length === 0 ? (
           <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.6)", fontSize: "16px" }}>
             No active game or winners recorded.
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
-            {prizes.map((prize) => (
+            {localPrizes.map((prize) => (
               <div
                 key={prize.id}
                 style={{

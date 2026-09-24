@@ -28,13 +28,13 @@ import {
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBSnCyJUiXLw-bk8-hKD9Gv-KyUXHZX-Bs",
-  authDomain: "tambola-board-ticket-prod.firebaseapp.com",
-  projectId: "tambola-board-ticket-prod",
-  storageBucket: "tambola-board-ticket-prod.firebasestorage.app",
-  messagingSenderId: "243416223664",
-  appId: "1:243416223664:web:7ff6139de58b543fc91075",
-  measurementId: "G-M6WV4600TM"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "tambola-board-ticket-prod.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "tambola-board-ticket-prod",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "tambola-board-ticket-prod.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "243416223664",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:243416223664:web:7ff6139de58b543fc91075",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-M6WV4600TM"
 };
 
 // Initialize Firebase singleton
