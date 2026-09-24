@@ -24,6 +24,7 @@ import { useTranslation } from "../lib/useTranslation";
 
 interface HomeScreenProps {
   onNewGame: () => void;
+  onJoinGame?: () => void;
   onContinue: () => void;
   onViewWinners: () => void;
   hasSavedGame: boolean;
@@ -31,6 +32,7 @@ interface HomeScreenProps {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   onNewGame,
+  onJoinGame,
   onContinue,
   onViewWinners,
   hasSavedGame
@@ -300,6 +302,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </div>
             <ChevronRight style={{ width: "22px", height: "22px", opacity: 0.8 }} />
           </button>
+
+          {/* Join Game as Player Button */}
+          {onJoinGame && (
+            <button
+              onClick={onJoinGame}
+              className="btn-hover-lift"
+              style={{
+                padding: "16px 20px",
+                borderRadius: "18px",
+                background: "linear-gradient(135deg, #00E5FF 0%, #0088FF 100%)",
+                color: "#FFFFFF",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 6px 20px rgba(0, 229, 255, 0.35)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                textAlign: "left"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                <div style={{
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "12px",
+                  backgroundColor: "rgba(255, 255, 255, 0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <Ticket style={{ width: "22px", height: "22px", color: "#FFFFFF" }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: "16px", fontWeight: "700" }}>
+                    Join Game / Get Ticket
+                  </div>
+                  <div style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.9)", fontWeight: "500" }}>
+                    Scan QR or enter Game Code to get your ticket
+                  </div>
+                </div>
+              </div>
+              <ChevronRight style={{ width: "20px", height: "20px", opacity: 0.8 }} />
+            </button>
+          )}
 
           {/* Continue Last Game Button */}
           <button

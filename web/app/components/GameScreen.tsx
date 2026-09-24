@@ -8,6 +8,8 @@ import { PrizeItem, saveGameState, loadSelectedLanguage, loadVoiceGender } from 
 import { getFunnyPhrase, BCP47_MAP } from "../lib/funnyPhrases";
 import { WinnerBoardModal } from "./WinnerBoardModal";
 import { useTranslation } from "../lib/useTranslation";
+import { HostTicketDistribution } from "./HostTicketDistribution";
+import { getOrCreateGame, updateGameSettings, listenToGame } from "../lib/tambola/tickets";
 
 interface GameScreenProps {
   gameId: string;
@@ -33,6 +35,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   const [lastNumber, setLastNumber] = useState<number | null>(initialLastNumber);
   const [isAutoCalling, setIsAutoCalling] = useState(false);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
+  const [showTicketsModal, setShowTicketsModal] = useState(false);
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [showUndoDialog, setShowUndoDialog] = useState(false);
   const [showExitDialog, setShowExitDialog] = useState(false);
@@ -57,16 +60,29 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     return generated;
   });
 
-  // Generate QR Code for Game ID
+  // Generate QR Code for Game ID & Ensure Firestore Game Doc Exists
   useEffect(() => {
     if (gameId) {
       QRCode.toDataURL(gameId, { width: 120, margin: 1 })
         .then((url) => setQrDataUrl(url))
         .catch((err) => console.error("QR Code Error:", err));
+
+      getOrCreateGame(gameId).catch((err) => console.error("Firestore init error:", err));
     }
   }, [gameId]);
 
-  // Persist game state on changes
+  // Listen for remote game prizes updates from Firestore
+  useEffect(() => {
+    if (!gameId) return;
+    const unsub = listenToGame(gameId, (gDoc) => {
+      if (gDoc && gDoc.prizes && Array.isArray(gDoc.prizes) && gDoc.prizes.length > 0) {
+        setPrizes(gDoc.prizes);
+      }
+    });
+    return () => unsub();
+  }, [gameId]);
+
+  // Persist game state locally and to Firestore
   useEffect(() => {
     saveGameState({
       gameId,
@@ -75,6 +91,15 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       selectedRules,
       prizes
     });
+
+    if (gameId) {
+      updateGameSettings(gameId, {
+        calledNumbers,
+        lastNumber,
+        status: calledNumbers.length > 0 ? "STARTED" : "WAITING",
+        prizes
+      }).catch((err) => console.error("Firestore sync error:", err));
+    }
   }, [gameId, calledNumbers, lastNumber, selectedRules, prizes]);
 
   // Preload speech synthesis voices on GameScreen mount
@@ -535,6 +560,23 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           </button>
 
           <button
+            onClick={() => setShowTicketsModal(true)}
+            style={{
+              padding: "9px 14px",
+              borderRadius: "14px",
+              background: "linear-gradient(135deg, #7C4DFF 0%, #31005A 100%)",
+              color: "#FFF",
+              border: "1.5px solid #FFD700",
+              fontWeight: "800",
+              fontSize: "13px",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(124, 77, 255, 0.5)"
+            }}
+          >
+            🎟️ Distribute Tickets
+          </button>
+
+          <button
             onClick={() => setShowUndoDialog(true)}
             disabled={calledNumbers.length === 0}
             style={{
@@ -866,6 +908,22 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Ticket Distribution Modal */}
+      {showTicketsModal && (
+        <div style={{
+          position: "fixed",
+          inset: 0,
+          backgroundColor: "#1A0033",
+          zIndex: 1500,
+          overflowY: "auto"
+        }}>
+          <HostTicketDistribution
+            gameId={gameId}
+            onClose={() => setShowTicketsModal(false)}
+          />
         </div>
       )}
     </div>

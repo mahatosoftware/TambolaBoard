@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { HomeScreen } from "./components/HomeScreen";
 import { GameModeSelectionScreen } from "./components/GameModeSelectionScreen";
 import { GameIdInputScreen } from "./components/GameIdInputScreen";
@@ -8,6 +9,7 @@ import { RuleSelectionScreen } from "./components/RuleSelectionScreen";
 import { PointsDistributionScreen } from "./components/PointsDistributionScreen";
 import { GameScreen } from "./components/GameScreen";
 import { ViewWinnersScreen } from "./components/ViewWinnersScreen";
+import { HostTicketDistribution } from "./components/HostTicketDistribution";
 import { TambolaRule } from "./lib/rules";
 import { PrizeItem, loadGameState, generateGameId, clearGameState, GameState } from "./lib/storage";
 
@@ -15,12 +17,14 @@ type Screen =
   | "HOME"
   | "GAME_MODE_SELECT"
   | "GAME_ID_INPUT"
+  | "TICKET_DISTRIBUTION"
   | "RULE_SELECTION"
   | "POINTS_DISTRIBUTION"
   | "GAME_BOARD"
   | "VIEW_WINNERS";
 
 export default function Home() {
+  const router = useRouter();
   const [currentScreen, setCurrentScreen] = useState<Screen>("HOME");
   const [hasSavedGame, setHasSavedGame] = useState(false);
 
@@ -80,6 +84,11 @@ export default function Home() {
     setCurrentScreen("RULE_SELECTION");
   };
 
+  const handleOpenTicketDistribution = (id: string) => {
+    setGameId(id);
+    setCurrentScreen("TICKET_DISTRIBUTION");
+  };
+
   const handleRulesSelected = (rules: TambolaRule[]) => {
     setSelectedRules(rules);
     setCurrentScreen("POINTS_DISTRIBUTION");
@@ -121,6 +130,7 @@ export default function Home() {
       {currentScreen === "HOME" && (
         <HomeScreen
           onNewGame={() => setCurrentScreen("GAME_MODE_SELECT")}
+          onJoinGame={() => router.push("/join")}
           onContinue={handleContinueLastGame}
           onViewWinners={handleViewWinners}
           hasSavedGame={hasSavedGame}
@@ -138,7 +148,15 @@ export default function Home() {
       {currentScreen === "GAME_ID_INPUT" && (
         <GameIdInputScreen
           onSubmitGameId={handleSubmitGameId}
+          onOpenTicketDistribution={handleOpenTicketDistribution}
           onBack={() => setCurrentScreen("GAME_MODE_SELECT")}
+        />
+      )}
+
+      {currentScreen === "TICKET_DISTRIBUTION" && (
+        <HostTicketDistribution
+          gameId={gameId}
+          onClose={() => setCurrentScreen("RULE_SELECTION")}
         />
       )}
 
