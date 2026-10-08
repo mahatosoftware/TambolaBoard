@@ -1,0 +1,157 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
+import 'localization/app_localizations.dart';
+import 'localization/language_option.dart';
+import 'screens/main_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    debugPrint("Firebase init error: $e");
+  }
+
+  try {
+    MobileAds.instance.initialize();
+  } catch (e) {
+    debugPrint("MobileAds init error: $e");
+  }
+
+  runApp(const TambolaApp());
+}
+
+class TambolaApp extends StatefulWidget {
+  const TambolaApp({super.key});
+
+  static void setLocale(BuildContext context, String code) {
+    final state = context.findAncestorStateOfType<TambolaAppState>() ??
+        context.findRootAncestorStateOfType<TambolaAppState>();
+    state?.setLocale(code);
+  }
+
+  @override
+  State<TambolaApp> createState() => TambolaAppState();
+}
+
+class TambolaAppState extends State<TambolaApp> {
+  Locale _locale = const Locale('en');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedLanguage();
+  }
+
+  Future<void> _loadSavedLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString('selected_language') ?? 'en';
+    if (mounted) {
+      setState(() {
+        _locale = Locale(code);
+      });
+    }
+  }
+
+  void setLocale(String code) {
+    setState(() {
+      _locale = Locale(code);
+    });
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString('selected_language', code);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const purpleBg = Color(0xFF6C0BA9);
+    const purpleDark = Color(0xFF4A007E);
+    const shamrockGreen = Color(0xFF009E60);
+    const byzantium = Color(0xFF702963);
+    const bronze = Color(0xFFCD7F32);
+
+    final colorScheme = ColorScheme(
+      brightness: Brightness.light,
+      primary: purpleBg,
+      onPrimary: Colors.white,
+      primaryContainer: shamrockGreen,
+      onPrimaryContainer: Colors.white,
+      secondary: purpleDark,
+      onSecondary: Colors.white,
+      secondaryContainer: byzantium,
+      onSecondaryContainer: Colors.white,
+      tertiary: Colors.white,
+      onTertiary: Colors.black,
+      tertiaryContainer: bronze,
+      onTertiaryContainer: Colors.white,
+      error: Colors.red,
+      onError: Colors.white,
+      surface: purpleBg,
+      onSurface: Colors.white,
+    );
+
+    return MaterialApp(
+      title: 'Tambola Board',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: colorScheme,
+        scaffoldBackgroundColor: purpleBg,
+        dialogTheme: DialogThemeData(
+          backgroundColor: const Color(0xFF3C0084),
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          titleTextStyle: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          contentTextStyle: const TextStyle(
+            fontSize: 16,
+            color: Colors.white70,
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFF009E60),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.white,
+            side: const BorderSide(color: Colors.white54),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: colorScheme.primaryContainer,
+            foregroundColor: Colors.white,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+        ),
+      ),
+      locale: _locale,
+      supportedLocales: supportedLanguages.map((l) => Locale(l.code)).toList(),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        return _locale;
+      },
+      home: MainScreen(
+        onLanguageChanged: setLocale,
+      ),
+    );
+  }
+}

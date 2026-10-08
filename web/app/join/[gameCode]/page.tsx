@@ -9,12 +9,13 @@ import {
   assignDigitalTicketAtomically,
   getOrCreateGame,
   submitJoinRequest,
-  listenToMyJoinRequest
+  listenToMyJoinRequest,
+  createUnmoderatedTickets
 } from "../../lib/tambola/tickets";
 import { db, doc, getDoc, auth, onAuthStateChanged, signInWithGoogleHost } from "../../lib/firebase";
 import type { User as FirebaseUser } from "firebase/auth";
 import { DigitalTicketView } from "../../components/DigitalTicketView";
-import { Ticket, AlertCircle, ArrowRight, User, LogIn, CheckCircle2, Clock, RefreshCw } from "lucide-react";
+import { Ticket, AlertCircle, ArrowRight, User, LogIn, CheckCircle2, Clock, RefreshCw, Zap } from "lucide-react";
 
 interface JoinPageProps {
   params: Promise<{ gameCode: string }>;
@@ -279,15 +280,23 @@ export default function JoinGamePage({ params }: JoinPageProps) {
     }
   };
 
+  const handleGenerateUnmoderatedSelf = () => {
+    const pName = playerNameInput.trim() || authUser?.displayName || "Player";
+    const tickets = createUnmoderatedTickets(gameCode, pName, 1);
+    setTicketDoc(tickets[0]);
+    setPlayerId(tickets[0].playerId || "LOCAL");
+  };
+
   // If player already has assigned ticket doc, render DigitalTicketView
   if (ticketDoc) {
     return (
       <DigitalTicketView
         gameId={gameCode}
         ticket={ticketDoc}
+        allTickets={[ticketDoc]}
         playerId={playerId}
         onExit={() => {
-          if (window.confirm("Leave this game screen? Your ticket will remain saved to your Google Account.")) {
+          if (window.confirm("Leave this game screen?")) {
             setTicketDoc(null);
           }
         }}
@@ -357,17 +366,61 @@ export default function JoinGamePage({ params }: JoinPageProps) {
             Loading game details...
           </div>
         ) : !gameDoc ? (
-          <div style={{ color: "#FF5252", fontWeight: "bold", fontSize: "15px" }}>
-            <AlertCircle style={{ width: "24px", height: "24px", margin: "0 auto 8px auto" }} />
-            Game not found! Please check the game code and try again.
+          <div style={{ color: "#FF5252", fontWeight: "bold", fontSize: "15px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div>
+              <AlertCircle style={{ width: "24px", height: "24px", margin: "0 auto 8px auto" }} />
+              Game not found on server!
+            </div>
+            <button
+              type="button"
+              onClick={handleGenerateUnmoderatedSelf}
+              style={{
+                padding: "14px",
+                borderRadius: "14px",
+                backgroundColor: "#00E676",
+                color: "#000",
+                border: "none",
+                fontWeight: "800",
+                fontSize: "14px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
+              }}
+            >
+              <Zap style={{ width: "18px", height: "18px" }} />
+              Play Unmoderated: Generate Ticket On My Own
+            </button>
           </div>
         ) : gameDoc.status === "COMPLETED" || gameDoc.status === "CANCELLED" ? (
           <div style={{ color: "#FF8A80", fontWeight: "bold", fontSize: "15px" }}>
             This game has ended.
           </div>
         ) : gameDoc.allowDigitalJoin === false ? (
-          <div style={{ color: "#FFD54F", fontWeight: "bold", fontSize: "15px" }}>
-            Digital ticket joining is currently closed by the host.
+          <div style={{ color: "#FFD54F", fontWeight: "bold", fontSize: "15px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div>Digital ticket joining is currently closed by the host.</div>
+            <button
+              type="button"
+              onClick={handleGenerateUnmoderatedSelf}
+              style={{
+                padding: "14px",
+                borderRadius: "14px",
+                backgroundColor: "#00E676",
+                color: "#000",
+                border: "none",
+                fontWeight: "800",
+                fontSize: "14px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
+              }}
+            >
+              <Zap style={{ width: "18px", height: "18px" }} />
+              Play Unmoderated: Generate Ticket On My Own
+            </button>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -384,10 +437,10 @@ export default function JoinGamePage({ params }: JoinPageProps) {
                 gap: "14px"
               }}>
                 <div style={{ fontSize: "14px", fontWeight: "bold", color: "#00E5FF" }}>
-                  🔐 Google Sign-In Required
+                  🔐 Google Sign-In Required for Host Game
                 </div>
                 <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)", lineHeight: "1.5" }}>
-                  Please sign in with Google to claim your ticket. Your ticket will be linked securely so you can access it anytime.
+                  Sign in with Google to join host game, or play unmoderated by generating a ticket on your own.
                 </div>
 
                 <button
@@ -418,6 +471,35 @@ export default function JoinGamePage({ params }: JoinPageProps) {
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                   </svg>
                   {isSigningIn ? "Signing In..." : "Sign in with Google"}
+                </button>
+
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "4px 0" }}>
+                  <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.2)" }} />
+                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", fontWeight: "bold" }}>OR</span>
+                  <div style={{ flex: 1, height: "1px", backgroundColor: "rgba(255,255,255,0.2)" }} />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleGenerateUnmoderatedSelf}
+                  style={{
+                    width: "100%",
+                    padding: "14px",
+                    borderRadius: "14px",
+                    backgroundColor: "rgba(0, 230, 118, 0.15)",
+                    color: "#69F0AE",
+                    border: "1.5px solid #00E676",
+                    fontWeight: "800",
+                    fontSize: "14px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px"
+                  }}
+                >
+                  <Zap style={{ width: "18px", height: "18px" }} />
+                  Play Unmoderated: Generate Ticket On My Own
                 </button>
               </div>
             ) : myJoinRequest?.status === "PENDING" ? (

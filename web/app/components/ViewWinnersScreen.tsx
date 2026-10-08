@@ -8,31 +8,40 @@ import { listenToGame } from "../lib/tambola/tickets";
 
 interface ViewWinnersScreenProps {
   gameId: string;
+  isModerated?: boolean;
   prizes: PrizeItem[];
   onBack: () => void;
 }
 
 export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
   gameId,
+  isModerated = false,
   prizes,
   onBack
 }) => {
   const { t } = useTranslation();
   const [localPrizes, setLocalPrizes] = useState<PrizeItem[]>(prizes);
 
+  const sortedPrizes = [...localPrizes].sort((a, b) => {
+    const aClaimed = Boolean(a.isClaimed);
+    const bClaimed = Boolean(b.isClaimed);
+    if (aClaimed === bClaimed) return 0;
+    return aClaimed ? 1 : -1;
+  });
+
   useEffect(() => {
     setLocalPrizes(prizes);
   }, [prizes]);
 
   useEffect(() => {
-    if (!gameId) return;
+    if (!gameId || !isModerated) return;
     const unsub = listenToGame(gameId, (gDoc) => {
       if (gDoc && gDoc.prizes && Array.isArray(gDoc.prizes) && gDoc.prizes.length > 0) {
         setLocalPrizes(gDoc.prizes);
       }
     });
     return () => unsub();
-  }, [gameId]);
+  }, [gameId, isModerated]);
 
   const handleDownloadPdf = () => {
     const doc = new jsPDF();
@@ -57,7 +66,7 @@ export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
     doc.setFont("helvetica", "normal");
     doc.setTextColor(0, 0, 0);
 
-    localPrizes.forEach((prize) => {
+    sortedPrizes.forEach((prize) => {
       doc.text(prize.ruleName.toUpperCase(), 18, y);
       doc.text(prize.winnerName || t.unclaimedStatus, 110, y);
       y += 10;
@@ -101,7 +110,7 @@ export const ViewWinnersScreen: React.FC<ViewWinnersScreenProps> = ({
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
-            {localPrizes.map((prize) => (
+            {sortedPrizes.map((prize) => (
               <div
                 key={prize.id}
                 style={{

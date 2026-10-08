@@ -1,0 +1,54 @@
+name: tambola_board
+description: "Tambola Board Flutter App converted from native Android app"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^2.0.0
+  intl: ^0.20.3
+  shared_preferences: ^2.3.2
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  flutter_tts: ^4.2.5
+  firebase_core: ^4.15.0
+  firebase_auth: ^6.7.0
+  cloud_firestore: ^6.10.0
+  qr_flutter: ^4.1.0
+  pdf: ^3.11.1
+  printing: ^5.13.2
+  share_plus: ^13.3.1
+  url_launcher: ^6.3.0
+  google_mobile_ads: ^9.1.0
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+dependency_overrides:
+  cli_util: ^0.6.0
+  material_color_utilities: ^0.13.1
+  test_api: ^0.7.14
+  xml: ^7.1.0
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/ic_launcher_512.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/

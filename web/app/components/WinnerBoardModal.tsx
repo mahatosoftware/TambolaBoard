@@ -10,6 +10,7 @@ import { CheckCircle2, User, Ticket as TicketIcon, Trophy, Edit2 } from "lucide-
 
 interface WinnerBoardModalProps {
   gameId: string;
+  isModerated?: boolean;
   prizes: PrizeItem[];
   onUpdatePrize: (updatedPrizes: PrizeItem[]) => void;
   onDismiss: () => void;
@@ -17,6 +18,7 @@ interface WinnerBoardModalProps {
 
 export const WinnerBoardModal: React.FC<WinnerBoardModalProps> = ({
   gameId,
+  isModerated = false,
   prizes,
   onUpdatePrize,
   onDismiss
@@ -27,13 +29,20 @@ export const WinnerBoardModal: React.FC<WinnerBoardModalProps> = ({
   const [pendingClaims, setPendingClaims] = useState<any[]>([]);
   const [customInputActive, setCustomInputActive] = useState<{ [ruleId: string]: boolean }>({});
 
+  const sortedPrizes = [...localPrizes].sort((a, b) => {
+    const aClaimed = Boolean(a.isClaimed);
+    const bClaimed = Boolean(b.isClaimed);
+    if (aClaimed === bClaimed) return 0;
+    return aClaimed ? 1 : -1;
+  });
+
   useEffect(() => {
     setLocalPrizes(prizes);
   }, [prizes]);
 
-  // 1. Subscribe to all game tickets (Digital & Paper) for player selection
+  // 1. Subscribe to all game tickets (Digital & Paper) for player selection if Moderated
   useEffect(() => {
-    if (!gameId) return;
+    if (!gameId || !isModerated) return;
 
     const unsubTickets = listenToTickets(gameId, (tList) => {
       setTickets(tList);
@@ -56,7 +65,7 @@ export const WinnerBoardModal: React.FC<WinnerBoardModalProps> = ({
       unsubTickets();
       unsubClaims();
     };
-  }, [gameId]);
+  }, [gameId, isModerated]);
 
   // Filter player options from assigned / issued paper and digital tickets
   const digitalPlayers = tickets
@@ -185,7 +194,7 @@ export const WinnerBoardModal: React.FC<WinnerBoardModalProps> = ({
     doc.setFont("helvetica", "normal");
     doc.setTextColor(0, 0, 0);
 
-    localPrizes.forEach((prize) => {
+    sortedPrizes.forEach((prize) => {
       if (y > 270) {
         doc.addPage();
         y = 20;
@@ -330,7 +339,7 @@ export const WinnerBoardModal: React.FC<WinnerBoardModalProps> = ({
               No rules or prizes configured for this game.
             </div>
           ) : (
-            localPrizes.map((prize) => {
+            sortedPrizes.map((prize) => {
               const isCustomInput = customInputActive[prize.id];
               return (
                 <div

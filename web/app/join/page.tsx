@@ -11,13 +11,22 @@ import {
   Camera, 
   Upload, 
   AlertCircle, 
-  CheckCircle2 
+  CheckCircle2,
+  Zap,
+  User
 } from "lucide-react";
+import { createUnmoderatedTickets, TicketDoc } from "../lib/tambola/tickets";
+import { generateGameId } from "../lib/storage";
+import { DigitalTicketView } from "../components/DigitalTicketView";
 
 export default function JoinMainPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"SCAN" | "MANUAL">("SCAN");
+  const [activeTab, setActiveTab] = useState<"SCAN" | "MANUAL" | "UNMODERATED">("SCAN");
   const [gameCodeInput, setGameCodeInput] = useState("");
+  const [unmoderatedName, setUnmoderatedName] = useState("");
+  const [unmoderatedGameCode, setUnmoderatedGameCode] = useState("");
+  const [ticketCount, setTicketCount] = useState<number>(1);
+  const [generatedTickets, setGeneratedTickets] = useState<TicketDoc[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Camera & QR State
@@ -169,6 +178,27 @@ export default function JoinMainPage() {
     router.push(`/join/${code}`);
   };
 
+  const handleGenerateUnmoderated = (e: React.FormEvent) => {
+    e.preventDefault();
+    const gCode = unmoderatedGameCode.trim().toUpperCase() || generateGameId(5);
+    const pName = unmoderatedName.trim() || "Player";
+    const tickets = createUnmoderatedTickets(gCode, pName, ticketCount);
+    setUnmoderatedGameCode(gCode);
+    setGeneratedTickets(tickets);
+  };
+
+  if (generatedTickets && generatedTickets.length > 0) {
+    return (
+      <DigitalTicketView
+        gameId={unmoderatedGameCode.trim().toUpperCase() || "EXPRESS"}
+        ticket={generatedTickets[0]}
+        allTickets={generatedTickets}
+        playerId={generatedTickets[0].playerId || "LOCAL"}
+        onExit={() => setGeneratedTickets(null)}
+      />
+    );
+  }
+
   return (
     <div style={{
       minHeight: "100vh",
@@ -211,13 +241,13 @@ export default function JoinMainPage() {
         </h1>
 
         <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.75)", marginBottom: "20px" }}>
-          Scan host QR Code or enter Game Code manually to claim your ticket
+          Scan host QR Code, enter Game Code, or generate tickets on your own
         </p>
 
         {/* Tab Selection Controls */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+          gridTemplateColumns: "1fr 1fr 1fr",
           backgroundColor: "rgba(0, 0, 0, 0.3)",
           borderRadius: "16px",
           padding: "4px",
@@ -226,43 +256,64 @@ export default function JoinMainPage() {
           <button
             onClick={() => { setActiveTab("SCAN"); setError(null); }}
             style={{
-              padding: "10px",
+              padding: "10px 4px",
               borderRadius: "12px",
               backgroundColor: activeTab === "SCAN" ? "#00E5FF" : "transparent",
               color: activeTab === "SCAN" ? "#000" : "rgba(255,255,255,0.7)",
               border: "none",
               fontWeight: "bold",
-              fontSize: "13px",
+              fontSize: "12px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "6px"
+              gap: "4px"
             }}
           >
-            <QrCode style={{ width: "16px", height: "16px" }} />
-            Scan QR Code
+            <QrCode style={{ width: "15px", height: "15px" }} />
+            Scan QR
           </button>
 
           <button
             onClick={() => { setActiveTab("MANUAL"); setError(null); }}
             style={{
-              padding: "10px",
+              padding: "10px 4px",
               borderRadius: "12px",
               backgroundColor: activeTab === "MANUAL" ? "#7C4DFF" : "transparent",
               color: activeTab === "MANUAL" ? "#FFF" : "rgba(255,255,255,0.7)",
               border: "none",
               fontWeight: "bold",
-              fontSize: "13px",
+              fontSize: "12px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "6px"
+              gap: "4px"
             }}
           >
-            <Keyboard style={{ width: "16px", height: "16px" }} />
+            <Keyboard style={{ width: "15px", height: "15px" }} />
             Enter Code
+          </button>
+
+          <button
+            onClick={() => { setActiveTab("UNMODERATED"); setError(null); }}
+            style={{
+              padding: "10px 4px",
+              borderRadius: "12px",
+              backgroundColor: activeTab === "UNMODERATED" ? "#00E676" : "transparent",
+              color: activeTab === "UNMODERATED" ? "#000" : "rgba(255,255,255,0.7)",
+              border: "none",
+              fontWeight: "bold",
+              fontSize: "12px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px"
+            }}
+          >
+            <Zap style={{ width: "15px", height: "15px" }} />
+            Self Ticket
           </button>
         </div>
 
@@ -410,6 +461,113 @@ export default function JoinMainPage() {
             >
               CONTINUE TO GET TICKET
               <ArrowRight style={{ width: "20px", height: "20px" }} />
+            </button>
+          </form>
+        )}
+
+        {/* Tab 3: UNMODERATED SELF TICKET GENERATOR */}
+        {activeTab === "UNMODERATED" && (
+          <form onSubmit={handleGenerateUnmoderated} style={{ display: "flex", flexDirection: "column", gap: "14px", textAlign: "left" }}>
+            <div style={{ backgroundColor: "rgba(0, 230, 118, 0.12)", border: "1px solid rgba(0, 230, 118, 0.3)", borderRadius: "14px", padding: "12px", fontSize: "12px", color: "#69F0AE", lineHeight: "1.4" }}>
+              ⚡ <strong>Unmoderated Mode:</strong> Generate tickets on your own without waiting for host approval or signing into Firebase!
+            </div>
+
+            <div>
+              <label style={{ fontSize: "11px", fontWeight: "bold", color: "rgba(255,255,255,0.8)", marginBottom: "4px", display: "block" }}>
+                YOUR NAME
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Rahul"
+                value={unmoderatedName}
+                onChange={(e) => setUnmoderatedName(e.target.value)}
+                maxLength={30}
+                style={{
+                  width: "100%",
+                  padding: "12px 14px",
+                  borderRadius: "12px",
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  color: "#FFF",
+                  border: "1px solid rgba(255,255,255,0.3)",
+                  fontSize: "14px",
+                  outline: "none",
+                  boxSizing: "border-box"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: "11px", fontWeight: "bold", color: "rgba(255,255,255,0.8)", marginBottom: "4px", display: "block" }}>
+                GAME CODE (OPTIONAL)
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. EXPRESS (leave empty for auto)"
+                value={unmoderatedGameCode}
+                onChange={(e) => setUnmoderatedGameCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6))}
+                maxLength={6}
+                style={{
+                  width: "100%",
+                  padding: "12px 14px",
+                  borderRadius: "12px",
+                  backgroundColor: "rgba(255,255,255,0.15)",
+                  color: "#FFF",
+                  border: "1px solid rgba(255,255,255,0.3)",
+                  fontSize: "14px",
+                  outline: "none",
+                  boxSizing: "border-box"
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: "11px", fontWeight: "bold", color: "rgba(255,255,255,0.8)", marginBottom: "6px", display: "block" }}>
+                NUMBER OF TICKETS
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
+                {[1, 2, 3].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setTicketCount(num)}
+                    style={{
+                      padding: "10px",
+                      borderRadius: "12px",
+                      backgroundColor: ticketCount === num ? "#00E676" : "rgba(255,255,255,0.1)",
+                      color: ticketCount === num ? "#000" : "#FFF",
+                      border: ticketCount === num ? "2px solid #FFF" : "1px solid rgba(255,255,255,0.2)",
+                      fontWeight: "bold",
+                      fontSize: "13px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {num} {num === 1 ? "Ticket" : "Tickets"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                marginTop: "6px",
+                padding: "16px",
+                borderRadius: "16px",
+                background: "linear-gradient(135deg, #00E676 0%, #00B0FF 100%)",
+                color: "#FFF",
+                border: "none",
+                fontWeight: "900",
+                fontSize: "15px",
+                cursor: "pointer",
+                boxShadow: "0 6px 20px rgba(0, 230, 118, 0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
+              }}
+            >
+              <Zap style={{ width: "20px", height: "20px" }} />
+              GENERATE TICKET(S) & START
             </button>
           </form>
         )}

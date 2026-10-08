@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { TAMBOLA_RULES, TambolaRule } from "../lib/rules";
 import { TicketVisualizer } from "./TicketVisualizer";
 import { useTranslation } from "../lib/useTranslation";
+import { RuleIcon } from "./RuleIcon";
 
 interface RuleSelectionScreenProps {
   onContinue: (selectedRules: TambolaRule[]) => void;
@@ -153,8 +154,8 @@ export const RuleSelectionScreen: React.FC<RuleSelectionScreenProps> = ({
                 ℹ️
               </button>
 
-              <div style={{ fontSize: "28px", marginBottom: "8px" }}>
-                {rule.type.includes("HOUSE") ? "🏠" : rule.type.includes("LINE") ? "➖" : rule.type.includes("FIVE") ? "🖐️" : "🎯"}
+              <div style={{ marginBottom: "8px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <RuleIcon type={rule.type} size={48} />
               </div>
 
               <div style={{ fontWeight: "bold", fontSize: "15px", lineHeight: "1.2" }}>

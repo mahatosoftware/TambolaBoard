@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { TambolaRule } from "../lib/rules";
 import { useTranslation } from "../lib/useTranslation";
+import { RuleIcon } from "./RuleIcon";
 
 interface PointsDistributionScreenProps {
   selectedRules: TambolaRule[];
@@ -109,7 +110,10 @@ export const PointsDistributionScreen: React.FC<PointsDistributionScreenProps> =
                 borderRadius: "10px"
               }}
             >
-              <div style={{ fontWeight: "600", fontSize: "15px" }}>{rule.name}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <RuleIcon type={rule.type} size={28} />
+                <div style={{ fontWeight: "600", fontSize: "15px" }}>{rule.name}</div>
+              </div>
 
               {/* Stepper controls */}
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

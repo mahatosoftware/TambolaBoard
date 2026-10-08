@@ -646,3 +646,35 @@ export async function rejectJoinRequest(gameId: string, requestUid: string): Pro
     status: "REJECTED"
   });
 }
+
+/**
+ * Create local unmoderated ticket(s) without Firestore requirement.
+ */
+export function createUnmoderatedTickets(
+  gameId: string,
+  playerName: string = "Player",
+  count: number = 1
+): TicketDoc[] {
+  const normalizedId = (gameId || "EXPRESS").trim().toUpperCase();
+  const list: TicketDoc[] = [];
+  for (let i = 0; i < count; i++) {
+    const tNum = i + 1;
+    list.push({
+      id: `${normalizedId}-U${tNum}-${Math.floor(1000 + Math.random() * 9000)}`,
+      ticketNumber: tNum,
+      type: "Digital",
+      isManual: false,
+      isActive: true,
+      status: "ACTIVE",
+      name: playerName.trim() || "Player",
+      playerId: `PLAYER-${tNum}`,
+      playerUid: null,
+      grid: generateTambolaGrid(),
+      createdAt: new Date(),
+      assignedAt: new Date(),
+      claimedAt: null
+    });
+  }
+  return list;
+}
+

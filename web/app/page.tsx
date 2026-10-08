@@ -50,7 +50,8 @@ export default function Home() {
   const handleContinueLastGame = () => {
     const saved = loadGameState();
     if (saved) {
-      setGameId(saved.gameId || generateGameId());
+      setIsModerated(!!saved.isModerated);
+      setGameId(saved.gameId || generateGameId(5));
       setCalledNumbers(saved.calledNumbers || []);
       setLastNumber(saved.lastNumber ?? null);
       setSelectedRules(saved.selectedRules || []);
@@ -62,6 +63,7 @@ export default function Home() {
   const handleViewWinners = () => {
     const saved = loadGameState();
     if (saved) {
+      setIsModerated(!!saved.isModerated);
       setGameId(saved.gameId || "");
       setPrizes(saved.prizes || []);
     }
@@ -70,7 +72,7 @@ export default function Home() {
 
   const handleStartUnmoderated = () => {
     setIsModerated(false);
-    setGameId(generateGameId());
+    setGameId(generateGameId(5));
     setCurrentScreen("RULE_SELECTION");
   };
 
@@ -119,7 +121,7 @@ export default function Home() {
   };
 
   const handleResetGame = () => {
-    const newId = generateGameId();
+    const newId = generateGameId(5);
     setGameId(newId);
     setCalledNumbers([]);
     setLastNumber(null);
@@ -179,6 +181,7 @@ export default function Home() {
       {currentScreen === "GAME_BOARD" && (
         <GameScreen
           gameId={gameId}
+          isModerated={isModerated}
           initialCalledNumbers={calledNumbers}
           initialLastNumber={lastNumber}
           selectedRules={selectedRules}
@@ -191,6 +194,7 @@ export default function Home() {
       {currentScreen === "VIEW_WINNERS" && (
         <ViewWinnersScreen
           gameId={gameId}
+          isModerated={isModerated}
           prizes={prizes}
           onBack={() => setCurrentScreen("HOME")}
         />

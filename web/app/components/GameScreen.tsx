@@ -13,6 +13,7 @@ import { getOrCreateGame, updateGameSettings, listenToGame } from "../lib/tambol
 
 interface GameScreenProps {
   gameId: string;
+  isModerated?: boolean;
   initialCalledNumbers?: number[];
   initialLastNumber?: number | null;
   selectedRules: TambolaRule[];
@@ -23,6 +24,7 @@ interface GameScreenProps {
 
 export const GameScreen: React.FC<GameScreenProps> = ({
   gameId,
+  isModerated = false,
   initialCalledNumbers = [],
   initialLastNumber = null,
   selectedRules,
@@ -60,39 +62,42 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     return generated;
   });
 
-  // Generate QR Code for Game ID & Ensure Firestore Game Doc Exists
+  // Generate QR Code for Game ID & Ensure Firestore Game Doc Exists if Moderated
   useEffect(() => {
     if (gameId) {
       QRCode.toDataURL(gameId, { width: 120, margin: 1 })
         .then((url) => setQrDataUrl(url))
         .catch((err) => console.error("QR Code Error:", err));
 
-      getOrCreateGame(gameId).catch((err) => console.error("Firestore init error:", err));
+      if (isModerated) {
+        getOrCreateGame(gameId).catch((err) => console.error("Firestore init error:", err));
+      }
     }
-  }, [gameId]);
+  }, [gameId, isModerated]);
 
-  // Listen for remote game prizes updates from Firestore
+  // Listen for remote game prizes updates from Firestore if Moderated
   useEffect(() => {
-    if (!gameId) return;
+    if (!gameId || !isModerated) return;
     const unsub = listenToGame(gameId, (gDoc) => {
       if (gDoc && gDoc.prizes && Array.isArray(gDoc.prizes) && gDoc.prizes.length > 0) {
         setPrizes(gDoc.prizes);
       }
     });
     return () => unsub();
-  }, [gameId]);
+  }, [gameId, isModerated]);
 
-  // Persist game state locally and to Firestore
+  // Persist game state locally and to Firestore if Moderated
   useEffect(() => {
     saveGameState({
       gameId,
       calledNumbers,
       lastNumber,
       selectedRules,
-      prizes
+      prizes,
+      isModerated
     });
 
-    if (gameId) {
+    if (isModerated && gameId) {
       updateGameSettings(gameId, {
         calledNumbers,
         lastNumber,
@@ -100,7 +105,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         prizes
       }).catch((err) => console.error("Firestore sync error:", err));
     }
-  }, [gameId, calledNumbers, lastNumber, selectedRules, prizes]);
+  }, [gameId, calledNumbers, lastNumber, selectedRules, prizes, isModerated]);
 
   // Preload speech synthesis voices on GameScreen mount
   useEffect(() => {
@@ -559,22 +564,24 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             🏆 {t.viewWinners}
           </button>
 
-          <button
-            onClick={() => setShowTicketsModal(true)}
-            style={{
-              padding: "9px 14px",
-              borderRadius: "14px",
-              background: "linear-gradient(135deg, #7C4DFF 0%, #31005A 100%)",
-              color: "#FFF",
-              border: "1.5px solid #FFD700",
-              fontWeight: "800",
-              fontSize: "13px",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(124, 77, 255, 0.5)"
-            }}
-          >
-            🎟️ Distribute Tickets
-          </button>
+          {isModerated && (
+            <button
+              onClick={() => setShowTicketsModal(true)}
+              style={{
+                padding: "9px 14px",
+                borderRadius: "14px",
+                background: "linear-gradient(135deg, #7C4DFF 0%, #31005A 100%)",
+                color: "#FFF",
+                border: "1.5px solid #FFD700",
+                fontWeight: "800",
+                fontSize: "13px",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(124, 77, 255, 0.5)"
+              }}
+            >
+              🎟️ Distribute Tickets
+            </button>
+          )}
 
           <button
             onClick={() => setShowUndoDialog(true)}
@@ -705,6 +712,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       {showWinnerModal && (
         <WinnerBoardModal
           gameId={gameId}
+          isModerated={isModerated}
           prizes={prizes}
           onUpdatePrize={(updated) => setPrizes(updated)}
           onDismiss={() => setShowWinnerModal(false)}
