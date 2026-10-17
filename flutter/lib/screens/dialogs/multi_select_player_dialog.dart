@@ -107,9 +107,6 @@ class _MultiSelectPlayerDialogState extends State<MultiSelectPlayerDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  style: TextButton.styleFrom(
-                    foregroundColor: const Color(0xFFFFD700),
-                  ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     loc.translate('btn_cancel'),
@@ -119,8 +116,6 @@ class _MultiSelectPlayerDialogState extends State<MultiSelectPlayerDialog> {
                 const SizedBox(width: 12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF009E60),
-                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),

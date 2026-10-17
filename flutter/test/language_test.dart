@@ -34,7 +34,10 @@ void main() {
     expect(locHi?.locale.languageCode, 'hi');
     expect(locHi?.translate('btn_start_new_game'), 'नया गेम शुरू करें');
 
-    // Tap on Odia option
+    // Tap on Odia option (reopen settings dialog first)
+    await tester.tap(settingsBtn);
+    await tester.pumpAndSettle();
+
     final orOption = find.textContaining('ଓଡ଼ିଆ');
     expect(orOption, findsOneWidget);
     await tester.tap(orOption);

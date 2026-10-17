@@ -135,7 +135,7 @@ class _WinnerBoardDialogState extends State<WinnerBoardDialog> {
                     right: 0,
                     top: 0,
                     child: IconButton(
-                      icon: const Icon(Icons.refresh, color: Colors.white),
+                      icon: const Icon(Icons.refresh),
                       onPressed: () {
                         widget.onReloadPlayers();
                         _loadData();
@@ -202,10 +202,6 @@ class _WinnerBoardDialogState extends State<WinnerBoardDialog> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  foregroundColor: theme.colorScheme.tertiary,
-                ),
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   loc.translate('btn_close_board'),

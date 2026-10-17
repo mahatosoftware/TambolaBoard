@@ -62,11 +62,8 @@ class _RuleSelectionScreenState extends State<RuleSelectionScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    foregroundColor: theme.colorScheme.tertiary,
-                  ),
+                child: _DistributePointsButton(
+                  isEnabled: _selectedRuleIds.isNotEmpty,
                   onPressed: _selectedRuleIds.isEmpty
                       ? null
                       : () {
@@ -84,12 +81,9 @@ class _RuleSelectionScreenState extends State<RuleSelectionScreen> {
                             ),
                           );
                         },
-                  child: Text(
-                    loc.translate(
-                      'btn_distribute_points',
-                      [_selectedRuleIds.length],
-                    ),
-                    style: const TextStyle(fontSize: 18),
+                  text: loc.translate(
+                    'btn_distribute_points',
+                    [_selectedRuleIds.length],
                   ),
                 ),
               ),
@@ -131,7 +125,84 @@ class _RuleSelectionScreenState extends State<RuleSelectionScreen> {
   }
 }
 
-class _RuleCard extends StatelessWidget {
+class _DistributePointsButton extends StatefulWidget {
+  final bool isEnabled;
+  final VoidCallback? onPressed;
+  final String text;
+
+  const _DistributePointsButton({
+    required this.isEnabled,
+    required this.onPressed,
+    required this.text,
+  });
+
+  @override
+  State<_DistributePointsButton> createState() => _DistributePointsButtonState();
+}
+
+class _DistributePointsButtonState extends State<_DistributePointsButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isFocused = _isFocused && widget.isEnabled;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.03 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: ElevatedButton(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFocused
+                ? const Color(0xFF3C0084)
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: isFocused
+                ? const Color(0xFFFFD700)
+                : theme.colorScheme.tertiary,
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            elevation: isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onPressed,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isFocused ? const Color(0xFFFFD700) : theme.colorScheme.tertiary,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RuleCard extends StatefulWidget {
   final TambolaRule rule;
   final bool isSelected;
   final bool isTv;
@@ -145,6 +216,13 @@ class _RuleCard extends StatelessWidget {
     required this.onToggle,
     required this.onInfo,
   });
+
+  @override
+  State<_RuleCard> createState() => _RuleCardState();
+}
+
+class _RuleCardState extends State<_RuleCard> {
+  bool _isFocused = false;
 
   IconData _getIconForType(TambolaRuleType type) {
     switch (type) {
@@ -187,75 +265,111 @@ class _RuleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isSelected = widget.isSelected;
+    final isFocused = _isFocused;
 
-    return InkWell(
-      onTap: onToggle,
-      onLongPress: onInfo,
-      borderRadius: BorderRadius.circular(16),
-      child: Card(
-        shape: RoundedRectangleBorder(
+    return AnimatedScale(
+      scale: isFocused ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: isSelected ? theme.colorScheme.primary : Colors.grey.withValues(alpha: 0.3),
-            width: isSelected ? 3 : 1,
-          ),
-        ),
-        color: isSelected
-            ? theme.colorScheme.tertiaryContainer
-            : theme.colorScheme.secondary,
-        child: Stack(
-          children: [
-            if (!isTv)
-              Positioned(
-                top: 4,
-                right: 4,
-                child: IconButton(
-                  icon: const Icon(Icons.info_outline, size: 20),
-                  onPressed: onInfo,
-                ),
-              ),
-            if (isSelected)
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 12,
+                    spreadRadius: 2,
                   ),
-                  child: const Icon(Icons.check, size: 16, color: Colors.white),
-                ),
-              ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _getIconForType(rule.type),
-                      size: 40,
-                      color: isSelected
-                          ? theme.colorScheme.onTertiaryContainer
-                          : theme.colorScheme.onSecondary,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      rule.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
+                ]
+              : null,
+        ),
+        child: Card(
+          elevation: isFocused ? 12 : (isSelected ? 6 : 2),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(
+              color: isFocused
+                  ? const Color(0xFFFFD700)
+                  : (isSelected
+                      ? theme.colorScheme.primaryContainer
+                      : Colors.grey.withValues(alpha: 0.3)),
+              width: isFocused ? 3.5 : (isSelected ? 3 : 1),
             ),
-          ],
+          ),
+          color: isFocused
+              ? const Color(0xFF3C0084)
+              : (isSelected
+                  ? theme.colorScheme.tertiaryContainer
+                  : theme.colorScheme.secondary),
+          child: InkWell(
+            onFocusChange: (focused) {
+              setState(() {
+                _isFocused = focused;
+              });
+            },
+            onTap: widget.onToggle,
+            onLongPress: widget.onInfo,
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              children: [
+                if (!widget.isTv)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: IconButton(
+                      icon: const Icon(Icons.info_outline, size: 20),
+                      onPressed: widget.onInfo,
+                    ),
+                  ),
+                if (isSelected)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.check, size: 16, color: Colors.white),
+                    ),
+                  ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _getIconForType(widget.rule.type),
+                          size: 40,
+                          color: isFocused
+                              ? const Color(0xFFFFD700)
+                              : (isSelected
+                                  ? theme.colorScheme.onTertiaryContainer
+                                  : theme.colorScheme.onSecondary),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.rule.name,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: isFocused ? const Color(0xFFFFD700) : Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -291,7 +405,7 @@ class _RuleDetailDialog extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.close),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -311,10 +425,6 @@ class _RuleDetailDialog extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.purple,
-                ),
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   loc.translate('btn_close'),

@@ -138,7 +138,6 @@ class _GameIdInputScreenState extends State<GameIdInputScreen> {
 
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.white, width: 1.5),
                   minimumSize: const Size.fromHeight(50),
                 ),
                 onPressed: () => GeneralUtil.openPlayStore(),
@@ -147,7 +146,6 @@ class _GameIdInputScreenState extends State<GameIdInputScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
-                    color: Colors.white,
                   ),
                 ),
               ),
@@ -157,18 +155,10 @@ class _GameIdInputScreenState extends State<GameIdInputScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    foregroundColor: theme.colorScheme.tertiary,
-                  ),
+                child: _SubmitButton(
+                  isLoading: _isLoading,
                   onPressed: _isLoading ? null : _submitGameId,
-                  child: _isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          loc.translate('btn_submit'),
-                          style: const TextStyle(fontSize: 18),
-                        ),
+                  text: loc.translate('btn_submit'),
                 ),
               ),
 
@@ -180,6 +170,85 @@ class _GameIdInputScreenState extends State<GameIdInputScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SubmitButton extends StatefulWidget {
+  final bool isLoading;
+  final VoidCallback? onPressed;
+  final String text;
+
+  const _SubmitButton({
+    required this.isLoading,
+    required this.onPressed,
+    required this.text,
+  });
+
+  @override
+  State<_SubmitButton> createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<_SubmitButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isFocused = _isFocused && widget.onPressed != null;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.03 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: ElevatedButton(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFocused
+                ? const Color(0xFF3C0084)
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: isFocused
+                ? const Color(0xFFFFD700)
+                : theme.colorScheme.tertiary,
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            elevation: isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onPressed,
+          child: widget.isLoading
+              ? const CircularProgressIndicator()
+              : Text(
+                  widget.text,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: isFocused ? const Color(0xFFFFD700) : theme.colorScheme.tertiary,
+                  ),
+                ),
         ),
       ),
     );

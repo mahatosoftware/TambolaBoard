@@ -2,7 +2,7 @@ name: tambola_board
 description: "Tambola Board Flutter App converted from native Android app"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.56+56
 
 environment:
   sdk: ^3.13.5

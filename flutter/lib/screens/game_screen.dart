@@ -13,6 +13,7 @@ import '../models/winning_prize_entity.dart';
 import '../utils/funny_phrase_util.dart';
 import '../utils/general_util.dart';
 import '../utils/screen_size_util.dart';
+import '../utils/tts_util.dart';
 import 'dialogs/language_settings_dialog.dart';
 import 'dialogs/winner_board_dialog.dart';
 import 'main_screen.dart';
@@ -70,71 +71,12 @@ class _GameScreenState extends State<GameScreen>
     super.dispose();
   }
 
-  String _getTtsLocale(String langCode) {
-    switch (langCode) {
-      case "hi":
-        return "hi-IN";
-      case "bn":
-        return "bn-IN";
-      case "or":
-        return "or-IN";
-      case "kn":
-        return "kn-IN";
-      case "ta":
-        return "ta-IN";
-      case "mr":
-        return "mr-IN";
-      case "te":
-        return "te-IN";
-      case "gu":
-        return "gu-IN";
-      case "ml":
-        return "ml-IN";
-      case "pa":
-        return "pa-IN";
-      case "as":
-        return "as-IN";
-      case "es":
-        return "es-ES";
-      case "pt":
-        return "pt-PT";
-      case "fr":
-        return "fr-FR";
-      case "de":
-        return "de-DE";
-      case "ar":
-        return "ar-SA";
-      case "id":
-        return "id-ID";
-      case "tr":
-        return "tr-TR";
-      case "it":
-        return "it-IT";
-      case "ja":
-        return "ja-JP";
-      case "ko":
-        return "ko-KR";
-      case "zh":
-        return "zh-CN";
-      case "nl":
-        return "nl-NL";
-      case "ru":
-        return "ru-RU";
-      case "vi":
-        return "vi-VN";
-      default:
-        return "en-US";
-    }
-  }
+  String _getTtsLocale(String langCode) => TtsUtil.getTtsLocale(langCode);
 
   Future<void> _updateLanguage(String newLang) async {
     _selectedLang = newLang;
     final ttsLocale = _getTtsLocale(newLang);
-    try {
-      await _tts.setLanguage(ttsLocale);
-    } catch (e) {
-      debugPrint("Error setting TTS language: $e");
-    }
+    await TtsUtil.configureFemaleVoice(_tts, ttsLocale);
     if (mounted) {
       setState(() {});
     }
@@ -145,11 +87,13 @@ class _GameScreenState extends State<GameScreen>
     _selectedLang = prefs.getString('selected_language') ?? 'en';
 
     final ttsLocale = _getTtsLocale(_selectedLang);
+    await TtsUtil.configureFemaleVoice(_tts, ttsLocale);
 
-    await _tts.setLanguage(ttsLocale);
-    setState(() {
-      _isTtsReady = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isTtsReady = true;
+      });
+    }
     if (!mounted) return;
     final loc = AppLocalizations.of(context)!;
     _tts.speak(loc.translate('welcome_speech'));
@@ -476,33 +420,82 @@ class _GameScreenState extends State<GameScreen>
 
           const SizedBox(height: 8),
 
-          // Last Number Card
+          // Last Number & Remaining Numbers Card
           Card(
             color: theme.colorScheme.secondary,
             elevation: 4,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    loc.translate('last_number_label'),
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+              padding: EdgeInsets.symmetric(
+                horizontal: isLandscape ? 10 : 18,
+                vertical: 6,
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Last Number
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: isLandscape ? 6 : 10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            loc.translate('last_number_label'),
+                            style: TextStyle(
+                              fontSize: isLandscape ? 10 : 11,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white70,
+                            ),
+                          ),
+                          Text(
+                            _lastNumber != null ? "$_lastNumber" : "--",
+                            style: TextStyle(
+                              fontSize: isLandscape ? 28 : 38,
+                              fontWeight: FontWeight.w900,
+                              color: theme.colorScheme.onSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    _lastNumber != null ? "$_lastNumber" : "--",
-                    style: TextStyle(
-                      fontSize: isLandscape ? 32 : 40,
-                      fontWeight: FontWeight.w900,
-                      color: theme.colorScheme.onSecondary,
+                    const VerticalDivider(
+                      color: Colors.white24,
+                      thickness: 1,
+                      indent: 4,
+                      endIndent: 4,
                     ),
-                  ),
-                ],
+                    // Remaining Numbers on the Board
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: isLandscape ? 6 : 10),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            loc.translate('remaining_label'),
+                            style: TextStyle(
+                              fontSize: isLandscape ? 10 : 11,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white70,
+                            ),
+                          ),
+                          Text(
+                            "${(90 - _calledNumbers.toSet().length).clamp(0, 90)}",
+                            style: TextStyle(
+                              fontSize: isLandscape ? 28 : 38,
+                              fontWeight: FontWeight.w900,
+                              color: const Color(0xFF69F0AE),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -573,44 +566,24 @@ class _GameScreenState extends State<GameScreen>
                   spacing: 6,
                   runSpacing: 6,
                   children: [
-            ElevatedButton.icon(
-              icon: const Icon(Icons.play_arrow, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF009E60),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: Icons.play_arrow,
+              label: loc.translate('btn_call_next'),
+              backgroundColor: const Color(0xFF009E60),
               onPressed: _callNumber,
-              label: Text(
-                loc.translate('btn_call_next'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
-            ElevatedButton.icon(
-              icon: Icon(_isAutoCalling ? Icons.pause : Icons.autorenew, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _isAutoCalling ? Colors.amber.shade800 : Colors.orange.shade800,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: _isAutoCalling ? Icons.pause : Icons.autorenew,
+              label: _isAutoCalling
+                  ? loc.translate('btn_pause')
+                  : loc.translate('btn_auto_call'),
+              backgroundColor: _isAutoCalling ? Colors.amber.shade800 : Colors.orange.shade800,
               onPressed: _toggleAutoCall,
-              label: Text(
-                _isAutoCalling
-                    ? loc.translate('btn_pause')
-                    : loc.translate('btn_auto_call'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.emoji_events, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal.shade700,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: Icons.emoji_events,
+              label: loc.translate('btn_claim_prize'),
+              backgroundColor: Colors.teal.shade700,
               onPressed: () {
                 showDialog(
                   context: context,
@@ -620,19 +593,11 @@ class _GameScreenState extends State<GameScreen>
                   ),
                 );
               },
-              label: Text(
-                loc.translate('btn_claim_prize'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.undo, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepOrange.shade600,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: Icons.undo,
+              label: loc.translate('btn_undo'),
+              backgroundColor: Colors.deepOrange.shade600,
               onPressed: () {
                 showDialog(
                   context: context,
@@ -643,7 +608,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey.shade700,
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(ctx),
                         child: Text(loc.translate('dialog_no'), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -651,7 +615,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrange.shade600,
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () {
                           Navigator.pop(ctx);
@@ -663,19 +626,11 @@ class _GameScreenState extends State<GameScreen>
                   ),
                 );
               },
-              label: Text(
-                loc.translate('btn_undo'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.refresh, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade700,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: Icons.refresh,
+              label: loc.translate('btn_reset'),
+              backgroundColor: Colors.red.shade700,
               onPressed: () {
                 showDialog(
                   context: context,
@@ -687,7 +642,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey.shade700,
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(ctx),
                         child: Text(loc.translate('dialog_no'), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -695,7 +649,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red.shade700,
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () {
                           Navigator.pop(ctx);
@@ -707,19 +660,11 @@ class _GameScreenState extends State<GameScreen>
                   ),
                 );
               },
-              label: Text(
-                loc.translate('btn_reset'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.home, size: 18),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4A007E),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
+            _GameActionButton(
+              icon: Icons.home,
+              label: loc.translate('btn_return_main_menu'),
+              backgroundColor: const Color(0xFF4A007E),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -731,7 +676,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueGrey.shade700,
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(ctx),
                         child: Text(loc.translate('dialog_no'), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -739,7 +683,6 @@ class _GameScreenState extends State<GameScreen>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF009E60),
-                          foregroundColor: Colors.white,
                         ),
                         onPressed: () {
                           Navigator.pop(ctx);
@@ -757,10 +700,6 @@ class _GameScreenState extends State<GameScreen>
                   ),
                 );
               },
-              label: Text(
-                loc.translate('btn_return_main_menu'),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
             ),
           ],
         ),
@@ -837,6 +776,85 @@ class _GameScreenState extends State<GameScreen>
           },
         );
       },
+    );
+  }
+}
+
+class _GameActionButton extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  final Color backgroundColor;
+  final VoidCallback onPressed;
+
+  const _GameActionButton({
+    required this.icon,
+    required this.label,
+    required this.backgroundColor,
+    required this.onPressed,
+  });
+
+  @override
+  State<_GameActionButton> createState() => _GameActionButtonState();
+}
+
+class _GameActionButtonState extends State<_GameActionButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _isFocused ? 1.08 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: _isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: ElevatedButton.icon(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          icon: Icon(
+            widget.icon,
+            size: 18,
+            color: _isFocused ? const Color(0xFFFFD700) : Colors.white,
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _isFocused
+                ? const Color(0xFF3C0084)
+                : widget.backgroundColor,
+            foregroundColor: _isFocused ? const Color(0xFFFFD700) : Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            side: BorderSide(
+              color: _isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: _isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onPressed,
+          label: Text(
+            widget.label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: _isFocused ? const Color(0xFFFFD700) : Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

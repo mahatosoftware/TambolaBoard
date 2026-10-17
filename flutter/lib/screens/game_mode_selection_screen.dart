@@ -36,61 +36,35 @@ class GameModeSelectionScreen extends StatelessWidget {
                     const SizedBox(height: 48),
 
                     // Moderated Button
-                    SizedBox(
+                    _ModeButton(
                       width: buttonWidth > 350 ? 350 : buttonWidth,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          foregroundColor: theme.colorScheme.tertiary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                      text: loc.translate('btn_moderated'),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const GameIdInputScreen(),
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const GameIdInputScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          loc.translate('btn_moderated'),
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
+                        );
+                      },
                     ),
 
                     const SizedBox(height: 24),
 
                     // Unmoderated Button
-                    SizedBox(
+                    _ModeButton(
                       width: buttonWidth > 350 ? 350 : buttonWidth,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          foregroundColor: theme.colorScheme.tertiary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                      text: loc.translate('btn_unmoderated'),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const RuleSelectionScreen(),
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const RuleSelectionScreen(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          loc.translate('btn_unmoderated'),
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
+                        );
+                      },
                     ),
 
                     const SizedBox(height: 48),
@@ -110,6 +84,85 @@ class GameModeSelectionScreen extends StatelessWidget {
               child: AdBannerWidget(),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ModeButton extends StatefulWidget {
+  final String text;
+  final VoidCallback onPressed;
+  final double width;
+
+  const _ModeButton({
+    required this.text,
+    required this.onPressed,
+    required this.width,
+  });
+
+  @override
+  State<_ModeButton> createState() => _ModeButtonState();
+}
+
+class _ModeButtonState extends State<_ModeButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isFocused = _isFocused;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: widget.width,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: ElevatedButton(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFocused
+                ? const Color(0xFF3C0084)
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: isFocused
+                ? const Color(0xFFFFD700)
+                : theme.colorScheme.tertiary,
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            elevation: isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onPressed,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isFocused ? const Color(0xFFFFD700) : theme.colorScheme.tertiary,
+            ),
+          ),
         ),
       ),
     );

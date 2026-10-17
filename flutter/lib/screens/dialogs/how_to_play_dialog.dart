@@ -89,8 +89,6 @@ class HowToPlayDialog extends StatelessWidget {
               height: 52,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: shamrockGreen,
-                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -247,11 +245,29 @@ class _ModeratedModeCard extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: accentGold,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(WidgetState.focused)) {
+                    return const Color(0xFF3C0084);
+                  }
+                  return accentGold;
+                }),
+                foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(WidgetState.focused)) {
+                    return const Color(0xFFFFD700);
+                  }
+                  return Colors.black;
+                }),
+                side: WidgetStateProperty.resolveWith<BorderSide>((states) {
+                  if (states.contains(WidgetState.focused)) {
+                    return const BorderSide(color: Color(0xFFFFD700), width: 3.0);
+                  }
+                  return const BorderSide(color: Colors.transparent, width: 3.0);
+                }),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
               onPressed: () => GeneralUtil.openPlayStore(),

@@ -322,7 +322,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-class _DashboardTile extends StatelessWidget {
+class _DashboardTile extends StatefulWidget {
   final String text;
   final VoidCallback onClick;
   final bool isHero;
@@ -334,29 +334,75 @@ class _DashboardTile extends StatelessWidget {
   });
 
   @override
+  State<_DashboardTile> createState() => _DashboardTileState();
+}
+
+class _DashboardTileState extends State<_DashboardTile> {
+  bool _isFocused = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      color: isHero
-          ? theme.colorScheme.primaryContainer
-          : theme.colorScheme.primaryContainer.withValues(alpha: 0.75),
-      elevation: 4,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: onClick,
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            text,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: isHero ? 20 : 16,
-              color: theme.colorScheme.tertiary,
-              height: 1.3,
+    final isFocused = _isFocused;
+    final isHero = widget.isHero;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.5,
             ),
-            textAlign: TextAlign.center,
+          ),
+          color: isFocused
+              ? const Color(0xFF3C0084)
+              : (isHero
+                  ? theme.colorScheme.primaryContainer
+                  : theme.colorScheme.primaryContainer.withValues(alpha: 0.75)),
+          elevation: isFocused ? 12 : 4,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onFocusChange: (focused) {
+              setState(() {
+                _isFocused = focused;
+              });
+            },
+            onTap: widget.onClick,
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                widget.text,
+                style: TextStyle(
+                  fontWeight: (isFocused || isHero)
+                      ? FontWeight.w900
+                      : FontWeight.bold,
+                  fontSize: isHero ? 20 : 16,
+                  color: isFocused
+                      ? const Color(0xFFFFD700)
+                      : theme.colorScheme.tertiary,
+                  height: 1.3,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
         ),
       ),
@@ -364,7 +410,7 @@ class _DashboardTile extends StatelessWidget {
   }
 }
 
-class _MobileButton extends StatelessWidget {
+class _MobileButton extends StatefulWidget {
   final String text;
   final VoidCallback onClick;
   final double width;
@@ -376,27 +422,71 @@ class _MobileButton extends StatelessWidget {
   });
 
   @override
+  State<_MobileButton> createState() => _MobileButtonState();
+}
+
+class _MobileButtonState extends State<_MobileButton> {
+  bool _isFocused = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SizedBox(
-      width: width,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: theme.colorScheme.primaryContainer,
-          foregroundColor: theme.colorScheme.tertiary,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
+    final isFocused = _isFocused;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: widget.width,
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
         ),
-        onPressed: onClick,
-        child: Text(
-          text,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        child: ElevatedButton(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFocused
+                ? const Color(0xFF3C0084)
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: isFocused
+                ? const Color(0xFFFFD700)
+                : theme.colorScheme.tertiary,
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.0,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            elevation: isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onClick,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: isFocused ? const Color(0xFFFFD700) : theme.colorScheme.tertiary,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ),
     );

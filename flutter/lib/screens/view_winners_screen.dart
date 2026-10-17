@@ -88,10 +88,6 @@ class ViewWinnersScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    foregroundColor: theme.colorScheme.tertiary,
-                  ),
                   onPressed: () => Navigator.pop(context),
                   child: Text(loc.translate('btn_back')),
                 ),

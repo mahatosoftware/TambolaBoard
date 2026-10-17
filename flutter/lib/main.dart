@@ -118,23 +118,118 @@ class TambolaAppState extends State<TambolaApp> {
           ),
         ),
         textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF009E60),
-            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700);
+              }
+              return const Color(0xFF009E60);
+            }),
+            side: WidgetStateProperty.resolveWith<BorderSide?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const BorderSide(color: Color(0xFFFFD700), width: 2.5);
+              }
+              return null;
+            }),
+            overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700).withValues(alpha: 0.25);
+              }
+              return null;
+            }),
+            textStyle: WidgetStateProperty.all(
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white,
-            side: const BorderSide(color: Colors.white54),
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700);
+              }
+              return Colors.white;
+            }),
+            side: WidgetStateProperty.resolveWith<BorderSide>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const BorderSide(color: Color(0xFFFFD700), width: 3.0);
+              }
+              return const BorderSide(color: Colors.white54, width: 1.5);
+            }),
+            overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700).withValues(alpha: 0.25);
+              }
+              return null;
+            }),
+            textStyle: WidgetStateProperty.all(
+              const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: colorScheme.primaryContainer,
-            foregroundColor: Colors.white,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFF3C0084);
+              }
+              return colorScheme.primaryContainer;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700);
+              }
+              return Colors.white;
+            }),
+            side: WidgetStateProperty.resolveWith<BorderSide?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const BorderSide(color: Color(0xFFFFD700), width: 3.0);
+              }
+              return const BorderSide(color: Colors.transparent, width: 3.0);
+            }),
+            elevation: WidgetStateProperty.resolveWith<double>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return 8.0;
+              }
+              return 2.0;
+            }),
+            shadowColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700);
+              }
+              return null;
+            }),
+            overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700).withValues(alpha: 0.25);
+              }
+              return null;
+            }),
+            textStyle: WidgetStateProperty.all(
+              const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+        ),
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700);
+              }
+              return Colors.white;
+            }),
+            side: WidgetStateProperty.resolveWith<BorderSide?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const BorderSide(color: Color(0xFFFFD700), width: 2.5);
+              }
+              return null;
+            }),
+            overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0xFFFFD700).withValues(alpha: 0.25);
+              }
+              return null;
+            }),
           ),
         ),
       ),

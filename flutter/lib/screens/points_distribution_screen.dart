@@ -198,19 +198,9 @@ class _PointsDistributionScreenState
                 SizedBox(
                   width: double.infinity,
                   height: 60,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primaryContainer,
-                      foregroundColor: theme.colorScheme.tertiary,
-                    ),
+                  child: _SaveRulesButton(
                     onPressed: _saveRulesAndStartGame,
-                    child: Text(
-                      loc.translate('btn_save_rules'),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    text: loc.translate('btn_save_rules'),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -292,7 +282,7 @@ class _RuleRow extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.remove_circle_outline, color: Colors.white),
+                  icon: const Icon(Icons.remove_circle_outline),
                   onPressed: onMinus,
                 ),
                 SizedBox(
@@ -308,13 +298,88 @@ class _RuleRow extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle_outline, color: Colors.white),
+                  icon: const Icon(Icons.add_circle_outline),
                   onPressed: onPlus,
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SaveRulesButton extends StatefulWidget {
+  final VoidCallback onPressed;
+  final String text;
+
+  const _SaveRulesButton({
+    required this.onPressed,
+    required this.text,
+  });
+
+  @override
+  State<_SaveRulesButton> createState() => _SaveRulesButtonState();
+}
+
+class _SaveRulesButtonState extends State<_SaveRulesButton> {
+  bool _isFocused = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isFocused = _isFocused;
+
+    return AnimatedScale(
+      scale: isFocused ? 1.03 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
+        ),
+        child: ElevatedButton(
+          onFocusChange: (focused) {
+            setState(() {
+              _isFocused = focused;
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isFocused
+                ? const Color(0xFF3C0084)
+                : theme.colorScheme.primaryContainer,
+            foregroundColor: isFocused
+                ? const Color(0xFFFFD700)
+                : theme.colorScheme.tertiary,
+            side: BorderSide(
+              color: isFocused ? const Color(0xFFFFD700) : Colors.transparent,
+              width: 3.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            elevation: isFocused ? 8 : 2,
+          ),
+          onPressed: widget.onPressed,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              color: isFocused ? const Color(0xFFFFD700) : theme.colorScheme.tertiary,
+            ),
+          ),
+        ),
       ),
     );
   }
