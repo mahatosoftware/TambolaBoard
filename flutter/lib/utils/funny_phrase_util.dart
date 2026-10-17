@@ -1,3 +1,7 @@
+part 'indian_languages_funny_phrases.dart';
+part 'european_languages_funny_phrases.dart';
+part 'asian_languages_funny_phrases.dart';
+
 class FunnyPhraseUtil {
   static String getFunnyPhrase(int number, [String languageCode = "en"]) {
     switch (languageCode) {
@@ -86,26 +90,105 @@ class FunnyPhraseUtil {
     return rhyme != null ? "$rhyme, எண் $number" : "எண் $number";
   }
 
-  static String _getMarathiNumberPhrase(int number) => "नंबर $number";
-  static String _getTeluguNumberPhrase(int number) => "సంఖ్య $number";
-  static String _getGujaratiNumberPhrase(int number) => "નંબર $number";
-  static String _getMalayalamNumberPhrase(int number) => "നമ്പർ $number";
-  static String _getPunjabiNumberPhrase(int number) => "ਨੰਬਰ $number";
-  static String _getAssameseNumberPhrase(int number) => "নম্বৰ $number";
-  static String _getSpanishNumberPhrase(int number) => "Número $number";
-  static String _getPortugueseNumberPhrase(int number) => "Número $number";
-  static String _getFrenchNumberPhrase(int number) => "Numéro $number";
-  static String _getGermanNumberPhrase(int number) => "Nummer $number";
-  static String _getArabicNumberPhrase(int number) => "رقم $number";
-  static String _getIndonesianNumberPhrase(int number) => "Nomor $number";
-  static String _getTurkishNumberPhrase(int number) => "Numara $number";
-  static String _getItalianNumberPhrase(int number) => "Numero $number";
-  static String _getJapaneseNumberPhrase(int number) => "番号 $number";
-  static String _getKoreanNumberPhrase(int number) => "번호 $number";
-  static String _getChineseNumberPhrase(int number) => "号码 $number";
-  static String _getDutchNumberPhrase(int number) => "Nummer $number";
-  static String _getRussianNumberPhrase(int number) => "Номер $number";
-  static String _getVietnameseNumberPhrase(int number) => "Số $number";
+  static String _getMarathiNumberPhrase(int number) {
+    final rhyme = _marathiFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, नंबर $number" : "नंबर $number";
+  }
+
+  static String _getTeluguNumberPhrase(int number) {
+    final rhyme = _teluguFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, సంఖ్య $number" : "సంఖ్య $number";
+  }
+
+  static String _getGujaratiNumberPhrase(int number) {
+    final rhyme = _gujaratiFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, નંબર $number" : "નંબર $number";
+  }
+
+  static String _getMalayalamNumberPhrase(int number) {
+    final rhyme = _malayalamFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, നമ്പർ $number" : "നമ്പർ $number";
+  }
+
+  static String _getPunjabiNumberPhrase(int number) {
+    final rhyme = _punjabiFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, ਨੰਬਰ $number" : "ਨੰਬਰ $number";
+  }
+
+  static String _getAssameseNumberPhrase(int number) {
+    final rhyme = _assameseFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, নম্বৰ $number" : "নম্বৰ $number";
+  }
+
+  static String _getSpanishNumberPhrase(int number) {
+    final rhyme = _spanishFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Número $number" : "Número $number";
+  }
+
+  static String _getPortugueseNumberPhrase(int number) {
+    final rhyme = _portugueseFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Número $number" : "Número $number";
+  }
+
+  static String _getFrenchNumberPhrase(int number) {
+    final rhyme = _frenchFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Numéro $number" : "Numéro $number";
+  }
+
+  static String _getGermanNumberPhrase(int number) {
+    final rhyme = _germanFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Nummer $number" : "Nummer $number";
+  }
+
+  static String _getArabicNumberPhrase(int number) {
+    final rhyme = _arabicFunnyPhrases[number];
+    return rhyme != null ? "$rhyme، رقم $number" : "رقم $number";
+  }
+
+  static String _getIndonesianNumberPhrase(int number) {
+    final rhyme = _indonesianFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Nomor $number" : "Nomor $number";
+  }
+
+  static String _getTurkishNumberPhrase(int number) {
+    final rhyme = _turkishFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Numara $number" : "Numara $number";
+  }
+
+  static String _getItalianNumberPhrase(int number) {
+    final rhyme = _italianFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Numero $number" : "Numero $number";
+  }
+
+  static String _getJapaneseNumberPhrase(int number) {
+    final rhyme = _japaneseFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, 番号 $number" : "番号 $number";
+  }
+
+  static String _getKoreanNumberPhrase(int number) {
+    final rhyme = _koreanFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, 번호 $number" : "번호 $number";
+  }
+
+  static String _getChineseNumberPhrase(int number) {
+    final rhyme = _chineseFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, 号码 $number" : "号码 $number";
+  }
+
+  static String _getDutchNumberPhrase(int number) {
+    final rhyme = _dutchFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Nummer $number" : "Nummer $number";
+  }
+
+  static String _getRussianNumberPhrase(int number) {
+    final rhyme = _russianFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Номер $number" : "Номер $number";
+  }
+
+  static String _getVietnameseNumberPhrase(int number) {
+    final rhyme = _vietnameseFunnyPhrases[number];
+    return rhyme != null ? "$rhyme, Số $number" : "Số $number";
+  }
 
   static String numberToWords(int number) {
     const units = [

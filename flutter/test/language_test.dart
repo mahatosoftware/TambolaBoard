@@ -15,7 +15,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Find and tap settings button
-    final settingsBtn = find.text('Settings');
+    final settingsBtn = find.textContaining('Settings');
     expect(settingsBtn, findsOneWidget);
     await tester.tap(settingsBtn);
     await tester.pumpAndSettle();
@@ -55,7 +55,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Find and tap settings button in wide dashboard layout
-    final settingsBtn = find.text('Settings');
+    final settingsBtn = find.textContaining('Settings');
     expect(settingsBtn, findsOneWidget);
     await tester.tap(settingsBtn);
     await tester.pumpAndSettle();
