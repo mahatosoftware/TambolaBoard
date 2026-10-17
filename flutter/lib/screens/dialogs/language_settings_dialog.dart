@@ -48,6 +48,10 @@ class _LanguageSettingsDialogState extends State<LanguageSettingsDialog> {
     SharedPreferences.getInstance().then((prefs) {
       prefs.setString('selected_language', code);
     });
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -188,13 +192,15 @@ class _LanguageTileState extends State<_LanguageTile> {
         ),
         child: Row(
           children: [
-            Radio<String>(
-              value: widget.option.code,
-              // ignore: deprecated_member_use
-              groupValue: isSelected ? widget.option.code : '',
-              // ignore: deprecated_member_use
-              onChanged: (_) => widget.onTap(),
-              activeColor: isFocused ? const Color(0xFFFFD700) : const Color(0xFF009E60),
+            ExcludeFocus(
+              child: Radio<String>(
+                value: widget.option.code,
+                // ignore: deprecated_member_use
+                groupValue: isSelected ? widget.option.code : '',
+                // ignore: deprecated_member_use
+                onChanged: (_) => widget.onTap(),
+                activeColor: isFocused ? const Color(0xFFFFD700) : const Color(0xFF009E60),
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
